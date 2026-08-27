@@ -674,6 +674,11 @@ TRANSLATIONS = {
         "zh_CN": "按场景帧率显示动捕 (Sync Viewport to Scene FPS)",
         "ja_JP": "シーンFPSに合わせて表示 (Sync Viewport to Scene FPS)",
     },
+    "勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点": {
+        "en_US": "Capture relative to the character's current position instead of snapping to world origin.",
+        "zh_CN": "勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点",
+        "ja_JP": "現在のオブジェクト位置を基準にしてキャプチャし、ワールド原点に強制的に戻りません。"
+    },
     "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率": {
         "en_US": "When checked, the viewport refresh rate drops to match the scene FPS to save GPU; otherwise, it runs at max real-time refresh rate.",
         "zh_CN": "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
@@ -753,6 +758,49 @@ def get_os_language():
     except:
         pass
     return 'en_US'
+
+
+import os
+
+def get_saved_language():
+    try:
+        pref_path = os.path.join(os.path.dirname(__file__), '..', 'lang.txt')
+        if os.path.exists(pref_path):
+            with open(pref_path, 'r') as f:
+                saved = f.read().strip()
+                if saved in ('AUTO', 'EN', 'ZH', 'JA'):
+                    return saved
+    except:
+        pass
+    return 'AUTO'
+
+def set_saved_language(lang_val):
+    try:
+        pref_path = os.path.join(os.path.dirname(__file__), '..', 'lang.txt')
+        with open(pref_path, 'w') as f:
+            f.write(lang_val)
+    except:
+        pass
+
+def T_static(text):
+    lang = get_saved_language()
+    
+    if lang == 'AUTO':
+        locale_key = get_os_language()
+    elif lang == 'ZH':
+        locale_key = 'zh_CN'
+    elif lang == 'JA':
+        locale_key = 'ja_JP'
+    else:
+        locale_key = 'en_US'
+        
+    if text in TRANSLATIONS:
+        if locale_key in TRANSLATIONS[text]:
+            return TRANSLATIONS[text][locale_key]
+        if locale_key == 'en_US' and 'en_US' in TRANSLATIONS[text]:
+            return TRANSLATIONS[text]['en_US']
+            
+    return text
 
 def T(text):
     scene = bpy.context.scene

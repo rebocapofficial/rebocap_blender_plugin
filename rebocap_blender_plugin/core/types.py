@@ -256,6 +256,10 @@ def get_fps_mode_items(self, context):
         ('CUSTOM', T('自定义帧率 (Custom...)'), T('手动指定任意目标帧率数值'))
     ]
 
+def on_language_changed(self, context):
+    from .translation import set_saved_language
+    set_saved_language(self.rebocap_language)
+
 def register_types():
     bpy.utils.register_class(RebocapTake)
     bpy.types.Scene.rebocap_takes = bpy.props.CollectionProperty(type=RebocapTake)
@@ -273,6 +277,7 @@ def register_types():
         default=False
     )
     
+    from .translation import get_saved_language
     bpy.types.Scene.rebocap_language = bpy.props.EnumProperty(
         name="Language",
         items=[
@@ -281,7 +286,8 @@ def register_types():
             ('ZH', '中文', '强制使用简体中文 (Force Simplified Chinese)'),
             ('JA', '日本語', '强制使用日语 (Force Japanese)')
         ],
-        default='AUTO'
+        default=get_saved_language(),
+        update=on_language_changed
     )
     
     bpy.types.Scene.port = bpy.props.IntProperty(
@@ -305,19 +311,17 @@ def register_types():
         name='Armature Source'
     )
     
+    from .translation import T_static
+    
     bpy.types.Scene.rebocap_keep_character_position = bpy.props.BoolProperty(
         name="保持角色当前起点",
-        description="勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点。\n"
-                    "EN: Capture relative to current position, do not snap to world origin.\n"
-                    "JA: 現在のオブジェクト位置を基準にしてキャプチャし、ワールド原点に強制的に戻りません。",
+        description=T_static("勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点"),
         default=False
     )
     
     bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
         name="按场景帧率显示动捕",
-        description="勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持最高实时刷新率。\n"
-                    "EN: Viewport refresh rate drops to match scene FPS to save GPU; otherwise max refresh rate.\n"
-                    "JA: ビューポートの更新をシーンFPSに同期しGPU負荷を減らします。オフで最高レートを維持します。",
+        description=T_static("勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率"),
         default=False
     )
     
