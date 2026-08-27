@@ -167,6 +167,7 @@ def draw_text(text, x, y, size=11, color=(1.0, 1.0, 1.0, 1.0)):
 class PuppetCanvasState:
     is_active = False
     draw_handle = None
+    timer_handle = None
     
     # Position & Size (Floating on 3D Viewport)
     x = 40.0
@@ -181,6 +182,9 @@ class PuppetCanvasState:
     hovered_slot = -1
     image_texture = None
     bpy_image = None
+    
+    status_message = ""
+    status_timer = 0
 
 
 def ensure_texture_loaded():
@@ -296,7 +300,13 @@ def draw_puppet_hud_callback():
             draw_circle(cx, cy, r * 0.38, (0.30, 0.32, 0.38, 0.85))
             
     # 5. 底部状态提示条
-    if PuppetCanvasState.hovered_slot >= 0:
+    if PuppetCanvasState.status_timer > 0:
+        PuppetCanvasState.status_timer -= 1
+        draw_rect(px + 4.0, py + 4.0, pw - 8.0, 18.0, (0.0, 0.45, 0.25, 0.95))
+        draw_text(PuppetCanvasState.status_message, px + 8.0, py + 8.0, size=10, color=(1.0, 1.0, 1.0, 1.0))
+        # Ensure redraw while timer is ticking down
+        context.area.tag_redraw()
+    elif PuppetCanvasState.hovered_slot >= 0:
         h_idx = PuppetCanvasState.hovered_slot
         h_item = DEFAULT_SLOT_DEFS[h_idx]
         b_val = getattr(bone_map, f"node_{h_idx}", "") if bone_map else ""
@@ -404,18 +414,23 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
             armature = bpy.data.objects.get(src_name)
             
         if not armature or armature.type != 'ARMATURE':
-            self.report({'WARNING'}, T("Please select an armature object."))
+            PuppetCanvasState.status_message = T("请先选择一个骨架和骨骼 (Select an armature)")
+            PuppetCanvasState.status_timer = 100
             return
 
         selected_bones = [b.name for b in armature.data.bones if b.select]
         if not selected_bones:
-            self.report({'WARNING'}, T("No bone selected."))
+            PuppetCanvasState.status_message = T("未选中任何骨骼 (No bone selected)")
+            PuppetCanvasState.status_timer = 100
             return
 
         bone_name = selected_bones[0]
         setattr(bone_map, f"node_{slot_idx}", bone_name)
         slot_info = DEFAULT_SLOT_DEFS[slot_idx]
-        self.report({'INFO'}, f"✅ {slot_info[1]} ➔ {bone_name}")
+        
+        # Use HUD status instead of self.report to avoid GBK console mojibake (淇℃伅:)
+        PuppetCanvasState.status_message = f"✅ {slot_info[1]} ➔ {bone_name}"
+        PuppetCanvasState.status_timer = 120
 
     def invoke(self, context, event):
         if PuppetCanvasState.is_active:
