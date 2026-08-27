@@ -33,6 +33,15 @@ DEFAULT_SLOT_DEFS = [
     (21, "R_Palm",       [341.2, 457.5], 12.5, "R_Palm (右手掌)"),
 ]
 
+# Body wireframe bone link pairs (idx1, idx2)
+BONE_LINKS = [
+    (15, 12), (12, 9), (9, 6), (6, 3), (3, 0),       # Spine chain
+    (9, 13), (13, 16), (16, 18), (18, 20),           # Left arm
+    (9, 14), (14, 17), (17, 19), (19, 21),           # Right arm
+    (0, 1), (1, 4), (4, 7), (7, 10),                 # Left leg
+    (0, 2), (2, 5), (5, 8), (8, 11),                 # Right leg
+]
+
 IMG_REF_W = 389.0
 IMG_REF_H = 865.0
 
@@ -51,77 +60,114 @@ def _get_shader_2d_image():
 
 
 def draw_rect(x, y, w, h, color):
-    shader = _get_shader_2d_uniform()
-    vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
-    indices = [(0, 1, 2), (2, 3, 0)]
-    batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
-    shader.bind()
-    shader.uniform_float("color", color)
-    batch.draw(shader)
+    try:
+        shader = _get_shader_2d_uniform()
+        vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+        indices = [(0, 1, 2), (2, 3, 0)]
+        batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
+        shader.bind()
+        shader.uniform_float("color", color)
+        batch.draw(shader)
+    except Exception:
+        pass
 
 
 def draw_rect_border(x, y, w, h, color, line_width=1.0):
-    shader = _get_shader_2d_uniform()
-    vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
-    indices = [(0, 1), (1, 2), (2, 3), (3, 0)]
-    batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
-    shader.bind()
-    shader.uniform_float("color", color)
-    gpu.state.line_width_set(line_width)
-    batch.draw(shader)
-    gpu.state.line_width_set(1.0)
+    try:
+        shader = _get_shader_2d_uniform()
+        vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+        indices = [(0, 1), (1, 2), (2, 3), (3, 0)]
+        batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
+        shader.bind()
+        shader.uniform_float("color", color)
+        gpu.state.line_width_set(line_width)
+        batch.draw(shader)
+        gpu.state.line_width_set(1.0)
+    except Exception:
+        pass
 
 
-def draw_circle(cx, cy, r, color, segments=32):
-    shader = _get_shader_2d_uniform()
-    vertices = [(cx, cy)]
-    indices = []
-    for i in range(segments + 1):
-        angle = 2.0 * math.pi * i / segments
-        vertices.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
-        if i > 0:
-            indices.append((0, i, i + 1 if i < segments else 1))
-    batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
-    shader.bind()
-    shader.uniform_float("color", color)
-    batch.draw(shader)
+def draw_line(x1, y1, x2, y2, color, line_width=1.5):
+    try:
+        shader = _get_shader_2d_uniform()
+        vertices = [(x1, y1), (x2, y2)]
+        indices = [(0, 1)]
+        batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
+        shader.bind()
+        shader.uniform_float("color", color)
+        gpu.state.line_width_set(line_width)
+        batch.draw(shader)
+        gpu.state.line_width_set(1.0)
+    except Exception:
+        pass
 
 
-def draw_ring(cx, cy, r, color, line_width=2.0, segments=32):
-    shader = _get_shader_2d_uniform()
-    vertices = []
-    indices = []
-    for i in range(segments):
-        angle = 2.0 * math.pi * i / segments
-        vertices.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
-        indices.append((i, (i + 1) % segments))
-    batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
-    shader.bind()
-    shader.uniform_float("color", color)
-    gpu.state.line_width_set(line_width)
-    batch.draw(shader)
-    gpu.state.line_width_set(1.0)
+def draw_circle(cx, cy, r, color, segments=24):
+    try:
+        shader = _get_shader_2d_uniform()
+        vertices = [(cx, cy)]
+        indices = []
+        for i in range(1, segments + 1):
+            angle = 2.0 * math.pi * (i - 1) / segments
+            vertices.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
+        for i in range(1, segments):
+            indices.append((0, i, i + 1))
+        indices.append((0, segments, 1))
+        batch = batch_for_shader(shader, 'TRIS', {"pos": vertices}, indices=indices)
+        shader.bind()
+        shader.uniform_float("color", color)
+        batch.draw(shader)
+    except Exception:
+        pass
+
+
+def draw_ring(cx, cy, r, color, line_width=2.0, segments=24):
+    try:
+        shader = _get_shader_2d_uniform()
+        vertices = []
+        indices = []
+        for i in range(segments):
+            angle = 2.0 * math.pi * i / segments
+            vertices.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
+            indices.append((i, (i + 1) % segments))
+        batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
+        shader.bind()
+        shader.uniform_float("color", color)
+        gpu.state.line_width_set(line_width)
+        batch.draw(shader)
+        gpu.state.line_width_set(1.0)
+    except Exception:
+        pass
 
 
 def draw_image(image_texture, x, y, w, h, color=(1.0, 1.0, 1.0, 1.0)):
     if not image_texture:
         return
-    shader = _get_shader_2d_image()
-    vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
-    tex_coords = [(0, 0), (1, 0), (1, 1), (0, 1)]
-    indices = [(0, 1, 2), (2, 3, 0)]
-    batch = batch_for_shader(shader, 'TRIS', {"pos": vertices, "texCoord": tex_coords}, indices=indices)
-    shader.bind()
-    shader.uniform_sampler("image", image_texture)
-    batch.draw(shader)
+    try:
+        shader = _get_shader_2d_image()
+        vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+        tex_coords = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
+        indices = [(0, 1, 2), (2, 3, 0)]
+        batch = batch_for_shader(shader, 'TRIS', {"pos": vertices, "texCoord": tex_coords}, indices=indices)
+        shader.bind()
+        try:
+            shader.uniform_sampler("image", image_texture)
+        except Exception:
+            shader.uniform_float("image", image_texture)
+        batch.draw(shader)
+    except Exception:
+        pass
 
 
 def draw_text(text, x, y, size=11, color=(1.0, 1.0, 1.0, 1.0)):
-    font_id = 0
-    blf.position(font_id, x, y, 0)
-    blf.size(font_id, size)
-    blf.color(font_id, *color)
-    blf.draw(font_id, text)
+    try:
+        font_id = 0
+        blf.position(font_id, x, y, 0)
+        blf.size(font_id, size)
+        blf.color(font_id, *color)
+        blf.draw(font_id, text)
+    except Exception:
+        pass
 
 
 # ================== Viewport HUD State & Manager ==================
@@ -129,11 +175,11 @@ class PuppetCanvasState:
     is_active = False
     draw_handle = None
     
-    # Position & Size
-    x = 30.0
-    y = 60.0
-    w = 210.0
-    h = 460.0
+    # Position & Size (Floating on 3D Viewport)
+    x = 40.0
+    y = 80.0
+    w = 220.0
+    h = 480.0
     
     is_dragging = False
     drag_offset_x = 0.0
@@ -179,7 +225,6 @@ def draw_puppet_hud_callback():
     scene = context.scene
     bone_map = getattr(scene, 'rebocap_bone_map', None)
     
-    # 启用 Alpha 混合渲染
     gpu.state.blend_set('ALPHA')
     
     px = PuppetCanvasState.x
@@ -202,45 +247,56 @@ def draw_puppet_hud_callback():
     btn_close_y = py + ph - 20.0
     draw_text("✕", btn_close_x, btn_close_y, size=12, color=(0.8, 0.8, 0.85, 1.0))
     
-    # 3. 绘制人体线稿图片底图 (mannequin_outline.png)
-    tex = ensure_texture_loaded()
-    body_pad_x = 10.0
-    body_pad_bottom = 26.0
+    # 3. 计算 22 个插槽在视口屏幕上的绝对坐标
+    body_pad_x = 12.0
+    body_pad_bottom = 28.0
     body_w = pw - body_pad_x * 2.0
     body_h = ph - header_h - body_pad_bottom
     body_x = px + body_pad_x
     body_y = py + body_pad_bottom
-    
-    if tex:
-        draw_image(tex, body_x, body_y, body_w, body_h, color=(1.0, 1.0, 1.0, 0.85))
-        
-    # 4. 绘制 22 个发光圆圈插槽
     scale_x = body_w / IMG_REF_W
     scale_y = body_h / IMG_REF_H
     
+    # 绘制人体线稿图片底图 (mannequin_outline.png)
+    tex = ensure_texture_loaded()
+    if tex:
+        draw_image(tex, body_x, body_y, body_w, body_h, color=(1.0, 1.0, 1.0, 0.85))
+        
+    slot_screen_coords = {}
     for idx, b_name, ref_pos, radius, label in DEFAULT_SLOT_DEFS:
         cx = body_x + ref_pos[0] * scale_x
         cy = body_y + (IMG_REF_H - ref_pos[1]) * scale_y
-        r = radius * 0.52
+        slot_screen_coords[idx] = (cx, cy, radius * 0.52)
+        
+    # 4. 绘制人偶骨骼拓扑骨架连线 (Vector Skeleton Bone Links)
+    for idx1, idx2 in BONE_LINKS:
+        if idx1 in slot_screen_coords and idx2 in slot_screen_coords:
+            p1 = slot_screen_coords[idx1]
+            p2 = slot_screen_coords[idx2]
+            draw_line(p1[0], p1[1], p2[0], p2[1], (0.38, 0.44, 0.54, 0.55), line_width=1.5)
+            
+    # 5. 绘制 22 个发光同心圆插槽 (原点)
+    for idx, b_name, ref_pos, radius, label in DEFAULT_SLOT_DEFS:
+        cx, cy, r = slot_screen_coords[idx]
         
         # 判断映射状态
         mapped_bone = getattr(bone_map, f"node_{idx}", "") if bone_map else ""
         is_mapped = bool(mapped_bone and mapped_bone.strip())
         is_hovered = (PuppetCanvasState.hovered_slot == idx)
         
-        # 4.1 光晕与外圈
+        # 5.1 光晕与外圈
         if is_hovered:
-            draw_ring(cx, cy, r + 3.0, (0.95, 0.61, 0.07, 0.5), line_width=3.5) # 橙黄发光
+            draw_ring(cx, cy, r + 3.0, (0.95, 0.61, 0.07, 0.65), line_width=3.5) # 橙黄发光
             draw_ring(cx, cy, r, (1.0, 1.0, 1.0, 1.0), line_width=2.0)
             draw_circle(cx, cy, r * 0.45, (1.0, 1.0, 1.0, 1.0))
         elif is_mapped:
             draw_ring(cx, cy, r, (0.18, 0.80, 0.44, 1.0), line_width=2.2)      # 绿色已映射
             draw_circle(cx, cy, r * 0.42, (1.0, 1.0, 1.0, 0.95))
         else:
-            draw_ring(cx, cy, r, (0.45, 0.48, 0.55, 0.75), line_width=1.4)     # 灰色未映射
+            draw_ring(cx, cy, r, (0.50, 0.53, 0.60, 0.85), line_width=1.5)     # 灰色未映射
             draw_circle(cx, cy, r * 0.38, (0.28, 0.30, 0.35, 0.85))
             
-    # 5. 底部状态提示条
+    # 6. 底部状态提示条
     if PuppetCanvasState.hovered_slot >= 0:
         h_idx = PuppetCanvasState.hovered_slot
         h_item = DEFAULT_SLOT_DEFS[h_idx]
@@ -310,7 +366,6 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
                     context.area.tag_redraw()
 
         elif event.type in {'RIGHTMOUSE', 'ESC'} and event.value == 'PRESS':
-            # 右键或 ESC 退出
             self.stop_hud(context)
             return {'FINISHED'}
 
@@ -322,8 +377,8 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
         pw = PuppetCanvasState.w
         ph = PuppetCanvasState.h
         header_h = 28.0
-        body_pad_x = 10.0
-        body_pad_bottom = 26.0
+        body_pad_x = 12.0
+        body_pad_bottom = 28.0
         body_w = pw - body_pad_x * 2.0
         body_h = ph - header_h - body_pad_bottom
         body_x = px + body_pad_x
@@ -346,7 +401,6 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
             return
         armature = context.object
         if not armature or armature.type != 'ARMATURE':
-            # 尝试通过 source armature 查找
             src_name = context.scene.rebocap_source_armature
             armature = bpy.data.objects.get(src_name)
             
@@ -380,7 +434,10 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
     def stop_hud(self, context):
         PuppetCanvasState.is_active = False
         if PuppetCanvasState.draw_handle:
-            bpy.types.SpaceView3D.draw_handler_remove(PuppetCanvasState.draw_handle, 'WINDOW')
+            try:
+                bpy.types.SpaceView3D.draw_handler_remove(PuppetCanvasState.draw_handle, 'WINDOW')
+            except Exception:
+                pass
             PuppetCanvasState.draw_handle = None
         if context and context.area:
             context.area.tag_redraw()
