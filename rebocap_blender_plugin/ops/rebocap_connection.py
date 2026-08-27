@@ -655,22 +655,31 @@ class RebocapConnect(bpy.types.Operator):
                 last_data = rebocap_app.get_last_msg()
                 if last_data is not None:
                     # Only force redraw if we actually received real-time data
-                    # Throttle redraws to Scene FPS to save GPU (core still processes at 60Hz)
-                    import time
-                    current_time = time.time()
-                    if not hasattr(self, "_last_redraw_time"):
-                        self._last_redraw_time = 0
-                        
-                    scene_fps = ctx.scene.render.fps / ctx.scene.render.fps_base
-                    scene_fps = max(10.0, min(120.0, scene_fps)) # clamp sensible range
-                    redraw_interval = 1.0 / scene_fps
+                    # Check if user wants to throttle redraws to Scene FPS
+                    sync_fps = getattr(ctx.scene, 'rebocap_sync_viewport_fps', True)
                     
-                    if current_time - self._last_redraw_time >= redraw_interval:
-                        self._last_redraw_time = current_time
+                    if not sync_fps:
+                        # Full speed redraw (60Hz default)
                         for window in ctx.window_manager.windows:
                             for area in window.screen.areas:
                                 if area.type in ('VIEW_3D', 'PROPERTIES'):
                                     area.tag_redraw()
+                    else:
+                        import time
+                        current_time = time.time()
+                        if not hasattr(self, "_last_redraw_time"):
+                            self._last_redraw_time = 0
+                            
+                        scene_fps = ctx.scene.render.fps / ctx.scene.render.fps_base
+                        scene_fps = max(10.0, min(120.0, scene_fps)) # clamp sensible range
+                        redraw_interval = 1.0 / scene_fps
+                        
+                        if current_time - self._last_redraw_time >= redraw_interval:
+                            self._last_redraw_time = current_time
+                            for window in ctx.window_manager.windows:
+                                for area in window.screen.areas:
+                                    if area.type in ('VIEW_3D', 'PROPERTIES'):
+                                        area.tag_redraw()
 
                     trans, pose24, static_index, ts = last_data
                     self.drive_retarget(trans, pose24, static_index, ts)

@@ -301,6 +301,12 @@ def register_types():
         default=False
     )
     
+    bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
+        name="视口渲染同步场景帧率",
+        description="勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
+        default=True
+    )
+    
     bpy.types.Scene.rebocap_record_counter = bpy.props.IntProperty(name="Record Counter", default=0)
     
     bpy.types.Scene.rebocap_fps_mode = bpy.props.EnumProperty(

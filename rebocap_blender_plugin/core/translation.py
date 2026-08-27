@@ -668,6 +668,11 @@ TRANSLATIONS = {
         "en_US": "💡 Click a slot to bind the selected bone",
         "zh_CN": "💡 点击插槽绑定当前选中骨骼",
         "ja_JP": "💡 スロットをクリックして選択中のボーンをバインド",
+    },
+    "视口渲染同步场景帧率 (Sync Viewport to Scene FPS)": {
+        "en_US": "Sync Viewport to Scene FPS",
+        "zh_CN": "视口渲染同步场景帧率 (Sync Viewport to Scene FPS)",
+        "ja_JP": "ビューポート描画をシーンFPSに同期する (Sync Viewport to Scene FPS)",
     }
 }
 
