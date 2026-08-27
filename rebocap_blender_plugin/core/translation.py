@@ -101,8 +101,8 @@ TRANSLATIONS = {
         "zh_CN": "✅ VRM 人形骨架 (VRM Humanoid)",
         "ja_JP": "✅ VRM ヒューマノイド (VRM Humanoid)",
     },
-    "保持角色当前位置 (Keep Character Position)": {
-        "zh_CN": "保持角色当前位置 (Keep Character Position)",
+    "保持角色当前起点 (Keep Character Position)": {
+        "zh_CN": "保持角色当前起点 (Keep Character Position)",
         "ja_JP": "キャラクターの現在位置を保持 (Keep Position)",
         "en_US": "Keep Character Position",
     },

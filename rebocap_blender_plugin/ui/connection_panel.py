@@ -153,7 +153,7 @@ class ConnectionPanel(bpy.types.Panel):
         layout.separator()
         row = layout.row()
         row.prop(ctx.scene, "rebocap_keep_character_position", text="")
-        row.label(text=T("保持角色当前位置 (Keep Character Position)"))
+        row.label(text=T("保持角色当前起点 (Keep Character Position)"))
 
         # 场景实时环境信息 (帧率与尺寸单位，无独立背景框，紧靠左侧显示)
         row_fps = layout.row(align=True)

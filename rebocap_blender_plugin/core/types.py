@@ -296,7 +296,7 @@ def register_types():
     )
     
     bpy.types.Scene.rebocap_keep_character_position = bpy.props.BoolProperty(
-        name="保持角色当前位置",
+        name="保持角色当前起点",
         description="勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点",
         default=False
     )
