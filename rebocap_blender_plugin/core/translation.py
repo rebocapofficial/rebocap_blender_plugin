@@ -136,13 +136,13 @@ TRANSLATIONS = {
         "ja_JP": "録画は60fpsのマスターとして保存され、この設定で変換してタイムラインに適用されます。",
         "en_US": "Recordings are saved at 60fps master, and converted to the target FPS on apply.",
     },
-    "👤 开启人偶骨骼视口画布 (Puppet HUD) ➔": {
-        "zh_CN": "👤 开启人偶骨骼视口画布 (Puppet HUD) ➔",
+    "👤 显示人偶骨骼HUD": {
+        "zh_CN": "👤 显示人偶骨骼HUD",
         "ja_JP": "👤 人形ボーンHUD画面を開く (Puppet HUD) ➔",
         "en_US": "👤 Toggle Puppet Canvas HUD ➔",
     },
-    "👤 关闭人偶骨骼视口画布 (Hide HUD)": {
-        "zh_CN": "👤 关闭人偶骨骼视口画布 (Hide HUD)",
+    "👤 隐藏人偶骨骼HUD": {
+        "zh_CN": "👤 隐藏人偶骨骼HUD",
         "ja_JP": "👤 人形ボーンHUD画面を閉じる (Hide HUD)",
         "en_US": "👤 Close Puppet Canvas HUD",
     },
