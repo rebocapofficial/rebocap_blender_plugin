@@ -669,10 +669,15 @@ TRANSLATIONS = {
         "zh_CN": "💡 点击插槽绑定当前选中骨骼",
         "ja_JP": "💡 スロットをクリックして選択中のボーンをバインド",
     },
-    "视口渲染同步场景帧率 (Sync Viewport to Scene FPS)": {
+    "按场景帧率显示动捕 (Sync Viewport to Scene FPS)": {
         "en_US": "Sync Viewport to Scene FPS",
-        "zh_CN": "视口渲染同步场景帧率 (Sync Viewport to Scene FPS)",
-        "ja_JP": "ビューポート描画をシーンFPSに同期する (Sync Viewport to Scene FPS)",
+        "zh_CN": "按场景帧率显示动捕 (Sync Viewport to Scene FPS)",
+        "ja_JP": "シーンFPSに合わせて表示 (Sync Viewport to Scene FPS)",
+    },
+    "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率": {
+        "en_US": "When checked, the viewport refresh rate drops to match the scene FPS to save GPU; otherwise, it runs at max real-time refresh rate.",
+        "zh_CN": "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
+        "ja_JP": "チェックすると、ビューポートの更新がシーンのFPSに同期されGPUの負荷を減らします。チェックを外すと最高リアルタイム更新レートを維持します。",
     }
 }
 

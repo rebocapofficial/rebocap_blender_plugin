@@ -1,3 +1,4 @@
+from .translation import T
 from .a2t_types import RebocapA2TSettings
 import bpy
 
@@ -302,9 +303,9 @@ def register_types():
     )
     
     bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
-        name="视口渲染同步场景帧率",
-        description="勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
-        default=True
+        name="按场景帧率显示动捕",
+        description=T("勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率"),
+        default=False
     )
     
     bpy.types.Scene.rebocap_record_counter = bpy.props.IntProperty(name="Record Counter", default=0)

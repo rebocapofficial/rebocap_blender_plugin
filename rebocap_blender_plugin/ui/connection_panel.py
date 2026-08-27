@@ -179,7 +179,7 @@ class ConnectionPanel(bpy.types.Panel):
         
         row = layout.row()
         row.prop(ctx.scene, "rebocap_sync_viewport_fps", text="")
-        row.label(text=T("视口渲染同步场景帧率 (Sync Viewport to Scene FPS)"))
+        row.label(text=T("按场景帧率显示动捕 (Sync Viewport to Scene FPS)"))
 
         # 场景实时环境信息 (帧率与尺寸单位，无独立背景框，紧靠左侧显示)
         row_fps = layout.row(align=True)
