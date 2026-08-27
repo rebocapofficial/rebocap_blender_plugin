@@ -36,7 +36,7 @@ class REBOCAP_PT_fk_panel(bpy.types.Panel):
         row_puppet = col.row(align=True)
         row_puppet.scale_y = 1.3
         is_active = PuppetCanvasState.is_active
-        btn_text = T("👤 关闭人偶骨骼视口画布 (Hide HUD)") if is_active else T("👤 开启人偶骨骼视口画布 (Puppet HUD) ➔")
+        btn_text = T("👤 隐藏人偶骨骼HUD") if is_active else T("👤 显示人偶骨骼HUD")
         row_puppet.operator('rebocap.toggle_puppet_hud', text=btn_text, icon='USER', depress=is_active)
         col.separator()
         

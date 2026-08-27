@@ -649,6 +649,26 @@ TRANSLATIONS = {
         "zh_CN": "导出映射json",
         "ja_JP": "マッピングJSONをエクスポート",
     },
+    "请先选择一个骨架和骨骼 (Select an armature)": {
+        "en_US": "Please select an armature first",
+        "zh_CN": "请先选择一个骨架和骨骼",
+        "ja_JP": "先にアーマチュアを選択してください",
+    },
+    "未选中任何骨骼 (No bone selected)": {
+        "en_US": "No bone selected",
+        "zh_CN": "未选中任何骨骼",
+        "ja_JP": "ボーンが選択されていません",
+    },
+    "(点击绑定)": {
+        "en_US": "(Click to Bind)",
+        "zh_CN": "(点击绑定)",
+        "ja_JP": "(クリックでバインド)",
+    },
+    "💡 点击插槽绑定当前选中骨骼": {
+        "en_US": "💡 Click a slot to bind the selected bone",
+        "zh_CN": "💡 点击插槽绑定当前选中骨骼",
+        "ja_JP": "💡 スロットをクリックして選択中のボーンをバインド",
+    }
 }
 
 import locale

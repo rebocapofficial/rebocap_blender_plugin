@@ -310,11 +310,11 @@ def draw_puppet_hud_callback():
         h_idx = PuppetCanvasState.hovered_slot
         h_item = DEFAULT_SLOT_DEFS[h_idx]
         b_val = getattr(bone_map, f"node_{h_idx}", "") if bone_map else ""
-        disp_txt = f"{h_item[1]}: {b_val}" if b_val else f"{h_item[1]}: (点击绑定)"
+        disp_txt = f"{h_item[1]}: {b_val}" if b_val else f"{h_item[1]}: {T('(点击绑定)')}"
         draw_rect(px + 4.0, py + 4.0, pw - 8.0, 18.0, (0.0, 0.5, 0.8, 0.9))
         draw_text(disp_txt, px + 8.0, py + 8.0, size=10, color=(1.0, 1.0, 1.0, 1.0))
     else:
-        draw_text("💡 点击插槽绑定当前选中骨骼", px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
+        draw_text(T("💡 点击插槽绑定当前选中骨骼"), px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
         
     gpu.state.blend_set('NONE')
 
