@@ -660,6 +660,9 @@ class RebocapConnect(bpy.types.Operator):
                     
                     if not sync_fps:
                         # Full speed redraw (60Hz default)
+                        trans, pose24, static_index, ts = last_data
+                        self.drive_retarget(trans, pose24, static_index, ts)
+                        self.drive_ik_tracking(trans, pose24)
                         for window in ctx.window_manager.windows:
                             for area in window.screen.areas:
                                 if area.type in ('VIEW_3D', 'PROPERTIES'):
@@ -676,14 +679,16 @@ class RebocapConnect(bpy.types.Operator):
                         
                         if current_time - self._last_redraw_time >= redraw_interval:
                             self._last_redraw_time = current_time
+                            
+                            # Move math inside throttle! Mutating RNA forces Blender depsgraph redraw.
+                            trans, pose24, static_index, ts = last_data
+                            self.drive_retarget(trans, pose24, static_index, ts)
+                            self.drive_ik_tracking(trans, pose24)
+                            
                             for window in ctx.window_manager.windows:
                                 for area in window.screen.areas:
                                     if area.type in ('VIEW_3D', 'PROPERTIES'):
                                         area.tag_redraw()
-
-                    trans, pose24, static_index, ts = last_data
-                    self.drive_retarget(trans, pose24, static_index, ts)
-                    self.drive_ik_tracking(trans, pose24)
             except Exception as e:
                 # Safe disconnect if connection broke down
                 print(f"[Rebocap] Driver error: {e}")
