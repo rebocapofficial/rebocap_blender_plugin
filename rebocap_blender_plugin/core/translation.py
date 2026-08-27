@@ -45,6 +45,17 @@ TRANSLATIONS = {
         "en_US": "Tracking Point Mode",
         "it_IT": "Modalità Punti di Tracciamento"
     },
+    "Version: Beta 11.6": {
+        "zh_CN": "Version: Beta 11.6",
+        "ja_JP": "Version: Beta 11.6",
+        "en_US": "Version: Beta 11.6",
+        "zh_TW": "Version: Beta 11.6",
+        "es_ES": "Version: Beta 11.6",
+        "fr_FR": "Version: Beta 11.6",
+        "ko_KR": "Version: Beta 11.6",
+        "ru_RU": "Version: Beta 11.6",
+        "it_IT": "Versione: Beta 11.6"
+    },
     "Version: Beta 11.5": {
         "zh_CN": "Version: Beta 11.5",
         "ja_JP": "Version: Beta 11.5",

@@ -214,7 +214,7 @@ class ConnectionPanel(bpy.types.Panel):
         row_unit.label(text=f"{T('尺寸单位:')} {_get_scene_unit_str(ctx.scene)}", icon='CON_SIZELIMIT')
         
         row = layout.row()
-        row.label(text=T("Version: Beta 11.5"))
+        row.label(text=T("Version: Beta 11.6"))
         
         row_lang = row.row(align=True)
         row_lang.alignment = 'RIGHT'
