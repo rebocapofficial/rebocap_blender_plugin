@@ -258,6 +258,10 @@ def register_types():
         name="Has New Take Notification",
         default=False
     )
+    bpy.types.Scene.rebocap_show_auto_detect_help = bpy.props.BoolProperty(
+        name="Show Auto Detect Help",
+        default=False
+    )
     
     bpy.types.Scene.rebocap_language = bpy.props.EnumProperty(
         name="Language",
