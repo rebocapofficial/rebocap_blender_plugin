@@ -407,7 +407,6 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
 
 
     def _select_mapped_bone(self, context, slot_idx):
-        from .translation import T
         bone_map = getattr(context.scene, 'rebocap_bone_map', None)
         if not bone_map:
             return
