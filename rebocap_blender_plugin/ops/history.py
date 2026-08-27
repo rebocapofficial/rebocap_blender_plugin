@@ -2,7 +2,7 @@ import bpy
 import json
 import os
 from bpy_extras.io_utils import ExportHelper, ImportHelper
-from ..core.translation import T
+from ..core.translation import T, T_static
 from .rebocap_connection import _is_legacy_action, _action_iter_fcurves, _action_fcurve_new
 def _get_effective_target_fps(scene):
     mode = getattr(scene, 'rebocap_fps_mode', 'SCENE')
@@ -22,8 +22,8 @@ def _get_effective_target_fps(scene):
 
 class REBOCAP_OT_apply_take(bpy.types.Operator):
     bl_idname = "rebocap.apply_take"
-    bl_label = "挂载到时间轴 (Apply Take)"
-    bl_description = "将选中的历史记录应用到当前时间轴"
+    bl_label = T_static("挂载到时间轴 (Apply Take)")
+    bl_description = T_static("将选中的历史记录应用到当前时间轴")
     
     @classmethod
     def poll(cls, context):
@@ -109,8 +109,8 @@ class REBOCAP_OT_apply_take(bpy.types.Operator):
 
 class REBOCAP_OT_delete_take(bpy.types.Operator):
     bl_idname = "rebocap.delete_take"
-    bl_label = "删除记录 (Delete Take)"
-    bl_description = "删除当前选中的历史记录及其实际的动作数据"
+    bl_label = T_static("删除记录 (Delete Take)")
+    bl_description = T_static("删除当前选中的历史记录及其实际的动作数据")
     bl_options = {'REGISTER', 'UNDO'}
     
     @classmethod
@@ -158,7 +158,7 @@ class REBOCAP_OT_delete_take(bpy.types.Operator):
 
 class REBOCAP_OT_export_take(bpy.types.Operator, ExportHelper):
     bl_idname = "rebocap.export_take"
-    bl_label = "导出片段json (Export JSON)"
+    bl_label = T_static("导出片段json (Export JSON)")
     filename_ext = ".json"
     filter_glob: bpy.props.StringProperty(default="*.json", options={'HIDDEN'})
     
@@ -222,7 +222,7 @@ class REBOCAP_OT_export_take(bpy.types.Operator, ExportHelper):
 
 class REBOCAP_OT_import_take(bpy.types.Operator, ImportHelper):
     bl_idname = "rebocap.import_take"
-    bl_label = "导入片段json (Import JSON)"
+    bl_label = T_static("导入片段json (Import JSON)")
     filename_ext = ".json"
     filter_glob: bpy.props.StringProperty(default="*.json", options={'HIDDEN'})
     

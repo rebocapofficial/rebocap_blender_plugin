@@ -1,11 +1,11 @@
-﻿import bpy
-from ..core.translation import T
+import bpy
+from ..core.translation import T, T_static
 
 
 class REBOCAP_OT_puppet_mapper(bpy.types.Operator):
     bl_idname = "rebocap.open_puppet_mapper"
-    bl_label = "Rebocap 人偶骨骼映射器 (Puppet Bone Mapper)"
-    bl_description = "打开类似 Maya HumanIK 的人偶骨骼映射画布窗口，辅助快速选择与分配骨骼"
+    bl_label = T_static("Rebocap 人偶骨骼映射器 (Puppet Bone Mapper)")
+    bl_description = T_static("Rebocap 人偶骨骼映射器 (Puppet Bone Mapper)")
     bl_options = {'REGISTER', 'UNDO'}
 
     def invoke(self, context, event):
@@ -152,8 +152,8 @@ class REBOCAP_OT_puppet_mapper(bpy.types.Operator):
 
 class REBOCAP_OT_clear_all_bone_map(bpy.types.Operator):
     bl_idname = "rebocap.clear_all_bone_map"
-    bl_label = "清空全部骨骼映射"
-    bl_description = "一键清空当前所有 24 根骨骼的绑定映射"
+    bl_label = T_static("清空全部骨骼映射")
+    bl_description = T_static("清空全部骨骼映射")
     bl_options = {'REGISTER', 'UNDO'}
     
     def execute(self, context):

@@ -1,11 +1,11 @@
 import bpy
 import json
 from bpy_extras.io_utils import ExportHelper, ImportHelper
-from ..core.translation import T
+from ..core.translation import T, T_static
 
 class REBOCAP_OT_language_changed_msg(bpy.types.Operator):
     bl_idname = "rebocap.language_changed_msg"
-    bl_label = "Language Changed"
+    bl_label = T_static("Language Changed")
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self, width=300)
@@ -20,7 +20,7 @@ class REBOCAP_OT_language_changed_msg(bpy.types.Operator):
 
 class REBOCAP_OT_export_bone_map(bpy.types.Operator, ExportHelper):
     bl_idname = "rebocap.export_bone_map"
-    bl_label = "导出 JSON (Export Config)"
+    bl_label = T_static("导出 JSON (Export Config)")
     filename_ext = ".json"
     filter_glob: bpy.props.StringProperty(default="*.json", options={'HIDDEN'})
 
@@ -39,7 +39,7 @@ class REBOCAP_OT_export_bone_map(bpy.types.Operator, ExportHelper):
 
 class REBOCAP_OT_import_bone_map(bpy.types.Operator, ImportHelper):
     bl_idname = "rebocap.import_bone_map"
-    bl_label = "导入 JSON (Import Config)"
+    bl_label = T_static("导入 JSON (Import Config)")
     filename_ext = ".json"
     filter_glob: bpy.props.StringProperty(default="*.json", options={'HIDDEN'})
 
@@ -97,7 +97,7 @@ def _get_scene_unit_str(scene):
 
 class REBOCAP_OT_change_scene_fps(bpy.types.Operator):
     bl_idname = "rebocap.change_scene_fps"
-    bl_label = "修改场景帧率 (Change Scene FPS)"
+    bl_label = T_static("修改场景帧率 (Change Scene FPS)")
     bl_options = {'REGISTER', 'UNDO'}
     
     new_fps: bpy.props.IntProperty(
@@ -212,8 +212,8 @@ class ConnectionPanel(bpy.types.Panel):
 
 class PickBoneOperator(bpy.types.Operator):
     bl_idname = "object.pick_bone"
-    bl_label = "使用选中的骨骼 (Use Selected Bone)"
-    bl_description = "分配当前在姿态模式或大纲中选中的骨骼 (Assign selected bone)"
+    bl_label = T_static("使用选中的骨骼 (Use Selected Bone)")
+    bl_description = T_static("分配当前在姿态模式或大纲中选中的骨骼 (Assign selected bone)")
 
     bone_type: bpy.props.StringProperty()
 

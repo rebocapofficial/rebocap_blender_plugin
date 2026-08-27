@@ -4,7 +4,7 @@ import bpy
 import gpu
 from gpu_extras.batch import batch_for_shader
 import blf
-from ..core.translation import T
+from ..core.translation import T, T_static
 
 
 # 22 Bone Slot Definitions matching Maya HumanIK Mannequin (Normalized Coordinates 389 x 865)
@@ -322,8 +322,8 @@ def draw_puppet_hud_callback():
 # ================== Modal Operator for Interactive Viewport Control ==================
 class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
     bl_idname = "rebocap.toggle_puppet_hud"
-    bl_label = "开启人偶骨骼映射视口 (Puppet HUD)"
-    bl_description = "在 3D 视口中开启/关闭交互式人偶骨骼映射画布"
+    bl_label = T_static("开启人偶骨骼映射视口 (Puppet HUD)")
+    bl_description = T_static("开启人偶骨骼映射视口 (Puppet HUD)")
 
     def modal(self, context, event):
         if not PuppetCanvasState.is_active:
