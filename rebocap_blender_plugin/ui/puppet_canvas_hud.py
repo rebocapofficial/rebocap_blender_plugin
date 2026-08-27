@@ -45,9 +45,20 @@ def _get_shader_2d_uniform():
 
 def _get_shader_2d_image():
     try:
-        return gpu.shader.from_builtin('IMAGE_2D')
+        # Blender 4.0+ standard image shader
+        return gpu.shader.from_builtin('IMAGE')
     except Exception:
+        pass
+    try:
+        # Blender 4.0+ colored image shader
+        return gpu.shader.from_builtin('IMAGE_COLOR')
+    except Exception:
+        pass
+    try:
+        # Blender 3.x fallback
         return gpu.shader.from_builtin('2D_IMAGE')
+    except Exception:
+        return None
 
 
 def draw_rect(x, y, w, h, color):
@@ -121,6 +132,8 @@ def draw_image(image_texture, x, y, w, h, color=(1.0, 1.0, 1.0, 1.0)):
         return
     try:
         shader = _get_shader_2d_image()
+        if not shader:
+            return
         vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
         tex_coords = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
         indices = [(0, 1, 2), (2, 3, 0)]
