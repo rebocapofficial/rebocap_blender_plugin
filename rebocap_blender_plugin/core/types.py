@@ -318,13 +318,13 @@ def register_types():
     from .translation import T_static
     
     bpy.types.Scene.rebocap_keep_character_position = bpy.props.BoolProperty(
-        name=T_static("保持角色当前起点"),
+        name=T_static("保持角色当前起点 (Keep Character Position)"),
         description=T_static("勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点"),
         default=False
     )
     
     bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
-        name=T_static("按场景帧率显示动捕"),
+        name=T_static("按场景帧率显示动捕 (Sync Viewport to Scene FPS)"),
         description=T_static("勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率"),
         default=False
     )
