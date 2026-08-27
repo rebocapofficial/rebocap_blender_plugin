@@ -314,7 +314,7 @@ def draw_puppet_hud_callback():
         draw_rect(px + 4.0, py + 4.0, pw - 8.0, 18.0, (0.0, 0.5, 0.8, 0.9))
         draw_text(disp_txt, px + 8.0, py + 8.0, size=10, color=(1.0, 1.0, 1.0, 1.0))
     else:
-        draw_text(T("💡 悬停查看对应骨骼名称"), px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
+        draw_text(T("💡 悬停查看对应骨骼，点击绿点快速选中"), px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
         
     gpu.state.blend_set('NONE')
 
@@ -351,8 +351,12 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
                     PuppetCanvasState.drag_offset_x = mx - px
                     PuppetCanvasState.drag_offset_y = my - py
                     return {'RUNNING_MODAL'}
-                # 只保留点击检查以防止穿透到3D视图，不执行绑定逻辑
+                # 检查点击插槽（联动选中已映射骨骼）
                 if (px <= mx <= px + pw) and (py <= my <= py + ph - header_h):
+                    clicked_slot = self._hit_test_slot(mx, my)
+                    if clicked_slot >= 0:
+                        self._select_mapped_bone(context, clicked_slot)
+                        context.area.tag_redraw()
                     return {'RUNNING_MODAL'}
             elif event.value == 'RELEASE':
                 PuppetCanvasState.is_dragging = False
@@ -401,6 +405,42 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
         return -1
 
 
+
+    def _select_mapped_bone(self, context, slot_idx):
+        from .translation import T
+        bone_map = getattr(context.scene, 'rebocap_bone_map', None)
+        if not bone_map:
+            return
+            
+        mapped_bone_name = getattr(bone_map, f"node_{slot_idx}", "")
+        if not mapped_bone_name:
+            return
+            
+        src_name = context.scene.rebocap_source_armature
+        if not src_name:
+            return
+            
+        armature = bpy.data.objects.get(src_name)
+        if not armature or armature.type != 'ARMATURE':
+            return
+            
+        if context.active_object != armature:
+            context.view_layer.objects.active = armature
+            armature.select_set(True)
+            
+        if context.mode != 'POSE':
+            bpy.ops.object.mode_set(mode='POSE')
+            
+        bpy.ops.pose.select_all(action='DESELECT')
+            
+        if mapped_bone_name in armature.pose.bones:
+            target_pb = armature.pose.bones[mapped_bone_name]
+            target_pb.select = True
+            armature.data.bones.active = target_pb.bone
+            
+            slot_info = DEFAULT_SLOT_DEFS[slot_idx]
+            PuppetCanvasState.status_message = f"Selected: {slot_info[1]} -> {mapped_bone_name}"
+            PuppetCanvasState.status_timer = 100
 
     def invoke(self, context, event):
         if PuppetCanvasState.is_active:

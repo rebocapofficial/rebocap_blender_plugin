@@ -679,6 +679,11 @@ TRANSLATIONS = {
         "zh_CN": "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
         "ja_JP": "チェックすると、ビューポートの更新がシーンのFPSに同期されGPUの負荷を減らします。チェックを外すと最高リアルタイム更新レートを維持します。",
     },
+    "💡 悬停查看对应骨骼，点击绿点快速选中": {
+        "en_US": "💡 Hover to view bone name, click green dot to select",
+        "zh_CN": "💡 悬停查看对应骨骼，点击绿点快速选中",
+        "ja_JP": "💡 ホバーでボーン名を確認、緑の点をクリックで選択"
+    },
     "自动匹配场景 (Auto Scene)": {
         "en_US": "Auto Match Scene (Auto Scene)",
         "zh_CN": "自动匹配场景 (Auto Scene)",
