@@ -80,6 +80,28 @@ def _get_scene_unit_str(scene):
         return f"公制: {name}"
 
 
+class REBOCAP_OT_change_scene_fps(bpy.types.Operator):
+    bl_idname = "rebocap.change_scene_fps"
+    bl_label = "修改场景帧率 (Change Scene FPS)"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    new_fps: bpy.props.IntProperty(
+        name="FPS",
+        description="设置新的场景帧率",
+        default=60,
+        min=1,
+        max=240
+    )
+    
+    def invoke(self, context, event):
+        self.new_fps = round(context.scene.render.fps / context.scene.render.fps_base)
+        return context.window_manager.invoke_props_dialog(self)
+        
+    def execute(self, context):
+        context.scene.render.fps = self.new_fps
+        context.scene.render.fps_base = 1.0
+        return {'FINISHED'}
+
 class ConnectionPanel(bpy.types.Panel):
     bl_idname = 'REBOCAP_PT_connection_panel'
     bl_label = " "
@@ -163,6 +185,7 @@ class ConnectionPanel(bpy.types.Panel):
         row_fps = layout.row(align=True)
         row_fps.alignment = 'LEFT'
         row_fps.label(text=f"{T('场景帧率:')} {_get_scene_fps_str(ctx.scene)}", icon='TIME')
+        row_fps.operator("rebocap.change_scene_fps", text="", icon='GREASEPENCIL')
         
         row_unit = layout.row(align=True)
         row_unit.alignment = 'LEFT'

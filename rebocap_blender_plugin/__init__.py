@@ -47,6 +47,7 @@ class_list = [
     ops.ik_tracking.REBOCAP_OT_create_tracking_nodes,
     ops.ik_tracking.REBOCAP_OT_import_character,
     core.RebocapBones,
+    ui.REBOCAP_OT_change_scene_fps,
     ui.ConnectionPanel,
     history_panel.REBOCAP_UL_history_takes,
     history_panel.REBOCAP_PT_history_panel,
