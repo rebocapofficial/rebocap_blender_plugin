@@ -116,7 +116,7 @@ def draw_ring(cx, cy, r, color, line_width=2.0, segments=24):
         pass
 
 
-def draw_image(image_texture, x, y, w, h):
+def draw_image(image_texture, x, y, w, h, color=(1.0, 1.0, 1.0, 1.0)):
     if not image_texture:
         return
     try:
@@ -130,8 +130,12 @@ def draw_image(image_texture, x, y, w, h):
             shader.uniform_sampler("image", image_texture)
         except Exception:
             pass
+        try:
+            shader.uniform_float("color", color)
+        except Exception:
+            pass
         batch.draw(shader)
-    except Exception as e:
+    except Exception:
         pass
 
 
@@ -189,15 +193,24 @@ def ensure_texture_loaded():
     try:
         if not bpy_img.has_data or bpy_img.size[0] == 0:
             bpy_img.reload()
-        _ = len(bpy_img.pixels)
+        _ = bpy_img.pixels[0]
     except Exception:
         pass
 
     PuppetCanvasState.bpy_image = bpy_img
+    
+    # Method 1: from_image
     try:
         PuppetCanvasState.image_texture = gpu.texture.from_image(bpy_img)
     except Exception:
-        pass
+        # Method 2: Buffer fallback
+        try:
+            w, h = bpy_img.size[0], bpy_img.size[1]
+            buf = gpu.types.Buffer('FLOAT', len(bpy_img.pixels), bpy_img.pixels)
+            PuppetCanvasState.image_texture = gpu.types.GPUTexture((w, h), format='RGBA16F', data=buf)
+        except Exception:
+            pass
+
     return PuppetCanvasState.image_texture
 
 
@@ -241,7 +254,7 @@ def draw_puppet_hud_callback():
     
     tex = ensure_texture_loaded()
     if tex:
-        draw_image(tex, body_x, body_y, body_w, body_h)
+        draw_image(tex, body_x, body_y, body_w, body_h, color=(1.0, 1.0, 1.0, 0.9))
         
     # 4. 计算 22 个发光同心圆插槽 (原点) 在视口中的坐标
     scale_x = body_w / IMG_REF_W
