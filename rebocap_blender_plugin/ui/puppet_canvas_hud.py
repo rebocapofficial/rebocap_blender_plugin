@@ -439,6 +439,31 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
             
         PuppetCanvasState.is_active = True
         PuppetCanvasState.image_texture = None  # Reset texture to ensure fresh load on open
+        
+        # Dynamically place HUD on the right side of the 3D Viewport
+        # When clicking a button in the N-panel, context.region is the N-panel (UI region).
+        # We need to find the actual 3D viewport region ('WINDOW') to get the correct width/height.
+        window_region = None
+        for r in context.area.regions:
+            if r.type == 'WINDOW':
+                window_region = r
+                break
+                
+        PuppetCanvasState.w = 220.0
+        PuppetCanvasState.h = 480.0
+        
+        if window_region:
+            PuppetCanvasState.x = window_region.width - PuppetCanvasState.w - 30.0
+            PuppetCanvasState.y = (window_region.height - PuppetCanvasState.h) * 0.5
+        else:
+            PuppetCanvasState.x = 40.0
+            PuppetCanvasState.y = 80.0
+        
+        if PuppetCanvasState.x < 10.0:
+            PuppetCanvasState.x = 10.0
+        if PuppetCanvasState.y < 10.0:
+            PuppetCanvasState.y = 10.0
+
         PuppetCanvasState.draw_handle = bpy.types.SpaceView3D.draw_handler_add(
             draw_puppet_hud_callback, (), 'WINDOW', 'POST_PIXEL'
         )
