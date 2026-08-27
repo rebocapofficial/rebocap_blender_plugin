@@ -30,6 +30,13 @@ class REBOCAP_PT_fk_panel(bpy.types.Panel):
         layout = self.layout
         rebocap_bone_map = ctx.scene.rebocap_bone_map
         col = layout.column()
+        
+        # 1. 独立人偶骨骼映射画布入口
+        row_puppet = col.row(align=True)
+        row_puppet.scale_y = 1.25
+        row_puppet.operator('rebocap.open_puppet_mapper', text=T("👤 打开人偶骨骼映射画布 (Puppet View) ➔"), icon='USER')
+        col.separator()
+        
         row = col.row(align=True)
         source = bpy.data.objects.get(ctx.scene.rebocap_source_armature)
         

@@ -36,6 +36,8 @@ class_list = [
     ops.SaveBone,
     ops.REBOCAP_OT_select_foot_contact_point,
     ops.REBOCAP_OT_place_all_foot_contact_points,
+    ops.puppet_mapper.REBOCAP_OT_puppet_mapper,
+    ops.puppet_mapper.REBOCAP_OT_clear_all_bone_map,
     ops.ik_tracking.REBOCAP_OT_auto_detect_config,
     ops.ik_tracking.REBOCAP_OT_read_config_data,
     ops.a2t_ops.REBOCAP_OT_export_a2t_json,

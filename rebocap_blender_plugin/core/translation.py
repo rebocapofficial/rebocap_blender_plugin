@@ -136,6 +136,41 @@ TRANSLATIONS = {
         "ja_JP": "録画は60fpsのマスターとして保存され、この設定で変換してタイムラインに適用されます。",
         "en_US": "Recordings are saved at 60fps master, and converted to the target FPS on apply.",
     },
+    "👤 打开人偶骨骼映射画布 (Puppet View) ➔": {
+        "zh_CN": "👤 打开人偶骨骼映射画布 (Puppet View) ➔",
+        "ja_JP": "👤 人形ボーンマッピング画面を開く (Puppet View) ➔",
+        "en_US": "👤 Open Puppet Bone Mapper ➔",
+    },
+    "Rebocap 人偶画布 (Skeleton View)": {
+        "zh_CN": "Rebocap 人偶画布 (Skeleton View)",
+        "ja_JP": "Rebocap 人形キャンバス (Skeleton View)",
+        "en_US": "Rebocap Skeleton View",
+    },
+    "FK 骨骼映射清单 (FK Definition):": {
+        "zh_CN": "FK 骨骼映射清单 (FK Definition):",
+        "ja_JP": "FKボーン定義リスト (FK Definition):",
+        "en_US": "FK Bone Definition:",
+    },
+    "四肢对称映射:": {
+        "zh_CN": "四肢对称映射:",
+        "ja_JP": "四肢対称マッピング:",
+        "en_US": "Limbs Mapping:",
+    },
+    "Left (左)": {
+        "zh_CN": "Left (左)",
+        "ja_JP": "Left (左)",
+        "en_US": "Left",
+    },
+    "Right (右)": {
+        "zh_CN": "Right (右)",
+        "ja_JP": "Right (右)",
+        "en_US": "Right",
+    },
+    "清空全部": {
+        "zh_CN": "清空全部",
+        "ja_JP": "すべてクリア",
+        "en_US": "Clear All",
+    },
     "片段名称": {
         "zh_CN": "片段名称",
         "ja_JP": "テイク名",
