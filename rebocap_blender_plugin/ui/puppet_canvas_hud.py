@@ -310,11 +310,11 @@ def draw_puppet_hud_callback():
         h_idx = PuppetCanvasState.hovered_slot
         h_item = DEFAULT_SLOT_DEFS[h_idx]
         b_val = getattr(bone_map, f"node_{h_idx}", "") if bone_map else ""
-        disp_txt = f"{h_item[1]}: {b_val}" if b_val else f"{h_item[1]}: {T('(点击绑定)')}"
+        disp_txt = f"{h_item[1]}: {b_val}" if b_val else f"{h_item[1]} (Unmapped)"
         draw_rect(px + 4.0, py + 4.0, pw - 8.0, 18.0, (0.0, 0.5, 0.8, 0.9))
         draw_text(disp_txt, px + 8.0, py + 8.0, size=10, color=(1.0, 1.0, 1.0, 1.0))
     else:
-        draw_text(T("💡 点击插槽绑定当前选中骨骼"), px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
+        draw_text(T("💡 悬停查看对应骨骼名称"), px + 8.0, py + 8.0, size=10, color=(0.6, 0.65, 0.7, 0.8))
         
     gpu.state.blend_set('NONE')
 
@@ -351,13 +351,9 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
                     PuppetCanvasState.drag_offset_x = mx - px
                     PuppetCanvasState.drag_offset_y = my - py
                     return {'RUNNING_MODAL'}
-                # 检查点击插槽绑定
+                # 只保留点击检查以防止穿透到3D视图，不执行绑定逻辑
                 if (px <= mx <= px + pw) and (py <= my <= py + ph - header_h):
-                    clicked_slot = self._hit_test_slot(mx, my)
-                    if clicked_slot >= 0:
-                        self._assign_selected_bone_to_slot(context, clicked_slot)
-                        context.area.tag_redraw()
-                        return {'RUNNING_MODAL'}
+                    return {'RUNNING_MODAL'}
             elif event.value == 'RELEASE':
                 PuppetCanvasState.is_dragging = False
 
@@ -404,33 +400,7 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
                 return idx
         return -1
 
-    def _assign_selected_bone_to_slot(self, context, slot_idx):
-        bone_map = getattr(context.scene, 'rebocap_bone_map', None)
-        if not bone_map:
-            return
-        armature = context.object
-        if not armature or armature.type != 'ARMATURE':
-            src_name = context.scene.rebocap_source_armature
-            armature = bpy.data.objects.get(src_name)
-            
-        if not armature or armature.type != 'ARMATURE':
-            PuppetCanvasState.status_message = T("请先选择一个骨架和骨骼 (Select an armature)")
-            PuppetCanvasState.status_timer = 100
-            return
 
-        selected_bones = [b.name for b in armature.data.bones if b.select]
-        if not selected_bones:
-            PuppetCanvasState.status_message = T("未选中任何骨骼 (No bone selected)")
-            PuppetCanvasState.status_timer = 100
-            return
-
-        bone_name = selected_bones[0]
-        setattr(bone_map, f"node_{slot_idx}", bone_name)
-        slot_info = DEFAULT_SLOT_DEFS[slot_idx]
-        
-        # Use HUD status instead of self.report to avoid GBK console mojibake (淇℃伅:)
-        PuppetCanvasState.status_message = f"✅ {slot_info[1]} ➔ {bone_name}"
-        PuppetCanvasState.status_timer = 120
 
     def invoke(self, context, event):
         if PuppetCanvasState.is_active:
