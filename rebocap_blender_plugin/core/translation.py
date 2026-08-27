@@ -5,19 +5,43 @@ TRANSLATIONS = {
     "Connection": {
         "zh_CN": "连接与录制",
         "ja_JP": "接続と録画",
-    },
+    
+        "zh_TW": "連接與錄製",
+        "es_ES": "Conexión",
+        "fr_FR": "Connexion",
+        "ko_KR": "연결 및 녹화",
+        "ru_RU": "Подключение",
+},
     "Character Skeleton": {
         "zh_CN": "创建角色骨架",
         "ja_JP": "キャラクター骨格を作成",
-    },
+    
+        "zh_TW": "創建角色骨架",
+        "es_ES": "Esqueleto del Personaje",
+        "fr_FR": "Squelette du Personnage",
+        "ko_KR": "캐릭터 골격 생성",
+        "ru_RU": "Создание скелета персонажа",
+},
     "FK Animation Mode": {
         "zh_CN": "角色骨骼直驱模式 (FK Animation)",
         "ja_JP": "キャラクターFKモード (FK Animation)",
-    },
+    
+        "zh_TW": "角色骨骼直驅模式 (FK Animation)",
+        "es_ES": "Modo de Animación FK",
+        "fr_FR": "Mode dAnimation FK",
+        "ko_KR": "캐릭터 FK 모드",
+        "ru_RU": "Режим FK анимации",
+},
     "Tracking Point Mode": {
         "zh_CN": "追踪点模式 (Tracking Point Mode)",
         "ja_JP": "トラッキングポイントモード (Tracking Point)",
-    },
+    
+        "zh_TW": "追踪點模式 (Tracking Point Mode)",
+        "es_ES": "Modo de Puntos de Rastreo",
+        "fr_FR": "Mode Points de Suivi",
+        "ko_KR": "트래킹 포인트 모드",
+        "ru_RU": "Режим точек отслеживания",
+},
 
     # Connection Panel
     "Version: Beta 11.5": {
@@ -44,11 +68,23 @@ TRANSLATIONS = {
     "Restore T-Pose": {
         "zh_CN": "恢复 T-Pose",
         "ja_JP": "Tポーズに戻す",
-    },
+    
+        "zh_TW": "恢復 T-Pose",
+        "es_ES": "Restaurar T-Pose",
+        "fr_FR": "Restaurer T-Pose",
+        "ko_KR": "T-포즈 복구",
+        "ru_RU": "Сброс T-Pose",
+},
     "Wait": {
         "zh_CN": "等待",
         "ja_JP": "待機",
-    },
+    
+        "zh_TW": "等待",
+        "es_ES": "Esperar",
+        "fr_FR": "Attendre",
+        "ko_KR": "대기",
+        "ru_RU": "Ожидание",
+},
     "No bone selected.": {
         "zh_CN": "未选中任何骨骼。",
         "ja_JP": "ボーンが選択されていません。",
@@ -105,7 +141,13 @@ TRANSLATIONS = {
         "zh_CN": "保持角色当前起点 (Keep Character Position)",
         "ja_JP": "キャラクターの現在位置を保持 (Keep Position)",
         "en_US": "Keep Character Position",
-    },
+    
+        "zh_TW": "保持角色當前起點",
+        "es_ES": "Mantener Posición Inicial",
+        "fr_FR": "Garder Position Initiale",
+        "ko_KR": "현재 위치 유지",
+        "ru_RU": "Сохранить начальную позицию",
+},
     "挂载与导出帧率设置 (FPS Mode):": {
         "zh_CN": "挂载与导出帧率设置 (FPS Mode):",
         "ja_JP": "適用とエクスポートのFPS設定 (FPS Mode):",
@@ -258,11 +300,23 @@ TRANSLATIONS = {
     "Connect": {
         "zh_CN": "连接",
         "ja_JP": "接続",
-    },
+    
+        "zh_TW": "連接 (Connect)",
+        "es_ES": "Conectar",
+        "fr_FR": "Connecter",
+        "ko_KR": "연결 (Connect)",
+        "ru_RU": "Подключить",
+},
     "Disconnect": {
         "zh_CN": "断开连接",
         "ja_JP": "切断",
-    },
+    
+        "zh_TW": "斷開連接",
+        "es_ES": "Desconectar",
+        "fr_FR": "Déconnecter",
+        "ko_KR": "연결 끊기",
+        "ru_RU": "Отключить",
+},
     "Connected": {
         "zh_CN": "已连接",
         "ja_JP": "接続済み",
@@ -278,11 +332,23 @@ TRANSLATIONS = {
     "Start Record": {
         "zh_CN": "开始录制",
         "ja_JP": "録画開始",
-    },
+    
+        "zh_TW": "開始錄製",
+        "es_ES": "Iniciar Grabación",
+        "fr_FR": "Démarrer lEnregistrement",
+        "ko_KR": "녹화 시작",
+        "ru_RU": "Начать запись",
+},
     "Stop Record": {
         "zh_CN": "停止录制",
         "ja_JP": "録画停止",
-    },
+    
+        "zh_TW": "停止錄製",
+        "es_ES": "Detener Grabación",
+        "fr_FR": "Arrêter lEnregistrement",
+        "ko_KR": "녹화 중지",
+        "ru_RU": "Остановить запись",
+},
     "Enable Debug Logs": {
         "zh_CN": "开启系统调试日志",
         "ja_JP": "システムデバッグログを有効化",
@@ -466,11 +532,23 @@ TRANSLATIONS = {
     "Connection": {
         "zh_CN": "连接与录制 (Connection)",
         "ja_JP": "接続と録画 (Connection)",
-    },
+    
+        "zh_TW": "連接與錄製",
+        "es_ES": "Conexión",
+        "fr_FR": "Connexion",
+        "ko_KR": "연결 및 녹화",
+        "ru_RU": "Подключение",
+},
     "Character Skeleton": {
         "zh_CN": "创建角色骨架",
         "ja_JP": "キャラクタースケルトンを作成",
-    },
+    
+        "zh_TW": "創建角色骨架",
+        "es_ES": "Esqueleto del Personaje",
+        "fr_FR": "Squelette du Personnage",
+        "ko_KR": "캐릭터 골격 생성",
+        "ru_RU": "Создание скелета персонажа",
+},
     "Apply Take": {
         "zh_CN": "挂载到时间轴 (Apply Take)",
         "ja_JP": "タイムラインに適用 (Apply Take)",
@@ -643,12 +721,24 @@ TRANSLATIONS = {
         "en_US": "Import JSON",
         "zh_CN": "导入映射json",
         "ja_JP": "マッピングJSONをインポート",
-    },
+    
+        "zh_TW": "導入映射json",
+        "es_ES": "Importar Configuración",
+        "fr_FR": "Importer Configuration",
+        "ko_KR": "설정 가져오기",
+        "ru_RU": "Импорт настроек",
+},
     "Export Bone Map JSON": {
         "en_US": "Export JSON",
         "zh_CN": "导出映射json",
         "ja_JP": "マッピングJSONをエクスポート",
-    },
+    
+        "zh_TW": "導出映射json",
+        "es_ES": "Exportar Configuración",
+        "fr_FR": "Exporter Configuration",
+        "ko_KR": "설정 내보내기",
+        "ru_RU": "Экспорт настроек",
+},
     "请先选择一个骨架和骨骼 (Select an armature)": {
         "en_US": "Please select an armature first",
         "zh_CN": "请先选择一个骨架和骨骼",
@@ -673,7 +763,13 @@ TRANSLATIONS = {
         "en_US": "Sync Viewport to Scene FPS",
         "zh_CN": "按场景帧率显示动捕 (Sync Viewport to Scene FPS)",
         "ja_JP": "シーンFPSに合わせて表示 (Sync Viewport to Scene FPS)",
-    },
+    
+        "zh_TW": "按場景幀率顯示動捕",
+        "es_ES": "Sincronizar Visor con FPS",
+        "fr_FR": "Sync. Vue avec FPS de Scène",
+        "ko_KR": "뷰포트 FPS 동기화",
+        "ru_RU": "Синхр. FPS вьюпорта",
+},
     "勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点": {
         "en_US": "Capture relative to the character's current position instead of snapping to world origin.",
         "zh_CN": "勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点",
