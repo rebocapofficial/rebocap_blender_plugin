@@ -72,27 +72,27 @@ def _get_scene_fps_str(scene):
 def _get_scene_unit_str(scene):
     units = getattr(scene, 'unit_settings', None)
     if not units:
-        return "默认 (Default)"
+        return T("默认 (Default)")
     sys_name = getattr(units, 'system', 'METRIC')
     scale = getattr(units, 'scale_length', 1.0)
     if sys_name == 'NONE':
-        return f"无 (None, 比例:{scale:g})"
+        return f"{T('无 (None)')}, {T('比例:')} {scale:g}"
     elif sys_name == 'IMPERIAL':
         unit_name = getattr(units, 'length_unit', 'FEET').capitalize()
-        return f"英制: {unit_name} (比例:{scale:g})"
+        return f"{T('英制:')} {unit_name} ({T('比例:')} {scale:g})"
     else:  # METRIC
         len_unit = getattr(units, 'length_unit', 'METERS')
         unit_map = {
-            'METERS': '米 (m)',
-            'CENTIMETERS': '厘米 (cm)',
-            'MILLIMETERS': '毫米 (mm)',
-            'KILOMETERS': '千米 (km)',
-            'ADAPTIVE': '自适应 (Adaptive)'
+            'METERS': T('米 (m)'),
+            'CENTIMETERS': T('厘米 (cm)'),
+            'MILLIMETERS': T('毫米 (mm)'),
+            'KILOMETERS': T('千米 (km)'),
+            'ADAPTIVE': T('自适应 (Adaptive)')
         }
         name = unit_map.get(len_unit, len_unit)
         if abs(scale - 1.0) > 1e-4:
-            return f"公制: {name} (比例:{scale:g})"
-        return f"公制: {name}"
+            return f"{T('公制:')} {name} ({T('比例:')} {scale:g})"
+        return f"{T('公制:')} {name}"
 
 
 class REBOCAP_OT_change_scene_fps(bpy.types.Operator):
