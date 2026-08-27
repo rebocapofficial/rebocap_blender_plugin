@@ -9,7 +9,8 @@ TRANSLATIONS = {
         "fr_FR": "Connexion et Enregistrement",
         "ko_KR": "연결 및 녹화",
         "ru_RU": "Подключение и запись",
-        "en_US": "Connection & Recording"
+        "en_US": "Connection & Recording",
+        "it_IT": "Connessione e Registrazione"
     },
     "Character Skeleton": {
         "zh_CN": "创建角色骨架",
@@ -19,7 +20,8 @@ TRANSLATIONS = {
         "fr_FR": "Créer un Squelette",
         "ko_KR": "캐릭터 골격 생성",
         "ru_RU": "Создание скелета персонажа",
-        "en_US": "Create Character Skeleton"
+        "en_US": "Create Character Skeleton",
+        "it_IT": "Crea Scheletro Personaggio"
     },
     "FK Animation Mode": {
         "zh_CN": "角色骨骼直驱模式 (FK Animation)",
@@ -29,7 +31,8 @@ TRANSLATIONS = {
         "fr_FR": "Mode d'Animation FK",
         "ko_KR": "캐릭터 FK 모드",
         "ru_RU": "Режим FK анимации",
-        "en_US": "FK Animation Mode"
+        "en_US": "FK Animation Mode",
+        "it_IT": "Modalità Animazione FK"
     },
     "Tracking Point Mode": {
         "zh_CN": "追踪点模式 (Tracking Point Mode)",
@@ -39,7 +42,8 @@ TRANSLATIONS = {
         "fr_FR": "Mode Points de Suivi",
         "ko_KR": "트래킹 포인트 모드",
         "ru_RU": "Режим точек отслеживания",
-        "en_US": "Tracking Point Mode"
+        "en_US": "Tracking Point Mode",
+        "it_IT": "Modalità Punti di Tracciamento"
     },
     "Version: Beta 11.5": {
         "zh_CN": "Version: Beta 11.5",
@@ -49,7 +53,8 @@ TRANSLATIONS = {
         "es_ES": "Version: Beta 11.5",
         "fr_FR": "Version: Beta 11.5",
         "ko_KR": "Version: Beta 11.5",
-        "ru_RU": "Version: Beta 11.5"
+        "ru_RU": "Version: Beta 11.5",
+        "it_IT": "Versione: Beta 11.5"
     },
     "Version: Beta 11.4": {
         "zh_CN": "Version: Beta 11.4",
@@ -59,7 +64,8 @@ TRANSLATIONS = {
         "es_ES": "Version: Beta 11.4",
         "fr_FR": "Version: Beta 11.4",
         "ko_KR": "Version: Beta 11.4",
-        "ru_RU": "Version: Beta 11.4"
+        "ru_RU": "Version: Beta 11.4",
+        "it_IT": "Versione: Beta 11.4"
     },
     "Version: Beta 11.3": {
         "zh_CN": "Version: Beta 11.3",
@@ -69,7 +75,8 @@ TRANSLATIONS = {
         "es_ES": "Version: Beta 11.3",
         "fr_FR": "Version: Beta 11.3",
         "ko_KR": "Version: Beta 11.3",
-        "ru_RU": "Version: Beta 11.3"
+        "ru_RU": "Version: Beta 11.3",
+        "it_IT": "Versione: Beta 11.3"
     },
     "Version: Beta 11.2": {
         "zh_CN": "Version: Beta 11.2",
@@ -79,7 +86,8 @@ TRANSLATIONS = {
         "es_ES": "Version: Beta 11.2",
         "fr_FR": "Version: Beta 11.2",
         "ko_KR": "Version: Beta 11.2",
-        "ru_RU": "Version: Beta 11.2"
+        "ru_RU": "Version: Beta 11.2",
+        "it_IT": "Versione: Beta 11.2"
     },
     "Version: Beta 11.1": {
         "zh_CN": "Version: Beta 11.1",
@@ -89,7 +97,8 @@ TRANSLATIONS = {
         "es_ES": "Version: Beta 11.1",
         "fr_FR": "Version: Beta 11.1",
         "ko_KR": "Version: Beta 11.1",
-        "ru_RU": "Version: Beta 11.1"
+        "ru_RU": "Version: Beta 11.1",
+        "it_IT": "Versione: Beta 11.1"
     },
     "Restore T-Pose": {
         "zh_CN": "恢复 T-Pose",
@@ -99,7 +108,8 @@ TRANSLATIONS = {
         "fr_FR": "Restaurer T-Pose",
         "ko_KR": "T-포즈 복구",
         "ru_RU": "Сброс T-Pose",
-        "en_US": "Restore T-Pose"
+        "en_US": "Restore T-Pose",
+        "it_IT": "Ripristina T-Pose"
     },
     "Wait": {
         "zh_CN": "等待",
@@ -109,7 +119,8 @@ TRANSLATIONS = {
         "fr_FR": "Attendre",
         "ko_KR": "대기",
         "ru_RU": "Ожидание",
-        "en_US": "Wait"
+        "en_US": "Wait",
+        "it_IT": "Attendi"
     },
     "No bone selected.": {
         "zh_CN": "未选中任何骨骼。",
@@ -119,7 +130,8 @@ TRANSLATIONS = {
         "es_ES": "Ningún hueso seleccionado.",
         "fr_FR": "Aucun os sélectionné.",
         "ko_KR": "선택된 뼈가 없습니다.",
-        "ru_RU": "Кость не выбрана."
+        "ru_RU": "Кость не выбрана.",
+        "it_IT": "Nessun osso selezionato."
     },
     "Please select an armature object.": {
         "zh_CN": "请选择一个骨架物体。",
@@ -129,7 +141,8 @@ TRANSLATIONS = {
         "es_ES": "Por favor seleccione un objeto de armadura.",
         "fr_FR": "Veuillez sélectionner un objet armature.",
         "ko_KR": "아마추어 오브젝트를 선택하십시오.",
-        "ru_RU": "Пожалуйста, выберите объект арматуры."
+        "ru_RU": "Пожалуйста, выберите объект арматуры.",
+        "it_IT": "Seleziona un oggetto armatura."
     },
     "Selected bone": {
         "zh_CN": "已选骨骼",
@@ -139,7 +152,8 @@ TRANSLATIONS = {
         "es_ES": "Hueso seleccionado",
         "fr_FR": "Os sélectionné",
         "ko_KR": "선택된 뼈",
-        "ru_RU": "Выбранная кость"
+        "ru_RU": "Выбранная кость",
+        "it_IT": "Osso selezionato"
     },
     "Bone map exported successfully": {
         "zh_CN": "骨骼映射导出成功",
@@ -149,7 +163,8 @@ TRANSLATIONS = {
         "es_ES": "Mapeo de huesos exportado con éxito",
         "fr_FR": "Mappage d'os exporté avec succès",
         "ko_KR": "뼈 매핑을 성공적으로 내보냈습니다",
-        "ru_RU": "Карта костей успешно экспортирована"
+        "ru_RU": "Карта костей успешно экспортирована",
+        "it_IT": "Mappatura delle ossa esportata con successo"
     },
     "Bone map imported successfully": {
         "zh_CN": "骨骼映射导入成功",
@@ -159,7 +174,8 @@ TRANSLATIONS = {
         "es_ES": "Mapeo de huesos importado con éxito",
         "fr_FR": "Mappage d'os importé avec succès",
         "ko_KR": "뼈 매핑을 성공적으로 가져왔습니다",
-        "ru_RU": "Карта костей успешно импортирована"
+        "ru_RU": "Карта костей успешно импортирована",
+        "it_IT": "Mappatura delle ossa importata con successo"
     },
     "Import failed": {
         "zh_CN": "导入失败",
@@ -169,7 +185,8 @@ TRANSLATIONS = {
         "es_ES": "Error al importar",
         "fr_FR": "Échec de l'importation",
         "ko_KR": "가져오기 실패",
-        "ru_RU": "Ошибка импорта"
+        "ru_RU": "Ошибка импорта",
+        "it_IT": "Importazione non riuscita"
     },
     "* Please bind Pelvis and Legs first": {
         "zh_CN": "* 请先绑定骨盆和腿部骨骼",
@@ -179,7 +196,8 @@ TRANSLATIONS = {
         "es_ES": "* Primero vincule la pelvis y las piernas",
         "fr_FR": "* Veuillez d'abord lier le bassin et les jambes",
         "ko_KR": "* 먼저 골반과 다리 뼈를 바인딩하세요",
-        "ru_RU": "* Сначала привяжите таз и кости ног"
+        "ru_RU": "* Сначала привяжите таз и кости ног",
+        "it_IT": "* Associa prima il bacino e le ossa delle gambe"
     },
     "Ankle Height": {
         "zh_CN": "脚踝高度",
@@ -189,7 +207,8 @@ TRANSLATIONS = {
         "es_ES": "Altura del tobillo",
         "fr_FR": "Hauteur de la cheville",
         "ko_KR": "발목 높이",
-        "ru_RU": "Высота лодыжки"
+        "ru_RU": "Высота лодыжки",
+        "it_IT": "Altezza Caviglia"
     },
     "Mode: Applied Skeleton": {
         "zh_CN": "模式: 已应用骨架",
@@ -199,7 +218,8 @@ TRANSLATIONS = {
         "es_ES": "Modo: Esqueleto aplicado",
         "fr_FR": "Mode : Squelette appliqué",
         "ko_KR": "모드: 적용된 골격",
-        "ru_RU": "Режим: Примененный скелет"
+        "ru_RU": "Режим: Примененный скелет",
+        "it_IT": "Modalità: Scheletro Applicato"
     },
     "Mode: Manual Skeleton": {
         "zh_CN": "模式: 手动骨架",
@@ -209,7 +229,8 @@ TRANSLATIONS = {
         "es_ES": "Modo: Esqueleto manual",
         "fr_FR": "Mode : Squelette manuel",
         "ko_KR": "모드: 수동 골격",
-        "ru_RU": "Режим: Ручной скелет"
+        "ru_RU": "Режим: Ручной скелет",
+        "it_IT": "Modalità: Scheletro Manuale"
     },
     "✅ Rebocap Standard": {
         "zh_CN": "✅ Rebocap 标准骨骼 (Rebocap Standard)",
@@ -219,7 +240,8 @@ TRANSLATIONS = {
         "es_ES": "✅ Estándar Rebocap",
         "fr_FR": "✅ Standard Rebocap",
         "ko_KR": "✅ Rebocap 표준",
-        "ru_RU": "✅ Стандарт Rebocap"
+        "ru_RU": "✅ Стандарт Rebocap",
+        "it_IT": "✅ Standard Rebocap"
     },
     "✅ Unreal Engine (UE4/UE5/MetaHuman)": {
         "zh_CN": "✅ 虚幻引擎标准 (UE4/UE5/MetaHuman)",
@@ -229,7 +251,8 @@ TRANSLATIONS = {
         "es_ES": "✅ Unreal Engine (UE4/UE5/MetaHuman)",
         "fr_FR": "✅ Unreal Engine (UE4/UE5/MetaHuman)",
         "ko_KR": "✅ 언리얼 엔진 (UE4/UE5/MetaHuman)",
-        "ru_RU": "✅ Unreal Engine (UE4/UE5/MetaHuman)"
+        "ru_RU": "✅ Unreal Engine (UE4/UE5/MetaHuman)",
+        "it_IT": "✅ Unreal Engine (UE4/UE5/MetaHuman)"
     },
     "✅ VRM Humanoid": {
         "zh_CN": "✅ VRM 人形骨架 (VRM Humanoid)",
@@ -239,7 +262,8 @@ TRANSLATIONS = {
         "es_ES": "✅ VRM Humanoide",
         "fr_FR": "✅ VRM Humanoïde",
         "ko_KR": "✅ VRM 휴머노이드",
-        "ru_RU": "✅ VRM Гуманоид"
+        "ru_RU": "✅ VRM Гуманоид",
+        "it_IT": "✅ VRM Umanoide"
     },
     "保持角色当前起点 (Keep Character Position)": {
         "zh_CN": "保持角色当前起点 (Keep Character Position)",
@@ -249,7 +273,8 @@ TRANSLATIONS = {
         "es_ES": "Mantener Posición Inicial",
         "fr_FR": "Garder Position Initiale",
         "ko_KR": "현재 위치 유지",
-        "ru_RU": "Сохранить начальную позицию"
+        "ru_RU": "Сохранить начальную позицию",
+        "it_IT": "Mantieni Posizione Attuale del Personaggio"
     },
     "挂载与导出帧率设置 (FPS Mode):": {
         "zh_CN": "挂载与导出帧率设置 (FPS Mode):",
@@ -259,7 +284,8 @@ TRANSLATIONS = {
         "es_ES": "Configuración de FPS de Aplicación / Exportación:",
         "fr_FR": "Paramètres FPS d'Application / Exportation :",
         "ko_KR": "적용 및 내보내기 FPS 설정 (FPS Mode):",
-        "ru_RU": "Настройки FPS применения и экспорта:"
+        "ru_RU": "Настройки FPS применения и экспорта:",
+        "it_IT": "Impostazioni FPS di Applicazione ed Esportazione:"
     },
     "导出片段json": {
         "zh_CN": "导出片段json",
@@ -269,7 +295,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar JSON de Toma",
         "fr_FR": "Exporter JSON de Prise",
         "ko_KR": "테이크 JSON 내보내기",
-        "ru_RU": "Экспорт JSON дубля"
+        "ru_RU": "Экспорт JSON дубля",
+        "it_IT": "Esporta JSON Registrazione"
     },
     "导入片段json": {
         "zh_CN": "导入片段json",
@@ -279,7 +306,8 @@ TRANSLATIONS = {
         "es_ES": "Importar JSON de Toma",
         "fr_FR": "Importer JSON de Prise",
         "ko_KR": "테이크 JSON 가져오기",
-        "ru_RU": "Импорт JSON дубля"
+        "ru_RU": "Импорт JSON дубля",
+        "it_IT": "Importa JSON Registrazione"
     },
     "插件录制时按60fps记录母带保存，": {
         "zh_CN": "插件录制时按60fps记录母带保存，",
@@ -289,7 +317,8 @@ TRANSLATIONS = {
         "es_ES": "Las grabaciones se guardan a 60 fps maestro,",
         "fr_FR": "Les enregistrements sont enregistrés en 60fps master,",
         "ko_KR": "녹화는 60fps 마스터로 저장되며,",
-        "ru_RU": "Запись сохраняется с качеством 60 FPS мастер-трека,"
+        "ru_RU": "Запись сохраняется с качеством 60 FPS мастер-трека,",
+        "it_IT": "Le registrazioni sono salvate con un master a 60 fps,"
     },
     "通过该选项转换帧率挂载到blender时间轴上。": {
         "zh_CN": "通过该选项转换帧率挂载到blender时间轴上。",
@@ -299,7 +328,8 @@ TRANSLATIONS = {
         "es_ES": "se convierte a los FPS seleccionados al aplicar.",
         "fr_FR": "converti au FPS sélectionné lors de l'application.",
         "ko_KR": "적용 시 선택한 FPS로 변환되어 타임라인에 등록됩니다.",
-        "ru_RU": "преобразуется в выбранный FPS при применении на шкалу."
+        "ru_RU": "преобразуется в выбранный FPS при применении на шкалу.",
+        "it_IT": "convertite agli FPS selezionati durante l'applicazione."
     },
     "插件录制时按60fps记录母带保存，通过该选项转换帧率挂载到blender时间轴上。": {
         "zh_CN": "插件录制时按60fps记录母带保存，通过该选项转换帧率挂载到blender时间轴上。",
@@ -309,7 +339,8 @@ TRANSLATIONS = {
         "es_ES": "Las grabaciones se guardan en 60 FPS maestro y se convierten a los FPS de destino al aplicar.",
         "fr_FR": "Les enregistrements sont en 60fps master et convertis au FPS cible lors de l'application.",
         "ko_KR": "녹화는 60fps 마스터로 저장되며, 적용 시 대상 FPS로 변환되어 타임라인에 등록됩니다.",
-        "ru_RU": "Записи сохраняются в мастере 60 FPS и преобразуются в целевой FPS при переносе на таймлайн."
+        "ru_RU": "Записи сохраняются в мастере 60 FPS и преобразуются в целевой FPS при переносе на таймлайн.",
+        "it_IT": "Le registrazioni sono salvate in formato master a 60 fps e convertite agli FPS di destinazione al momento dell'applicazione sulla timeline."
     },
     "👤 显示人偶骨骼HUD": {
         "zh_CN": "👤 显示人偶骨骼HUD",
@@ -319,7 +350,8 @@ TRANSLATIONS = {
         "es_ES": "👤 Mostrar HUD de Marioneta ➔",
         "fr_FR": "👤 Afficher HUD Marionnette ➔",
         "ko_KR": "👤 퍼펫 스켈레톤 HUD 표시 ➔",
-        "ru_RU": "👤 Показать HUD марионетки ➔"
+        "ru_RU": "👤 Показать HUD марионетки ➔",
+        "it_IT": "👤 Mostra HUD Scheletro Marionetta ➔"
     },
     "👤 隐藏人偶骨骼HUD": {
         "zh_CN": "👤 隐藏人偶骨骼HUD",
@@ -329,7 +361,8 @@ TRANSLATIONS = {
         "es_ES": "👤 Ocultar HUD de Marioneta",
         "fr_FR": "👤 Masquer HUD Marionnette",
         "ko_KR": "👤 퍼펫 스켈레톤 HUD 숨기기",
-        "ru_RU": "👤 Скрыть HUD марионетки"
+        "ru_RU": "👤 Скрыть HUD марионетки",
+        "it_IT": "👤 Nascondi HUD Scheletro Marionetta"
     },
     "👤 打开人偶骨骼映射画布 (Puppet View) ➔": {
         "zh_CN": "👤 打开人偶骨骼映射画布 (Puppet View) ➔",
@@ -339,7 +372,8 @@ TRANSLATIONS = {
         "es_ES": "👤 Abrir Mapeador de Huesos ➔",
         "fr_FR": "👤 Ouvrir le Mappeur de Marionnette ➔",
         "ko_KR": "👤 퍼펫 뼈 매핑 캔버스 열기 ➔",
-        "ru_RU": "👤 Открыть карту марионетки ➔"
+        "ru_RU": "👤 Открыть карту марионетки ➔",
+        "it_IT": "👤 Apri Mappatura Ossa Marionetta ➔"
     },
     "Rebocap 人偶画布 (Skeleton View)": {
         "zh_CN": "Rebocap 人偶画布 (Skeleton View)",
@@ -349,7 +383,8 @@ TRANSLATIONS = {
         "es_ES": "Rebocap Vista de Esqueleto",
         "fr_FR": "Vue du Squelette Rebocap",
         "ko_KR": "Rebocap 퍼펫 캔버스",
-        "ru_RU": "Холст марионетки Rebocap"
+        "ru_RU": "Холст марионетки Rebocap",
+        "it_IT": "Rebocap Vista Marionetta"
     },
     "FK 骨骼映射清单 (FK Definition):": {
         "zh_CN": "FK 骨骼映射清单 (FK Definition):",
@@ -359,7 +394,8 @@ TRANSLATIONS = {
         "es_ES": "Lista de Mapeo de Huesos FK:",
         "fr_FR": "Définition des Os FK :",
         "ko_KR": "FK 뼈 매핑 목록:",
-        "ru_RU": "Список сопоставления FK костей:"
+        "ru_RU": "Список сопоставления FK костей:",
+        "it_IT": "Elenco Mappatura Ossa FK:"
     },
     "四肢对称映射:": {
         "zh_CN": "四肢对称映射:",
@@ -369,7 +405,8 @@ TRANSLATIONS = {
         "es_ES": "Mapeo Simétrico de Extremidades:",
         "fr_FR": "Mappage Symétrique des Membres :",
         "ko_KR": "사지 대칭 매핑:",
-        "ru_RU": "Симметричное сопоставление конечностей:"
+        "ru_RU": "Симметричное сопоставление конечностей:",
+        "it_IT": "Mappatura Simmetrica degli Arti:"
     },
     "Left (左)": {
         "zh_CN": "Left (左)",
@@ -379,7 +416,8 @@ TRANSLATIONS = {
         "es_ES": "Izquierda",
         "fr_FR": "Gauche",
         "ko_KR": "왼쪽 (Left)",
-        "ru_RU": "Левая (Left)"
+        "ru_RU": "Левая (Left)",
+        "it_IT": "Sinistra (Left)"
     },
     "Right (右)": {
         "zh_CN": "Right (右)",
@@ -389,7 +427,8 @@ TRANSLATIONS = {
         "es_ES": "Derecha",
         "fr_FR": "Droite",
         "ko_KR": "오른쪽 (Right)",
-        "ru_RU": "Правая (Right)"
+        "ru_RU": "Правая (Right)",
+        "it_IT": "Destra (Right)"
     },
     "清空全部": {
         "zh_CN": "清空全部",
@@ -399,7 +438,8 @@ TRANSLATIONS = {
         "es_ES": "Borrar Todo",
         "fr_FR": "Tout Effacer",
         "ko_KR": "모두 지우기",
-        "ru_RU": "Очистить всё"
+        "ru_RU": "Очистить всё",
+        "it_IT": "Cancella Tutto"
     },
     "片段名称": {
         "zh_CN": "片段名称",
@@ -409,7 +449,8 @@ TRANSLATIONS = {
         "es_ES": "Nombre de Toma",
         "fr_FR": "Nom de la Prise",
         "ko_KR": "테이크 이름",
-        "ru_RU": "Имя дубля"
+        "ru_RU": "Имя дубля",
+        "it_IT": "Nome Registrazione"
     },
     "类型": {
         "zh_CN": "类型",
@@ -419,7 +460,8 @@ TRANSLATIONS = {
         "es_ES": "Tipo",
         "fr_FR": "Type",
         "ko_KR": "유형",
-        "ru_RU": "Тип"
+        "ru_RU": "Тип",
+        "it_IT": "Tipo"
     },
     "总帧数": {
         "zh_CN": "总帧数",
@@ -429,7 +471,8 @@ TRANSLATIONS = {
         "es_ES": "Fotogramas Totales",
         "fr_FR": "Total Images",
         "ko_KR": "총 프레임",
-        "ru_RU": "Всего кадров"
+        "ru_RU": "Всего кадров",
+        "it_IT": "Fotogrammi Totali"
     },
     "自动匹配场景 (Auto Scene)": {
         "en_US": "Auto Match Scene (Auto Scene)",
@@ -439,7 +482,8 @@ TRANSLATIONS = {
         "es_ES": "Coincidencia Automática (Auto Scene)",
         "fr_FR": "Auto-adaptation Scène (Auto Scene)",
         "ko_KR": "자동 씬 일치 (Auto Scene)",
-        "ru_RU": "Автосогласование сцены (Auto Scene)"
+        "ru_RU": "Автосогласование сцены (Auto Scene)",
+        "it_IT": "Adatta Automaticamente alla Scena (Auto Scene)"
     },
     "24 FPS (电影/标准动画 Film)": {
         "en_US": "24 FPS (Film/Animation)",
@@ -449,7 +493,8 @@ TRANSLATIONS = {
         "es_ES": "24 FPS (Cine/Animación)",
         "fr_FR": "24 FPS (Cinéma/Animation)",
         "ko_KR": "24 FPS (영화/애니메이션)",
-        "ru_RU": "24 FPS (Кино/Анимация)"
+        "ru_RU": "24 FPS (Кино/Анимация)",
+        "it_IT": "24 FPS (Cinema/Animazione Film)"
     },
     "30 FPS (电视/短视频 TV/Video)": {
         "en_US": "30 FPS (TV/Video)",
@@ -459,7 +504,8 @@ TRANSLATIONS = {
         "es_ES": "30 FPS (TV/Video)",
         "fr_FR": "30 FPS (TV/Vidéo)",
         "ko_KR": "30 FPS (TV/동영상)",
-        "ru_RU": "30 FPS (ТВ/Видео)"
+        "ru_RU": "30 FPS (ТВ/Видео)",
+        "it_IT": "30 FPS (TV/Video)"
     },
     "60 FPS (原生动捕/流畅游戏 60Hz)": {
         "en_US": "60 FPS (Native Mocap 60Hz)",
@@ -469,7 +515,8 @@ TRANSLATIONS = {
         "es_ES": "60 FPS (Mocap Nativo 60Hz)",
         "fr_FR": "60 FPS (Mocap Natif 60Hz)",
         "ko_KR": "60 FPS (네이티브 모캡 60Hz)",
-        "ru_RU": "60 FPS (Нативный мокап 60Hz)"
+        "ru_RU": "60 FPS (Нативный мокап 60Hz)",
+        "it_IT": "60 FPS (Mocap Nativo/Gioco 60Hz)"
     },
     "自定义帧率 (Custom...)": {
         "en_US": "Custom FPS (Custom...)",
@@ -479,7 +526,8 @@ TRANSLATIONS = {
         "es_ES": "FPS Personalizado (Custom...)",
         "fr_FR": "FPS Personnalisé (Custom...)",
         "ko_KR": "사용자 지정 FPS (Custom...)",
-        "ru_RU": "Пользовательский FPS (Custom...)"
+        "ru_RU": "Пользовательский FPS (Custom...)",
+        "it_IT": "FPS Personalizzato (Custom...)"
     },
     "自定义帧率 (Target FPS)": {
         "zh_CN": "自定义帧率 (Target FPS)",
@@ -489,7 +537,8 @@ TRANSLATIONS = {
         "es_ES": "FPS Objetivo",
         "fr_FR": "FPS Cible",
         "ko_KR": "목표 FPS",
-        "ru_RU": "Целевой FPS"
+        "ru_RU": "Целевой FPS",
+        "it_IT": "FPS Obiettivo"
     },
     "场景帧率:": {
         "zh_CN": "场景帧率:",
@@ -499,7 +548,8 @@ TRANSLATIONS = {
         "es_ES": "FPS de Escena:",
         "fr_FR": "FPS Scène :",
         "ko_KR": "씬 FPS:",
-        "ru_RU": "FPS сцены:"
+        "ru_RU": "FPS сцены:",
+        "it_IT": "FPS Scena:"
     },
     "尺寸单位:": {
         "zh_CN": "尺寸单位:",
@@ -509,7 +559,8 @@ TRANSLATIONS = {
         "es_ES": "Unidades:",
         "fr_FR": "Unité :",
         "ko_KR": "단위 비율:",
-        "ru_RU": "Единицы измерения:"
+        "ru_RU": "Единицы измерения:",
+        "it_IT": "Scala Unità:"
     },
     "确定要删除此动捕记录吗？": {
         "zh_CN": "确定要删除此动捕记录吗？",
@@ -519,7 +570,8 @@ TRANSLATIONS = {
         "es_ES": "¿Seguro que desea eliminar esta toma?",
         "fr_FR": "Voulez-vous vraiment supprimer cette prise ?",
         "ko_KR": "이 캡처 기록을 삭제하시겠습니까?",
-        "ru_RU": "Удалить эту запись дубля?"
+        "ru_RU": "Удалить эту запись дубля?",
+        "it_IT": "Sei sicuro di voler eliminare questa registrazione?"
     },
     "此操作将永久删除相关动作数据。": {
         "zh_CN": "此操作将永久删除相关动作数据。",
@@ -529,7 +581,8 @@ TRANSLATIONS = {
         "es_ES": "Esto eliminará permanentemente los datos de animación asociados.",
         "fr_FR": "Cette action supprimera définitivement les données d'action associées.",
         "ko_KR": "이 작업은 관련 모션 데이터를 영구적으로 삭제합니다.",
-        "ru_RU": "Это действие навсегда удалит связанные данные анимации."
+        "ru_RU": "Это действие навсегда удалит связанные данные анимации.",
+        "it_IT": "Questa operazione eliminerà definitivamente i dati di animazione associati."
     },
     "动捕记录已删除": {
         "zh_CN": "动捕记录已删除",
@@ -539,7 +592,8 @@ TRANSLATIONS = {
         "es_ES": "Toma eliminada",
         "fr_FR": "Prise supprimée",
         "ko_KR": "캡처 기록이 삭제되었습니다",
-        "ru_RU": "Дубль удален"
+        "ru_RU": "Дубль удален",
+        "it_IT": "Registrazione eliminata"
     },
     "Port": {
         "zh_CN": "端口",
@@ -549,7 +603,8 @@ TRANSLATIONS = {
         "es_ES": "Puerto",
         "fr_FR": "Port",
         "ko_KR": "포트",
-        "ru_RU": "Порт"
+        "ru_RU": "Порт",
+        "it_IT": "Porta"
     },
     "Connect": {
         "zh_CN": "连接",
@@ -559,7 +614,8 @@ TRANSLATIONS = {
         "fr_FR": "Connecter",
         "ko_KR": "연결 (Connect)",
         "ru_RU": "Подключить",
-        "en_US": "连接"
+        "en_US": "连接",
+        "it_IT": "Connetti"
     },
     "Disconnect": {
         "zh_CN": "断开连接",
@@ -569,7 +625,8 @@ TRANSLATIONS = {
         "fr_FR": "Déconnecter",
         "ko_KR": "연결 끊기",
         "ru_RU": "Отключить",
-        "en_US": "断开连接"
+        "en_US": "断开连接",
+        "it_IT": "Disconnetti"
     },
     "Connected": {
         "zh_CN": "已连接",
@@ -579,7 +636,8 @@ TRANSLATIONS = {
         "es_ES": "Conectado",
         "fr_FR": "Connecté",
         "ko_KR": "연결됨",
-        "ru_RU": "Подключено"
+        "ru_RU": "Подключено",
+        "it_IT": "Connesso"
     },
     "Pause Control": {
         "zh_CN": "暂停控制 (手动调整动作)",
@@ -589,7 +647,8 @@ TRANSLATIONS = {
         "es_ES": "Pausar Control",
         "fr_FR": "Pause du Contrôle",
         "ko_KR": "제어 일시중지",
-        "ru_RU": "Пауза управления"
+        "ru_RU": "Пауза управления",
+        "it_IT": "Metti in Pausa Controllo"
     },
     "Restore Pose": {
         "zh_CN": "恢复原始姿态 (T-Pose)",
@@ -599,7 +658,8 @@ TRANSLATIONS = {
         "es_ES": "Restaurar Pose (T-Pose)",
         "fr_FR": "Restaurer la Pose (T-Pose)",
         "ko_KR": "기본 포즈 복원 (T-Pose)",
-        "ru_RU": "Восстановить позу (T-Pose)"
+        "ru_RU": "Восстановить позу (T-Pose)",
+        "it_IT": "Ripristina Posa (T-Pose)"
     },
     "Start Record": {
         "zh_CN": "开始录制",
@@ -609,7 +669,8 @@ TRANSLATIONS = {
         "fr_FR": "Démarrer lEnregistrement",
         "ko_KR": "녹화 시작",
         "ru_RU": "Начать запись",
-        "en_US": "开始录制"
+        "en_US": "开始录制",
+        "it_IT": "Avvia Registrazione"
     },
     "Stop Record": {
         "zh_CN": "停止录制",
@@ -619,7 +680,8 @@ TRANSLATIONS = {
         "fr_FR": "Arrêter lEnregistrement",
         "ko_KR": "녹화 중지",
         "ru_RU": "Остановить запись",
-        "en_US": "停止录制"
+        "en_US": "停止录制",
+        "it_IT": "Ferma Registrazione"
     },
     "Enable Debug Logs": {
         "zh_CN": "开启系统调试日志",
@@ -629,7 +691,8 @@ TRANSLATIONS = {
         "es_ES": "Habilitar Registros de Depuración",
         "fr_FR": "Activer les Journaux de Débogage",
         "ko_KR": "디버그 로그 활성화",
-        "ru_RU": "Включить журналы отладки"
+        "ru_RU": "Включить журналы отладки",
+        "it_IT": "Abilita Log di Debug"
     },
     "Save Bone": {
         "zh_CN": "导出骨架文件",
@@ -639,7 +702,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar Archivo de Esqueleto",
         "fr_FR": "Exporter le Fichier Squelette",
         "ko_KR": "골격 파일 내보내기",
-        "ru_RU": "Экспорт файла скелета"
+        "ru_RU": "Экспорт файла скелета",
+        "it_IT": "Esporta File Scheletro"
     },
     "Export Skeleton File": {
         "zh_CN": "导出骨架文件",
@@ -649,7 +713,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar Archivo de Esqueleto",
         "fr_FR": "Exporter le Fichier Squelette",
         "ko_KR": "골격 파일 내보내기",
-        "ru_RU": "Экспорт файла скелета"
+        "ru_RU": "Экспорт файла скелета",
+        "it_IT": "Esporta File Scheletro"
     },
     "Please bind Pelvis and Legs first": {
         "zh_CN": "* 请先绑定 Pelvis(骨盆) 和双腿骨骼",
@@ -659,7 +724,8 @@ TRANSLATIONS = {
         "es_ES": "* Primero vincule la pelvis y las piernas",
         "fr_FR": "* Veuillez d'abord lier le bassin et les jambes",
         "ko_KR": "* 먼저 골반과 다리 뼈를 바인딩하세요",
-        "ru_RU": "* Сначала привяжите таз и кости ног"
+        "ru_RU": "* Сначала привяжите таз и кости ног",
+        "it_IT": "* Associa prima il bacino e le ossa delle gambe"
     },
     "Foot Contact Positions": {
         "zh_CN": "足底接触点配置",
@@ -669,7 +735,8 @@ TRANSLATIONS = {
         "es_ES": "Posiciones de Contacto del Pie",
         "fr_FR": "Points de Contact des Pieds",
         "ko_KR": "발 접촉 지점 설정",
-        "ru_RU": "Точки контакта стопы"
+        "ru_RU": "Точки контакта стопы",
+        "it_IT": "Posizioni di Contatto del Piede"
     },
     "Place All 6 Contact Points": {
         "zh_CN": "放置全部 6 个接触点",
@@ -679,7 +746,8 @@ TRANSLATIONS = {
         "es_ES": "Colocar los 6 Puntos de Contacto",
         "fr_FR": "Placer les 6 Points de Contact",
         "ko_KR": "6개 접촉점 모두 배치",
-        "ru_RU": "Разместить все 6 точек контакта"
+        "ru_RU": "Разместить все 6 точек контакта",
+        "it_IT": "Posiziona Tutti i 6 Punti di Contatto"
     },
     "Left": {
         "zh_CN": "左脚",
@@ -689,7 +757,8 @@ TRANSLATIONS = {
         "es_ES": "Pie Izquierdo",
         "fr_FR": "Pied Gauche",
         "ko_KR": "왼발",
-        "ru_RU": "Левая стопа"
+        "ru_RU": "Левая стопа",
+        "it_IT": "Piede Sinistro"
     },
     "Right": {
         "zh_CN": "右脚",
@@ -699,7 +768,8 @@ TRANSLATIONS = {
         "es_ES": "Pie Derecho",
         "fr_FR": "Pied Droit",
         "ko_KR": "오른발",
-        "ru_RU": "Правая стопа"
+        "ru_RU": "Правая стопа",
+        "it_IT": "Piede Destro"
     },
     "Right (Control)": {
         "zh_CN": "右脚 (主控)",
@@ -709,7 +779,8 @@ TRANSLATIONS = {
         "es_ES": "Pie Derecho (Control)",
         "fr_FR": "Pied Droit (Maître)",
         "ko_KR": "오른발 (메인)",
-        "ru_RU": "Правая стопа (мастер)"
+        "ru_RU": "Правая стопа (мастер)",
+        "it_IT": "Piede Destro (Principale)"
     },
     "Left (Mirrored)": {
         "zh_CN": "左脚 (自动镜像)",
@@ -719,7 +790,8 @@ TRANSLATIONS = {
         "es_ES": "Pie Izquierdo (Espejado)",
         "fr_FR": "Pied Gauche (Miroir)",
         "ko_KR": "왼발 (자동 미러)",
-        "ru_RU": "Левая стопа (зеркально)"
+        "ru_RU": "Левая стопа (зеркально)",
+        "it_IT": "Piede Sinistro (Specchiato)"
     },
     "Set Point": {
         "zh_CN": "放置节点",
@@ -729,7 +801,8 @@ TRANSLATIONS = {
         "es_ES": "Colocar Punto",
         "fr_FR": "Définir le Point",
         "ko_KR": "포인트 배치",
-        "ru_RU": "Установить точку"
+        "ru_RU": "Установить точку",
+        "it_IT": "Imposta Punto"
     },
     "Auto Mirrored": {
         "zh_CN": "已自动镜像",
@@ -739,7 +812,8 @@ TRANSLATIONS = {
         "es_ES": "Espejado Automático",
         "fr_FR": "Miroir Automatique",
         "ko_KR": "자동 미러링됨",
-        "ru_RU": "Зеркально"
+        "ru_RU": "Зеркально",
+        "it_IT": "Specchiato Automaticamente"
     },
     "Drive Type": {
         "zh_CN": "驱动模式",
@@ -749,7 +823,8 @@ TRANSLATIONS = {
         "es_ES": "Tipo de Control",
         "fr_FR": "Type de Commande",
         "ko_KR": "구동 모드",
-        "ru_RU": "Тип привода"
+        "ru_RU": "Тип привода",
+        "it_IT": "Tipo di Guida"
     },
     "Source": {
         "zh_CN": "源骨架",
@@ -759,7 +834,8 @@ TRANSLATIONS = {
         "es_ES": "Esqueleto Origen",
         "fr_FR": "Armature Source",
         "ko_KR": "소스 골격",
-        "ru_RU": "Исходный скелет"
+        "ru_RU": "Исходный скелет",
+        "it_IT": "Armatura Sorgente"
     },
     "Auto Detect Config Path": {
         "zh_CN": "自动检测配置文件路径",
@@ -769,7 +845,8 @@ TRANSLATIONS = {
         "es_ES": "Autodetectar Ruta de Configuración",
         "fr_FR": "Détecter Auto Chemin Config",
         "ko_KR": "설정 경로 자동 감지",
-        "ru_RU": "Автопоиск пути к конфигурации"
+        "ru_RU": "Автопоиск пути к конфигурации",
+        "it_IT": "Rileva Automaticamente Percorso Config"
     },
     "Auto Detect": {
         "zh_CN": "自动检测骨骼名称",
@@ -779,7 +856,8 @@ TRANSLATIONS = {
         "es_ES": "Detección Automática",
         "fr_FR": "Détection Automatique",
         "ko_KR": "뼈 자동 감지",
-        "ru_RU": "Автоопределение"
+        "ru_RU": "Автоопределение",
+        "it_IT": "Rilevamento Automatico"
     },
     "Supports Mixamo & VRM naming rules": {
         "zh_CN": "支持 Mixamo 和 VRM 命名规则",
@@ -789,7 +867,8 @@ TRANSLATIONS = {
         "es_ES": "Compatible con Mixamo y VRM",
         "fr_FR": "Supporte Mixamo et VRM",
         "ko_KR": "Mixamo 및 VRM 명명 규칙 지원",
-        "ru_RU": "Поддержка правил именования Mixamo и VRM"
+        "ru_RU": "Поддержка правил именования Mixamo и VRM",
+        "it_IT": "Supporta regole di denominazione Mixamo e VRM"
     },
     "Setup Character Bones": {
         "zh_CN": "一键配置角色骨骼绑定",
@@ -799,7 +878,8 @@ TRANSLATIONS = {
         "es_ES": "Configurar Huesos del Personaje",
         "fr_FR": "Configurer les Os du Personnage",
         "ko_KR": "캐릭터 뼈 원클릭 설정",
-        "ru_RU": "Настройка костей персонажа"
+        "ru_RU": "Настройка костей персонажа",
+        "it_IT": "Configura Ossa del Personaggio"
     },
     "Import JSON": {
         "zh_CN": "📥 导入配置 JSON",
@@ -809,7 +889,8 @@ TRANSLATIONS = {
         "es_ES": "📥 Importar JSON",
         "fr_FR": "📥 Importer JSON",
         "ko_KR": "📥 설정 JSON 가져오기",
-        "ru_RU": "📥 Импорт JSON"
+        "ru_RU": "📥 Импорт JSON",
+        "it_IT": "📥 Importa Configurazione JSON"
     },
     "Export JSON": {
         "zh_CN": "📤 导出配置 JSON",
@@ -819,7 +900,8 @@ TRANSLATIONS = {
         "es_ES": "📤 Exportar JSON",
         "fr_FR": "📤 Exporter JSON",
         "ko_KR": "📤 설정 JSON 내보내기",
-        "ru_RU": "📤 Экспорт JSON"
+        "ru_RU": "📤 Экспорт JSON",
+        "it_IT": "📤 Esporta Configurazione JSON"
     },
     "View Supported Formats": {
         "zh_CN": "查看支持的预设格式",
@@ -829,7 +911,8 @@ TRANSLATIONS = {
         "es_ES": "Ver Formatos Compatibles",
         "fr_FR": "Voir Formats Supportés",
         "ko_KR": "지원되는 포맷 보기",
-        "ru_RU": "Поддерживаемые форматы"
+        "ru_RU": "Поддерживаемые форматы",
+        "it_IT": "Mostra Formati Supportati"
     },
     "Hide Supported Formats": {
         "zh_CN": "收起支持的预设格式",
@@ -839,7 +922,8 @@ TRANSLATIONS = {
         "es_ES": "Ocultar Formatos Compatibles",
         "fr_FR": "Masquer Formats Supportés",
         "ko_KR": "지원되는 포맷 숨기기",
-        "ru_RU": "Скрыть форматы"
+        "ru_RU": "Скрыть форматы",
+        "it_IT": "Nascondi Formati Supportati"
     },
     "✅ Mixamo (with/without prefix)": {
         "zh_CN": "✅ Mixamo (带/不带前缀)",
@@ -849,7 +933,8 @@ TRANSLATIONS = {
         "es_ES": "✅ Mixamo (con/sin prefijo)",
         "fr_FR": "✅ Mixamo (avec/sans préfixe)",
         "ko_KR": "✅ Mixamo (접두사 유/무)",
-        "ru_RU": "✅ Mixamo (с префиксом/без)"
+        "ru_RU": "✅ Mixamo (с префиксом/без)",
+        "it_IT": "✅ Mixamo (con/senza prefisso)"
     },
     "Generate Nodes": {
         "zh_CN": "生成骨架追踪点",
@@ -859,7 +944,8 @@ TRANSLATIONS = {
         "es_ES": "Generar Nodos de Rastreo",
         "fr_FR": "Générer Nœuds de Suivi",
         "ko_KR": "트래킹 노드 생성",
-        "ru_RU": "Создать точки трекинга"
+        "ru_RU": "Создать точки трекинга",
+        "it_IT": "Genera Nodi di Tracciamento"
     },
     "Node Size (mm)": {
         "zh_CN": "追踪点大小 (mm)",
@@ -869,7 +955,8 @@ TRANSLATIONS = {
         "es_ES": "Tamaño del Nodo (mm)",
         "fr_FR": "Taille du Nœud (mm)",
         "ko_KR": "노드 크기 (mm)",
-        "ru_RU": "Размер узла (мм)"
+        "ru_RU": "Размер узла (мм)",
+        "it_IT": "Dimensione Nodo (mm)"
     },
     "Cancel Usage": {
         "zh_CN": "取消使用角色",
@@ -879,7 +966,8 @@ TRANSLATIONS = {
         "es_ES": "Cancelar Uso de Personaje",
         "fr_FR": "Annuler l'Utilisation",
         "ko_KR": "캐릭터 사용 취소",
-        "ru_RU": "Отменить использование персонажа"
+        "ru_RU": "Отменить использование персонажа",
+        "it_IT": "Annulla Uso Personaggio"
     },
     "Use Rebocap Character": {
         "zh_CN": "使用 Rebocap 角色",
@@ -889,7 +977,8 @@ TRANSLATIONS = {
         "es_ES": "Usar Personaje Rebocap",
         "fr_FR": "Utiliser Personnage Rebocap",
         "ko_KR": "Rebocap 캐릭터 사용",
-        "ru_RU": "Использовать персонажа Rebocap"
+        "ru_RU": "Использовать персонажа Rebocap",
+        "it_IT": "Usa Personaggio Rebocap"
     },
     "Config Path": {
         "zh_CN": "上位软件配置路径 (Config Path)",
@@ -899,7 +988,8 @@ TRANSLATIONS = {
         "es_ES": "Ruta de Configuración",
         "fr_FR": "Chemin de Config",
         "ko_KR": "설정 경로 (Config Path)",
-        "ru_RU": "Путь конфигурации (Config Path)"
+        "ru_RU": "Путь конфигурации (Config Path)",
+        "it_IT": "Percorso Configurazione"
     },
     "Read Data": {
         "zh_CN": "读取骨骼长度",
@@ -909,7 +999,8 @@ TRANSLATIONS = {
         "es_ES": "Leer Longitud de Huesos",
         "fr_FR": "Lire Longueur des Os",
         "ko_KR": "뼈 길이 읽기",
-        "ru_RU": "Считать длины костей"
+        "ru_RU": "Считать длины костей",
+        "it_IT": "Leggi Dati"
     },
     "Auto Refresh": {
         "zh_CN": "自动刷新",
@@ -919,7 +1010,8 @@ TRANSLATIONS = {
         "es_ES": "Actualización Automática",
         "fr_FR": "Actualisation Auto",
         "ko_KR": "자동 새로고침",
-        "ru_RU": "Автообновление"
+        "ru_RU": "Автообновление",
+        "it_IT": "Aggiornamento Automatico"
     },
     "Current Bone Lengths": {
         "zh_CN": "当前骨骼长度",
@@ -929,7 +1021,8 @@ TRANSLATIONS = {
         "es_ES": "Longitudes Actuales de Huesos",
         "fr_FR": "Longueurs d'Os Actuelles",
         "ko_KR": "현재 뼈 길이",
-        "ru_RU": "Текущие длины костей"
+        "ru_RU": "Текущие длины костей",
+        "it_IT": "Lunghezze Ossa Attuali"
     },
     "Neck & Head": {
         "zh_CN": "头颈 (Neck & Head)",
@@ -939,7 +1032,8 @@ TRANSLATIONS = {
         "es_ES": "Cuello y Cabeza",
         "fr_FR": "Cou et Tête",
         "ko_KR": "목과 머리",
-        "ru_RU": "Шея и голова"
+        "ru_RU": "Шея и голова",
+        "it_IT": "Collo e Testa"
     },
     "Chest": {
         "zh_CN": "胸腔 (Chest)",
@@ -949,7 +1043,8 @@ TRANSLATIONS = {
         "es_ES": "Pecho",
         "fr_FR": "Poitrine",
         "ko_KR": "가슴 (Chest)",
-        "ru_RU": "Грудь (Chest)"
+        "ru_RU": "Грудь (Chest)",
+        "it_IT": "Petto"
     },
     "Spine": {
         "zh_CN": "脊椎 (Spine)",
@@ -959,7 +1054,8 @@ TRANSLATIONS = {
         "es_ES": "Columna",
         "fr_FR": "Colonne",
         "ko_KR": "척추 (Spine)",
-        "ru_RU": "Позвоночник (Spine)"
+        "ru_RU": "Позвоночник (Spine)",
+        "it_IT": "Spina Dorsale"
     },
     "Shoulder Width": {
         "zh_CN": "肩宽 (Shoulder Width)",
@@ -969,7 +1065,8 @@ TRANSLATIONS = {
         "es_ES": "Ancho de Hombros",
         "fr_FR": "Largeur d'Épaules",
         "ko_KR": "어깨 너비",
-        "ru_RU": "Ширина плеч"
+        "ru_RU": "Ширина плеч",
+        "it_IT": "Larghezza Spalle"
     },
     "Upper Arm": {
         "zh_CN": "大臂 (Upper Arm)",
@@ -979,7 +1076,8 @@ TRANSLATIONS = {
         "es_ES": "Brazo Superior",
         "fr_FR": "Bras Supérieur",
         "ko_KR": "상완 (Upper Arm)",
-        "ru_RU": "Плечо (Upper Arm)"
+        "ru_RU": "Плечо (Upper Arm)",
+        "it_IT": "Braccio Superiore"
     },
     "Lower Arm": {
         "zh_CN": "小臂 (Lower Arm)",
@@ -989,7 +1087,8 @@ TRANSLATIONS = {
         "es_ES": "Antebrazo",
         "fr_FR": "Avant-bras",
         "ko_KR": "전완 (Lower Arm)",
-        "ru_RU": "Предплечье (Lower Arm)"
+        "ru_RU": "Предплечье (Lower Arm)",
+        "it_IT": "Avambraccio"
     },
     "Hip Width": {
         "zh_CN": "胯宽 (Hip Width)",
@@ -999,7 +1098,8 @@ TRANSLATIONS = {
         "es_ES": "Ancho de Cadera",
         "fr_FR": "Largeur de Hanches",
         "ko_KR": "골반 너비",
-        "ru_RU": "Ширина бедер"
+        "ru_RU": "Ширина бедер",
+        "it_IT": "Larghezza Fianchi"
     },
     "Hip Height": {
         "zh_CN": "跨高 (Hip Height)",
@@ -1009,7 +1109,8 @@ TRANSLATIONS = {
         "es_ES": "Altura de Cadera",
         "fr_FR": "Hauteur de Hanches",
         "ko_KR": "골반 높이",
-        "ru_RU": "Высота бедер"
+        "ru_RU": "Высота бедер",
+        "it_IT": "Altezza Fianchi"
     },
     "Upper Leg": {
         "zh_CN": "大腿 (Upper Leg)",
@@ -1019,7 +1120,8 @@ TRANSLATIONS = {
         "es_ES": "Muslo",
         "fr_FR": "Cuisse",
         "ko_KR": "허벅지 (Upper Leg)",
-        "ru_RU": "Бедро (Upper Leg)"
+        "ru_RU": "Бедро (Upper Leg)",
+        "it_IT": "Coscia"
     },
     "Lower Leg": {
         "zh_CN": "小腿 (Lower Leg)",
@@ -1029,7 +1131,8 @@ TRANSLATIONS = {
         "es_ES": "Pierna Inferior",
         "fr_FR": "Jambe Inférieure",
         "ko_KR": "종아리 (Lower Leg)",
-        "ru_RU": "Голень (Lower Leg)"
+        "ru_RU": "Голень (Lower Leg)",
+        "it_IT": "Gamba Inferiore"
     },
     "Foot": {
         "zh_CN": "脚掌 (Foot)",
@@ -1039,7 +1142,8 @@ TRANSLATIONS = {
         "es_ES": "Pie",
         "fr_FR": "Pied",
         "ko_KR": "발 (Foot)",
-        "ru_RU": "Стопа (Foot)"
+        "ru_RU": "Стопа (Foot)",
+        "it_IT": "Piede"
     },
     "History & Takes": {
         "zh_CN": "录制历史与回放 (History & Takes)",
@@ -1049,7 +1153,8 @@ TRANSLATIONS = {
         "es_ES": "Historial y Tomas",
         "fr_FR": "Historique et Prises",
         "ko_KR": "녹화 기록 및 테이크",
-        "ru_RU": "История и дубли"
+        "ru_RU": "История и дубли",
+        "it_IT": "Cronologia e Registrazioni"
     },
     "Apply Take": {
         "zh_CN": "挂载到时间轴 (Apply Take)",
@@ -1059,7 +1164,8 @@ TRANSLATIONS = {
         "es_ES": "Aplicar a Línea de Tiempo",
         "fr_FR": "Appliquer à la Chronologie",
         "ko_KR": "타임라인에 적용",
-        "ru_RU": "Применить к шкале"
+        "ru_RU": "Применить к шкале",
+        "it_IT": "Applica alla Timeline (Apply Take)"
     },
     "Delete Take": {
         "zh_CN": "删除记录 (Delete Take)",
@@ -1069,7 +1175,8 @@ TRANSLATIONS = {
         "es_ES": "Eliminar Toma",
         "fr_FR": "Supprimer la Prise",
         "ko_KR": "테이크 삭제",
-        "ru_RU": "Удалить дубль"
+        "ru_RU": "Удалить дубль",
+        "it_IT": "Elimina Registrazione (Delete Take)"
     },
     "Scene FPS:": {
         "zh_CN": "场景帧率 (Scene FPS):",
@@ -1079,7 +1186,8 @@ TRANSLATIONS = {
         "es_ES": "场景帧率 (Scene FPS):",
         "fr_FR": "场景帧率 (Scene FPS):",
         "ko_KR": "场景帧率 (Scene FPS):",
-        "ru_RU": "场景帧率 (Scene FPS):"
+        "ru_RU": "场景帧率 (Scene FPS):",
+        "it_IT": "FPS Scena:"
     },
     "Apply / Export FPS Settings:": {
         "zh_CN": "挂载 / 导出帧率设置:",
@@ -1089,7 +1197,8 @@ TRANSLATIONS = {
         "es_ES": "挂载 / 导出帧率设置:",
         "fr_FR": "挂载 / 导出帧率设置:",
         "ko_KR": "挂载 / 导出帧率设置:",
-        "ru_RU": "挂载 / 导出帧率设置:"
+        "ru_RU": "挂载 / 导出帧率设置:",
+        "it_IT": "Impostazioni FPS di Applicazione / Esportazione:"
     },
     "Apply FPS Mode": {
         "zh_CN": "应用帧率模式",
@@ -1099,7 +1208,8 @@ TRANSLATIONS = {
         "es_ES": "Modo FPS de Aplicación",
         "fr_FR": "Mode FPS d'Application",
         "ko_KR": "적용 FPS 모드",
-        "ru_RU": "Режим FPS применения"
+        "ru_RU": "Режим FPS применения",
+        "it_IT": "Modalità FPS di Applicazione"
     },
     "Auto (Scene)": {
         "zh_CN": "自动 (场景帧率)",
@@ -1109,7 +1219,8 @@ TRANSLATIONS = {
         "es_ES": "Auto (FPS de Escena)",
         "fr_FR": "Auto (FPS Scène)",
         "ko_KR": "자동 (씬 FPS)",
-        "ru_RU": "Авто (FPS сцены)"
+        "ru_RU": "Авто (FPS сцены)",
+        "it_IT": "Auto (Scena)"
     },
     "Custom": {
         "zh_CN": "自定义",
@@ -1119,7 +1230,8 @@ TRANSLATIONS = {
         "es_ES": "Personalizado",
         "fr_FR": "Personnalisé",
         "ko_KR": "사용자 지정",
-        "ru_RU": "Пользовательский"
+        "ru_RU": "Пользовательский",
+        "it_IT": "Personalizzato"
     },
     "Target FPS": {
         "zh_CN": "目标帧率",
@@ -1129,7 +1241,8 @@ TRANSLATIONS = {
         "es_ES": "FPS Objetivo",
         "fr_FR": "FPS Cible",
         "ko_KR": "목표 FPS",
-        "ru_RU": "Целевой FPS"
+        "ru_RU": "Целевой FPS",
+        "it_IT": "FPS Obiettivo"
     },
     "A2T Pose Calibration (A-Pose to T-Pose)": {
         "zh_CN": "A2T 姿态校准 (A-Pose 转 T-Pose)",
@@ -1139,7 +1252,8 @@ TRANSLATIONS = {
         "es_ES": "Calibración de Pose A2T (A-Pose a T-Pose)",
         "fr_FR": "Étalonnage de Pose A2T (A-Pose en T-Pose)",
         "ko_KR": "A2T 포즈 캘리브레이션 (A-Pose to T-Pose)",
-        "ru_RU": "Калибровка позы A2T (A-Pose в T-Pose)"
+        "ru_RU": "Калибровка позы A2T (A-Pose в T-Pose)",
+        "it_IT": "Calibrazione Posa A2T (Posa A a Posa T)"
     },
     "Enable A2T Calibration": {
         "zh_CN": "启用 A2T 姿态校准",
@@ -1149,7 +1263,8 @@ TRANSLATIONS = {
         "es_ES": "Habilitar Calibración A2T",
         "fr_FR": "Activer l'Étalonnage A2T",
         "ko_KR": "A2T 캘리브레이션 활성화",
-        "ru_RU": "Включить калибровку A2T"
+        "ru_RU": "Включить калибровку A2T",
+        "it_IT": "Abilita Calibrazione A2T"
     },
     "* A2T Disabled (Direct Mocap Mapping)": {
         "zh_CN": "* A2T 已停用 (直连动捕映射)",
@@ -1159,7 +1274,8 @@ TRANSLATIONS = {
         "es_ES": "* A2T Deshabilitado (Mapeo Directo)",
         "fr_FR": "* A2T Désactivé (Mappage Direct)",
         "ko_KR": "* A2T 비활성화 (직접 매핑)",
-        "ru_RU": "* A2T отключен (прямой мокап)"
+        "ru_RU": "* A2T отключен (прямой мокап)",
+        "it_IT": "* A2T Disabilitato (Mappatura Diretta Mocap)"
     },
     "Preset Template:": {
         "zh_CN": "预设模板:",
@@ -1169,7 +1285,8 @@ TRANSLATIONS = {
         "es_ES": "Plantilla Preestablecida:",
         "fr_FR": "Modèle Prédéfini :",
         "ko_KR": "프리셋 템플릿:",
-        "ru_RU": "Предустановленный шаблон:"
+        "ru_RU": "Предустановленный шаблон:",
+        "it_IT": "Modello Predefinito:"
     },
     "Preview in Viewport": {
         "zh_CN": "👁️ 实时视口预览",
@@ -1179,7 +1296,8 @@ TRANSLATIONS = {
         "es_ES": "👁️ Vista Previa en Visor",
         "fr_FR": "👁️ Aperçu Vue 3D",
         "ko_KR": "👁️ 뷰포트 미리보기",
-        "ru_RU": "👁️ Предпросмотр во вьюпорте"
+        "ru_RU": "👁️ Предпросмотр во вьюпорте",
+        "it_IT": "👁️ Anteprima nella Vista 3D"
     },
     "Reset Offsets": {
         "zh_CN": "重置所有偏移",
@@ -1189,7 +1307,8 @@ TRANSLATIONS = {
         "es_ES": "Restablecer Desplazamientos",
         "fr_FR": "Réinitialiser Décalages",
         "ko_KR": "오프셋 초기화",
-        "ru_RU": "Сбросить все смещения"
+        "ru_RU": "Сбросить все смещения",
+        "it_IT": "Reimposta Tutti gli Offset"
     },
     "Symmetrical Edit (Mirror Left -> Right)": {
         "zh_CN": "对称镜像编辑 (左侧同步右侧)",
@@ -1199,7 +1318,8 @@ TRANSLATIONS = {
         "es_ES": "Edición Simétrica (Espejo Izq -> Der)",
         "fr_FR": "Édition Symétrique (Miroir G -> D)",
         "ko_KR": "대칭 미러 편집 (좌 -> 우)",
-        "ru_RU": "Симметричное ред. (зеркало Л -> П)"
+        "ru_RU": "Симметричное ред. (зеркало Л -> П)",
+        "it_IT": "Modifica Simmetrica (Specchia Sinistra -> Destra)"
     },
     "1. Left Arm": {
         "zh_CN": "1. 左上肢 (Left Arm)",
@@ -1209,7 +1329,8 @@ TRANSLATIONS = {
         "es_ES": "1. Brazo Izquierdo",
         "fr_FR": "1. Bras Gauche",
         "ko_KR": "1. 왼팔 (Left Arm)",
-        "ru_RU": "1. Левая рука (Left Arm)"
+        "ru_RU": "1. Левая рука (Left Arm)",
+        "it_IT": "1. Braccio Sinistro (Left Arm)"
     },
     "2. Right Arm": {
         "zh_CN": "2. 右上肢 (Right Arm)",
@@ -1219,7 +1340,8 @@ TRANSLATIONS = {
         "es_ES": "2. Brazo Derecho",
         "fr_FR": "2. Bras Droit",
         "ko_KR": "2. 오른팔 (Right Arm)",
-        "ru_RU": "2. Правая рука (Right Arm)"
+        "ru_RU": "2. Правая рука (Right Arm)",
+        "it_IT": "2. Braccio Destro (Right Arm)"
     },
     "(Mirrored)": {
         "zh_CN": "(镜像联动中)",
@@ -1229,7 +1351,8 @@ TRANSLATIONS = {
         "es_ES": "(Espejado)",
         "fr_FR": "(Miroir actif)",
         "ko_KR": "(미러링 연동)",
-        "ru_RU": "(зеркально)"
+        "ru_RU": "(зеркально)",
+        "it_IT": "(Specchiato)"
     },
     "3. Left Leg": {
         "zh_CN": "3. 左下肢 (Left Leg)",
@@ -1239,7 +1362,8 @@ TRANSLATIONS = {
         "es_ES": "3. Pierna Izquierda",
         "fr_FR": "3. Jambe Gauche",
         "ko_KR": "3. 왼다리 (Left Leg)",
-        "ru_RU": "3. Левая нога (Left Leg)"
+        "ru_RU": "3. Левая нога (Left Leg)",
+        "it_IT": "3. Gamba Sinistra (Left Leg)"
     },
     "4. Right Leg": {
         "zh_CN": "4. 右下肢 (Right Leg)",
@@ -1249,7 +1373,8 @@ TRANSLATIONS = {
         "es_ES": "4. Pierna Derecha",
         "fr_FR": "4. Jambe Droite",
         "ko_KR": "4. 오른다리 (Right Leg)",
-        "ru_RU": "4. Правая нога (Right Leg)"
+        "ru_RU": "4. Правая нога (Right Leg)",
+        "it_IT": "4. Gamba Destra (Right Leg)"
     },
     "5. Root & Spine & Head": {
         "zh_CN": "5. 躯干与头部 (Root & Spine & Head)",
@@ -1259,7 +1384,8 @@ TRANSLATIONS = {
         "es_ES": "5. Torso y Cabeza",
         "fr_FR": "5. Buste et Tête",
         "ko_KR": "5. 몸통 및 머리",
-        "ru_RU": "5. Торс и голова"
+        "ru_RU": "5. Торс и голова",
+        "it_IT": "5. Busto e Testa (Root & Spine & Head)"
     },
     "Left Clavicle (Collar)": {
         "zh_CN": "左锁骨 (Clavicle / Collar)",
@@ -1269,7 +1395,8 @@ TRANSLATIONS = {
         "es_ES": "Clavícula Izquierda",
         "fr_FR": "Clavicule Gauche",
         "ko_KR": "왼쪽 쇄골",
-        "ru_RU": "Левая ключица"
+        "ru_RU": "Левая ключица",
+        "it_IT": "Clavicola Sinistra"
     },
     "Left UpperArm (Shoulder)": {
         "zh_CN": "左大臂 (UpperArm / Shoulder)",
@@ -1279,7 +1406,8 @@ TRANSLATIONS = {
         "es_ES": "Brazo Sup. Izquierdo",
         "fr_FR": "Bras Sup. Gauche",
         "ko_KR": "왼쪽 상완",
-        "ru_RU": "Левое плечо"
+        "ru_RU": "Левое плечо",
+        "it_IT": "Braccio Superiore Sinistro (Spalla)"
     },
     "Left LowerArm (Elbow)": {
         "zh_CN": "左小臂 (LowerArm / Elbow)",
@@ -1289,7 +1417,8 @@ TRANSLATIONS = {
         "es_ES": "Antebrazo Izquierdo",
         "fr_FR": "Avant-bras Gauche",
         "ko_KR": "왼쪽 전완",
-        "ru_RU": "Левое предплечье"
+        "ru_RU": "Левое предплечье",
+        "it_IT": "Avambraccio Sinistro (Gomito)"
     },
     "Left Hand (Wrist)": {
         "zh_CN": "左手/手腕 (Hand / Wrist)",
@@ -1299,7 +1428,8 @@ TRANSLATIONS = {
         "es_ES": "Mano/Muñeca Izquierda",
         "fr_FR": "Main/Poignet Gauche",
         "ko_KR": "왼손/손목",
-        "ru_RU": "Левая кисть/запястье"
+        "ru_RU": "Левая кисть/запястье",
+        "it_IT": "Mano/Polso Sinistro"
     },
     "Right Clavicle (Collar)": {
         "zh_CN": "右锁骨 (Clavicle / Collar)",
@@ -1309,7 +1439,8 @@ TRANSLATIONS = {
         "es_ES": "Clavícula Derecha",
         "fr_FR": "Clavicule Droite",
         "ko_KR": "오른쪽 쇄골",
-        "ru_RU": "Правая ключица"
+        "ru_RU": "Правая ключица",
+        "it_IT": "Clavicola Destra"
     },
     "Right UpperArm (Shoulder)": {
         "zh_CN": "右大臂 (UpperArm / Shoulder)",
@@ -1319,7 +1450,8 @@ TRANSLATIONS = {
         "es_ES": "Brazo Sup. Derecho",
         "fr_FR": "Bras Sup. Droit",
         "ko_KR": "오른쪽 상완",
-        "ru_RU": "Правое плечо"
+        "ru_RU": "Правое плечо",
+        "it_IT": "Braccio Superiore Destro (Spalla)"
     },
     "Right LowerArm (Elbow)": {
         "zh_CN": "右小臂 (LowerArm / Elbow)",
@@ -1329,7 +1461,8 @@ TRANSLATIONS = {
         "es_ES": "Antebrazo Derecho",
         "fr_FR": "Avant-bras Droit",
         "ko_KR": "오른쪽 전완",
-        "ru_RU": "Правое предплечье"
+        "ru_RU": "Правое предплечье",
+        "it_IT": "Avambraccio Destro (Gomito)"
     },
     "Right Hand (Wrist)": {
         "zh_CN": "右手/手腕 (Hand / Wrist)",
@@ -1339,7 +1472,8 @@ TRANSLATIONS = {
         "es_ES": "Mano/Muñeca Derecha",
         "fr_FR": "Main/Poignet Droit",
         "ko_KR": "오른손/손목",
-        "ru_RU": "Правая кисть/запястье"
+        "ru_RU": "Правая кисть/запястье",
+        "it_IT": "Mano/Polso Destro"
     },
     "Left Thigh (Hip)": {
         "zh_CN": "左大腿 (Thigh / Hip)",
@@ -1349,7 +1483,8 @@ TRANSLATIONS = {
         "es_ES": "Muslo Izquierdo",
         "fr_FR": "Cuisse Gauche",
         "ko_KR": "왼쪽 허벅지",
-        "ru_RU": "Левое бедро"
+        "ru_RU": "Левое бедро",
+        "it_IT": "Coscia Sinistra"
     },
     "Left Calf (Knee)": {
         "zh_CN": "左小腿 (Calf / Knee)",
@@ -1359,7 +1494,8 @@ TRANSLATIONS = {
         "es_ES": "Pantorrilla Izquierda",
         "fr_FR": "Mollet Gauche",
         "ko_KR": "왼쪽 종아리",
-        "ru_RU": "Левая голень"
+        "ru_RU": "Левая голень",
+        "it_IT": "Polpaccio Sinistro (Ginocchio)"
     },
     "Left Foot (Ankle)": {
         "zh_CN": "左脚踝 (Foot / Ankle)",
@@ -1369,7 +1505,8 @@ TRANSLATIONS = {
         "es_ES": "Tobillo Izquierdo",
         "fr_FR": "Cheville Gauche",
         "ko_KR": "왼쪽 발목",
-        "ru_RU": "Левая лодыжка"
+        "ru_RU": "Левая лодыжка",
+        "it_IT": "Piede/Caviglia Sinistra"
     },
     "Right Thigh (Hip)": {
         "zh_CN": "右大腿 (Thigh / Hip)",
@@ -1379,7 +1516,8 @@ TRANSLATIONS = {
         "es_ES": "Muslo Derecho",
         "fr_FR": "Cuisse Droite",
         "ko_KR": "오른쪽 허벅지",
-        "ru_RU": "Правое бедро"
+        "ru_RU": "Правое бедро",
+        "it_IT": "Coscia Destra"
     },
     "Right Calf (Knee)": {
         "zh_CN": "右小腿 (Calf / Knee)",
@@ -1389,7 +1527,8 @@ TRANSLATIONS = {
         "es_ES": "Pantorrilla Derecha",
         "fr_FR": "Mollet Droit",
         "ko_KR": "오른쪽 종아리",
-        "ru_RU": "Правая голень"
+        "ru_RU": "Правая голень",
+        "it_IT": "Polpaccio Destro (Ginocchio)"
     },
     "Right Foot (Ankle)": {
         "zh_CN": "右脚踝 (Foot / Ankle)",
@@ -1399,7 +1538,8 @@ TRANSLATIONS = {
         "es_ES": "Tobillo Derecho",
         "fr_FR": "Cheville Droite",
         "ko_KR": "오른쪽 발목",
-        "ru_RU": "Правая лодыжка"
+        "ru_RU": "Правая лодыжка",
+        "it_IT": "Piede/Caviglia Destra"
     },
     "Pelvis (Hips)": {
         "zh_CN": "骨盆 (Pelvis / Hips)",
@@ -1409,7 +1549,8 @@ TRANSLATIONS = {
         "es_ES": "Pelvis (Caderas)",
         "fr_FR": "Bassin (Hanches)",
         "ko_KR": "골반 (Pelvis / Hips)",
-        "ru_RU": "Таз (Pelvis / Hips)"
+        "ru_RU": "Таз (Pelvis / Hips)",
+        "it_IT": "Bacino (Pelvis / Fianchi)"
     },
     "Spine1 (Waist)": {
         "zh_CN": "腰椎 (Spine1 / Waist)",
@@ -1419,7 +1560,8 @@ TRANSLATIONS = {
         "es_ES": "Cintura (Spine1)",
         "fr_FR": "Taille (Spine1)",
         "ko_KR": "허리 (Spine1 / Waist)",
-        "ru_RU": "Поясница (Spine1 / Waist)"
+        "ru_RU": "Поясница (Spine1 / Waist)",
+        "it_IT": "Spina 1 (Vita)"
     },
     "Spine2 (Chest)": {
         "zh_CN": "胸部 (Spine2 / Chest)",
@@ -1429,7 +1571,8 @@ TRANSLATIONS = {
         "es_ES": "Pecho (Spine2)",
         "fr_FR": "Poitrine (Spine2)",
         "ko_KR": "가슴 (Spine2 / Chest)",
-        "ru_RU": "Грудь (Spine2 / Chest)"
+        "ru_RU": "Грудь (Spine2 / Chest)",
+        "it_IT": "Spina 2 (Petto)"
     },
     "Spine3 (Up Chest)": {
         "zh_CN": "上胸部 (Spine3 / Up Chest)",
@@ -1439,7 +1582,8 @@ TRANSLATIONS = {
         "es_ES": "Pecho Superior (Spine3)",
         "fr_FR": "Haut de Poitrine (Spine3)",
         "ko_KR": "상부 가슴 (Spine3)",
-        "ru_RU": "Верхняя часть груди (Spine3)"
+        "ru_RU": "Верхняя часть груди (Spine3)",
+        "it_IT": "Spina 3 (Petto Superiore)"
     },
     "Neck": {
         "zh_CN": "颈部 (Neck)",
@@ -1449,7 +1593,8 @@ TRANSLATIONS = {
         "es_ES": "Cuello",
         "fr_FR": "Cou",
         "ko_KR": "목 (Neck)",
-        "ru_RU": "Шея (Neck)"
+        "ru_RU": "Шея (Neck)",
+        "it_IT": "Collo"
     },
     "Head": {
         "zh_CN": "头部 (Head)",
@@ -1459,7 +1604,8 @@ TRANSLATIONS = {
         "es_ES": "Cabeza",
         "fr_FR": "Tête",
         "ko_KR": "머리 (Head)",
-        "ru_RU": "Голова (Head)"
+        "ru_RU": "Голова (Head)",
+        "it_IT": "Testa"
     },
     "Import Bone Map JSON": {
         "en_US": "Import JSON",
@@ -1469,7 +1615,8 @@ TRANSLATIONS = {
         "es_ES": "Importar Configuración",
         "fr_FR": "Importer Configuration",
         "ko_KR": "설정 가져오기",
-        "ru_RU": "Импорт настроек"
+        "ru_RU": "Импорт настроек",
+        "it_IT": "Importa Configurazione"
     },
     "Export Bone Map JSON": {
         "en_US": "Export JSON",
@@ -1479,7 +1626,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar Configuración",
         "fr_FR": "Exporter Configuration",
         "ko_KR": "설정 내보내기",
-        "ru_RU": "Экспорт настроек"
+        "ru_RU": "Экспорт настроек",
+        "it_IT": "Esporta Configurazione"
     },
     "请先选择一个骨架和骨骼 (Select an armature)": {
         "en_US": "Please select an armature and bone first",
@@ -1489,7 +1637,8 @@ TRANSLATIONS = {
         "es_ES": "Seleccione una armadura y hueso primero",
         "fr_FR": "Veuillez d'abord sélectionner une armature et un os",
         "ko_KR": "먼저 아마추어와 뼈를 선택하세요",
-        "ru_RU": "Сначала выберите арматуру и кость"
+        "ru_RU": "Сначала выберите арматуру и кость",
+        "it_IT": "Seleziona prima un'armatura e un osso"
     },
     "未选中任何骨骼 (No bone selected)": {
         "en_US": "No bone selected",
@@ -1499,7 +1648,8 @@ TRANSLATIONS = {
         "es_ES": "Ningún hueso seleccionado",
         "fr_FR": "Aucun os sélectionné",
         "ko_KR": "선택된 뼈가 없습니다",
-        "ru_RU": "Кость не выбрана"
+        "ru_RU": "Кость не выбрана",
+        "it_IT": "Nessun osso selezionato"
     },
     "(点击绑定)": {
         "en_US": "(Click to Bind)",
@@ -1509,7 +1659,8 @@ TRANSLATIONS = {
         "es_ES": "(Clic para Vincular)",
         "fr_FR": "(Cliquer pour Lier)",
         "ko_KR": "(클릭하여 바인딩)",
-        "ru_RU": "(Нажмите для привязки)"
+        "ru_RU": "(Нажмите для привязки)",
+        "it_IT": "(Clicca per Associare)"
     },
     "💡 点击插槽绑定当前选中骨骼": {
         "en_US": "💡 Click a slot to bind the selected bone",
@@ -1519,7 +1670,8 @@ TRANSLATIONS = {
         "es_ES": "💡 Haz clic en una ranura para vincular el hueso seleccionado",
         "fr_FR": "💡 Cliquez sur un emplacement pour lier l'os sélectionné",
         "ko_KR": "💡 슬롯을 클릭하여 선택한 뼈를 바인딩합니다",
-        "ru_RU": "💡 Нажмите на слот, чтобы привязать выбранную кость"
+        "ru_RU": "💡 Нажмите на слот, чтобы привязать выбранную кость",
+        "it_IT": "💡 Clicca su uno slot per associare l'osso selezionato"
     },
     "按场景帧率显示动捕 (Sync Viewport to Scene FPS)": {
         "en_US": "Sync Viewport to Scene FPS",
@@ -1529,7 +1681,8 @@ TRANSLATIONS = {
         "es_ES": "Sincronizar Visor con FPS",
         "fr_FR": "Sync. Vue avec FPS de Scène",
         "ko_KR": "뷰포트 FPS 동기화",
-        "ru_RU": "Синхр. FPS вьюпорта"
+        "ru_RU": "Синхр. FPS вьюпорта",
+        "it_IT": "Sincronizza Vista con FPS della Scena"
     },
     "勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点": {
         "en_US": "Capture relative to the character's current position instead of snapping to world origin.",
@@ -1539,7 +1692,8 @@ TRANSLATIONS = {
         "es_ES": "Captura relativa a la posición actual del personaje en lugar de ajustarse al origen del mundo.",
         "fr_FR": "Capture relative à la position actuelle du personnage au lieu de s'aligner sur l'origine du monde.",
         "ko_KR": "캐릭터의 현재 위치를 기준으로 캡처하며, 월드 원점으로 강제 이동하지 않습니다.",
-        "ru_RU": "Захват относительно текущей позиции персонажа вместо привязки к началу координат мира."
+        "ru_RU": "Захват относительно текущей позиции персонажа вместо привязки к началу координат мира.",
+        "it_IT": "Se attivo, il motion capture usa la posizione attuale dell'oggetto come riferimento invece di forzare l'origine del mondo."
     },
     "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率": {
         "en_US": "When checked, the viewport refresh rate drops to match the scene FPS to save GPU; otherwise, it runs at max real-time refresh rate.",
@@ -1549,7 +1703,8 @@ TRANSLATIONS = {
         "es_ES": "Al marcar, la actualización del visor baja para coincidir con los FPS de la escena y ahorrar GPU.",
         "fr_FR": "Si cochée, le taux de rafraîchissement s'aligne sur les FPS pour économiser le GPU.",
         "ko_KR": "선택 시 뷰포트 새로 고침 빈도가 씬 FPS와 일치하도록 낮아져 GPU를 절약합니다.",
-        "ru_RU": "При включении частота обновления вьюпорта снижается до FPS сцены для экономии GPU."
+        "ru_RU": "При включении частота обновления вьюпорта снижается до FPS сцены для экономии GPU.",
+        "it_IT": "Se attivo, la frequenza di aggiornamento della vista scende agli FPS della scena per risparmiare GPU; altrimenti usa il massimo in tempo reale."
     },
     "💡 悬停查看对应骨骼，点击绿点快速选中": {
         "en_US": "💡 Hover to view bone name, click green dot to select",
@@ -1559,7 +1714,8 @@ TRANSLATIONS = {
         "es_ES": "💡 Pasa el ratón para ver el nombre del hueso, haz clic en el punto verde para seleccionar",
         "fr_FR": "💡 Survolez pour voir le nom de l'os, cliquez sur le point vert pour sélectionner",
         "ko_KR": "💡 마우스를 올려 뼈 이름을 확인하고, 녹색 점을 클릭하여 선택합니다",
-        "ru_RU": "💡 Наведите курсор, чтобы увидеть имя кости, нажмите зеленую точку для выбора"
+        "ru_RU": "💡 Наведите курсор, чтобы увидеть имя кости, нажмите зеленую точку для выбора",
+        "it_IT": "💡 Passa il mouse per vedere il nome dell'osso, clicca sul punto verde per selezionare"
     },
     "💡 语言设置已保存！": {
         "en_US": "💡 Language saved!",
@@ -1569,7 +1725,8 @@ TRANSLATIONS = {
         "es_ES": "💡 ¡Idioma guardado!",
         "fr_FR": "💡 Langue sauvegardée !",
         "ko_KR": "💡 언어 설정이 저장되었습니다!",
-        "ru_RU": "💡 Язык сохранен!"
+        "ru_RU": "💡 Язык сохранен!",
+        "it_IT": "💡 Impostazione della lingua salvata!"
     },
     "部分悬停提示需要重启 Blender 才能生效。": {
         "en_US": "Please restart Blender to apply tooltips.",
@@ -1579,7 +1736,8 @@ TRANSLATIONS = {
         "es_ES": "Reinicie Blender para aplicar los mensajes de información (tooltips).",
         "fr_FR": "Veuillez redémarrer Blender pour appliquer les info-bulles.",
         "ko_KR": "일부 툴팁은 Blender를 다시 시작해야 적용됩니다.",
-        "ru_RU": "Перезапустите Blender, чтобы применить всплывающие подсказки."
+        "ru_RU": "Перезапустите Blender, чтобы применить всплывающие подсказки.",
+        "it_IT": "Alcuni tooltip richiedono il riavvio di Blender per essere applicati."
     },
     "自动根据当前 Blender 场景帧率重采样动作关键帧": {
         "en_US": "Automatically resample keyframes to match the current Blender scene FPS.",
@@ -1589,7 +1747,8 @@ TRANSLATIONS = {
         "es_ES": "Remuestrear automáticamente fotogramas clave según los FPS de la escena.",
         "fr_FR": "Rééchantillonner automatiquement les images clés selon les FPS de la scène.",
         "ko_KR": "현재 Blender 씬 FPS에 맞게 모션 키프레임을 자동으로 리샘플링합니다.",
-        "ru_RU": "Автоматически передискретизировать ключевые кадры под FPS сцены."
+        "ru_RU": "Автоматически передискретизировать ключевые кадры под FPS сцены.",
+        "it_IT": "Campiona automaticamente i fotogrammi chiave in base agli FPS attuali della scena di Blender."
     },
     "匹配 24 FPS 标准电影与影视动画帧率": {
         "en_US": "Match 24 FPS standard film and animation framerate.",
@@ -1599,7 +1758,8 @@ TRANSLATIONS = {
         "es_ES": "Coincidir con 24 FPS estándar de cine y animación.",
         "fr_FR": "Aligner sur 24 FPS standard cinéma et animation.",
         "ko_KR": "24 FPS 표준 영화 및 애니메이션 프레임 속도에 맞춥니다.",
-        "ru_RU": "Соответствие 24 FPS стандарта кино и анимации."
+        "ru_RU": "Соответствие 24 FPS стандарта кино и анимации.",
+        "it_IT": "Adatta alla frequenza standard di 24 FPS per cinema e animazione."
     },
     "匹配 30 FPS 电视与视频帧率": {
         "en_US": "Match 30 FPS TV and video framerate.",
@@ -1609,7 +1769,8 @@ TRANSLATIONS = {
         "es_ES": "Coincidir con 30 FPS estándar de TV y vídeo.",
         "fr_FR": "Aligner sur 30 FPS standard TV et vidéo.",
         "ko_KR": "30 FPS TV 및 비디오 프레임 속도에 맞춥니다.",
-        "ru_RU": "Соответствие 30 FPS стандарта ТВ и видео."
+        "ru_RU": "Соответствие 30 FPS стандарта ТВ и видео.",
+        "it_IT": "Adatta alla frequenza standard di 30 FPS per TV e video."
     },
     "匹配 60 FPS 原生动捕高帧率": {
         "en_US": "Match 60 FPS native high framerate mocap.",
@@ -1619,7 +1780,8 @@ TRANSLATIONS = {
         "es_ES": "Coincidir con 60 FPS nativos de alta velocidad.",
         "fr_FR": "Aligner sur 60 FPS natifs haute fréquence.",
         "ko_KR": "60 FPS 네이티브 고프레임 모캡에 맞춥니다.",
-        "ru_RU": "Соответствие 60 FPS нативного высокочастотного мокапа."
+        "ru_RU": "Соответствие 60 FPS нативного высокочастотного мокапа.",
+        "it_IT": "Adatta alla frequenza nativa elevata di 60 FPS del motion capture."
     },
     "手动指定任意目标帧率数值": {
         "en_US": "Manually specify any target framerate value.",
@@ -1629,7 +1791,8 @@ TRANSLATIONS = {
         "es_ES": "Especificar manualmente cualquier valor de FPS objetivo.",
         "fr_FR": "Spécifier manuellement une valeur de FPS cible.",
         "ko_KR": "임의의 목표 프레임 속도 값을 직접 지정합니다.",
-        "ru_RU": "Вручную указать любое значение целевого FPS."
+        "ru_RU": "Вручную указать любое значение целевого FPS.",
+        "it_IT": "Specifica manualmente qualsiasi valore di frequenza fotogrammi obiettivo."
     },
     "默认 (Default)": {
         "en_US": "Default",
@@ -1639,7 +1802,8 @@ TRANSLATIONS = {
         "fr_FR": "Défaut",
         "ko_KR": "기본 (Default)",
         "ru_RU": "По умолчанию",
-        "zh_CN": "默认 (Default)"
+        "zh_CN": "默认 (Default)",
+        "it_IT": "Predefinito (Default)"
     },
     "无 (None)": {
         "en_US": "None",
@@ -1649,7 +1813,8 @@ TRANSLATIONS = {
         "fr_FR": "Aucun",
         "ko_KR": "없음 (None)",
         "ru_RU": "Нет",
-        "zh_CN": "无 (None)"
+        "zh_CN": "无 (None)",
+        "it_IT": "Nessuno (None)"
     },
     "比例:": {
         "en_US": "Scale:",
@@ -1659,7 +1824,8 @@ TRANSLATIONS = {
         "fr_FR": "Échelle :",
         "ko_KR": "비율:",
         "ru_RU": "Масштаб:",
-        "zh_CN": "比例:"
+        "zh_CN": "比例:",
+        "it_IT": "Scala:"
     },
     "英制:": {
         "en_US": "Imperial:",
@@ -1669,7 +1835,8 @@ TRANSLATIONS = {
         "fr_FR": "Impérial :",
         "ko_KR": "야드파운드법:",
         "ru_RU": "Имперская:",
-        "zh_CN": "英制:"
+        "zh_CN": "英制:",
+        "it_IT": "Imperiale:"
     },
     "公制:": {
         "en_US": "Metric:",
@@ -1679,7 +1846,8 @@ TRANSLATIONS = {
         "fr_FR": "Métrique :",
         "ko_KR": "미터법:",
         "ru_RU": "Метрическая:",
-        "zh_CN": "公制:"
+        "zh_CN": "公制:",
+        "it_IT": "Metrico:"
     },
     "米 (m)": {
         "en_US": "Meters (m)",
@@ -1689,7 +1857,8 @@ TRANSLATIONS = {
         "fr_FR": "Mètres (m)",
         "ko_KR": "미터 (m)",
         "ru_RU": "Метры (m)",
-        "zh_CN": "米 (m)"
+        "zh_CN": "米 (m)",
+        "it_IT": "Metri (m)"
     },
     "厘米 (cm)": {
         "en_US": "Centimeters (cm)",
@@ -1699,7 +1868,8 @@ TRANSLATIONS = {
         "fr_FR": "Centimètres (cm)",
         "ko_KR": "센티미터 (cm)",
         "ru_RU": "Сантиметры (cm)",
-        "zh_CN": "厘米 (cm)"
+        "zh_CN": "厘米 (cm)",
+        "it_IT": "Centimetri (cm)"
     },
     "毫米 (mm)": {
         "en_US": "Millimeters (mm)",
@@ -1709,7 +1879,8 @@ TRANSLATIONS = {
         "fr_FR": "Millimètres (mm)",
         "ko_KR": "밀리미터 (mm)",
         "ru_RU": "Миллиметры (mm)",
-        "zh_CN": "毫米 (mm)"
+        "zh_CN": "毫米 (mm)",
+        "it_IT": "Millimetri (mm)"
     },
     "千米 (km)": {
         "en_US": "Kilometers (km)",
@@ -1719,7 +1890,8 @@ TRANSLATIONS = {
         "fr_FR": "Kilomètres (km)",
         "ko_KR": "킬로미터 (km)",
         "ru_RU": "Километры (km)",
-        "zh_CN": "千米 (km)"
+        "zh_CN": "千米 (km)",
+        "it_IT": "Chilometri (km)"
     },
     "自适应 (Adaptive)": {
         "en_US": "Adaptive",
@@ -1729,7 +1901,8 @@ TRANSLATIONS = {
         "fr_FR": "Adaptatif",
         "ko_KR": "적응형 (Adaptive)",
         "ru_RU": "Адаптивно",
-        "zh_CN": "自适应 (Adaptive)"
+        "zh_CN": "自适应 (Adaptive)",
+        "it_IT": "Adattivo (Adaptive)"
     },
     "修改场景帧率 (Change Scene FPS)": {
         "zh_CN": "修改场景帧率",
@@ -1739,7 +1912,8 @@ TRANSLATIONS = {
         "es_ES": "Cambiar FPS de Escena",
         "fr_FR": "Modifier les FPS de la Scène",
         "ko_KR": "씬 FPS 변경",
-        "ru_RU": "Изменить FPS сцены"
+        "ru_RU": "Изменить FPS сцены",
+        "it_IT": "Modifica FPS della Scena"
     },
     "Language Changed": {
         "zh_CN": "语言已更改",
@@ -1749,7 +1923,8 @@ TRANSLATIONS = {
         "es_ES": "Idioma Cambiado",
         "fr_FR": "Langue Modifiée",
         "ko_KR": "언어 변경됨",
-        "ru_RU": "Язык изменен"
+        "ru_RU": "Язык изменен",
+        "it_IT": "Lingua Modificata"
     },
     "Rebocap 人偶骨骼映射器 (Puppet Bone Mapper)": {
         "zh_CN": "Rebocap 人偶骨骼映射器 (Puppet Bone Mapper)",
@@ -1759,7 +1934,8 @@ TRANSLATIONS = {
         "es_ES": "Mapeador de Huesos Rebocap (Puppet Bone Mapper)",
         "fr_FR": "Mappeur d'Os Rebocap (Puppet Bone Mapper)",
         "ko_KR": "Rebocap 퍼펫 뼈 매퍼",
-        "ru_RU": "Карта марионетки Rebocap"
+        "ru_RU": "Карта марионетки Rebocap",
+        "it_IT": "Mappatore Ossa Marionetta Rebocap"
     },
     "清空全部骨骼映射": {
         "zh_CN": "清空全部骨骼映射",
@@ -1769,7 +1945,8 @@ TRANSLATIONS = {
         "es_ES": "Borrar Todos los Mapeos de Huesos",
         "fr_FR": "Effacer Tous les Mappages d'Os",
         "ko_KR": "모든 뼈 매핑 지우기",
-        "ru_RU": "Очистить все сопоставления костей"
+        "ru_RU": "Очистить все сопоставления костей",
+        "it_IT": "Cancella Tutte le Mappature Ossa"
     },
     "开启人偶骨骼映射视口 (Puppet HUD)": {
         "zh_CN": "开启人偶骨骼映射视口 (Puppet HUD)",
@@ -1779,7 +1956,8 @@ TRANSLATIONS = {
         "es_ES": "Alternar HUD de Marioneta",
         "fr_FR": "Basculer HUD Marionnette",
         "ko_KR": "퍼펫 스켈레톤 HUD 열기",
-        "ru_RU": "Включить HUD марионетки"
+        "ru_RU": "Включить HUD марионетки",
+        "it_IT": "Attiva HUD Marionetta"
     },
     "将选中的历史记录应用到当前时间轴": {
         "zh_CN": "将选中的历史记录应用到当前时间轴",
@@ -1789,7 +1967,8 @@ TRANSLATIONS = {
         "es_ES": "Aplicar toma seleccionada a la línea de tiempo actual",
         "fr_FR": "Appliquer la prise sélectionnée à la chronologie actuelle",
         "ko_KR": "선택한 기록을 현재 타임라인에 적용합니다",
-        "ru_RU": "Применить выбранный дубль к текущей шкале времени"
+        "ru_RU": "Применить выбранный дубль к текущей шкале времени",
+        "it_IT": "Applica la registrazione selezionata alla timeline corrente"
     },
     "删除当前选中的历史记录及其实际的动作数据": {
         "zh_CN": "删除当前选中的历史记录及其实际的动作数据",
@@ -1799,7 +1978,8 @@ TRANSLATIONS = {
         "es_ES": "Eliminar toma seleccionada y sus datos de animación",
         "fr_FR": "Supprimer la prise sélectionnée et ses données d'animation",
         "ko_KR": "선택한 기록 및 실제 모션 데이터를 삭제합니다",
-        "ru_RU": "Удалить выбранный дубль и связанные данные анимации"
+        "ru_RU": "Удалить выбранный дубль и связанные данные анимации",
+        "it_IT": "Elimina la registrazione selezionata e i relativi dati di animazione"
     },
     "设置新的场景帧率": {
         "zh_CN": "设置新的场景帧率",
@@ -1809,7 +1989,8 @@ TRANSLATIONS = {
         "es_ES": "Establecer nuevos FPS de escena",
         "fr_FR": "Définir la nouvelle fréquence d'images de la scène",
         "ko_KR": "새로운 씬 프레임 속도(FPS) 설정",
-        "ru_RU": "Задать новый FPS сцены"
+        "ru_RU": "Задать новый FPS сцены",
+        "it_IT": "Imposta nuova frequenza fotogrammi della scena"
     },
     "分配当前在姿态模式或大纲中选中的骨骼 (Assign selected bone)": {
         "zh_CN": "分配当前在姿态模式或大纲中选中的骨骼 (Assign selected bone)",
@@ -1819,7 +2000,8 @@ TRANSLATIONS = {
         "es_ES": "Asignar hueso seleccionado en Modo Pose o Outliner",
         "fr_FR": "Assigner l'os actuellement sélectionné en Mode Pose ou Outliner",
         "ko_KR": "포즈 모드 또는 아웃라이너에서 선택된 뼈 할당",
-        "ru_RU": "Назначить выбранную в режиме позы или аутлайнере кость"
+        "ru_RU": "Назначить выбранную в режиме позы или аутлайнере кость",
+        "it_IT": "Assegna l'osso attualmente selezionato in modalità Posa o nell'Outliner"
     },
     "导出片段json (Export JSON)": {
         "zh_CN": "导出片段json (Export JSON)",
@@ -1829,7 +2011,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar JSON de Toma (Export JSON)",
         "fr_FR": "Exporter JSON de Prise (Export JSON)",
         "ko_KR": "테이크 JSON 내보내기",
-        "ru_RU": "Экспорт JSON дубля"
+        "ru_RU": "Экспорт JSON дубля",
+        "it_IT": "Esporta JSON Registrazione (Export JSON)"
     },
     "导入片段json (Import JSON)": {
         "zh_CN": "导入片段json (Import JSON)",
@@ -1839,7 +2022,8 @@ TRANSLATIONS = {
         "es_ES": "Importar JSON de Toma (Import JSON)",
         "fr_FR": "Importer JSON de Prise (Import JSON)",
         "ko_KR": "테이크 JSON 가져오기",
-        "ru_RU": "Импорт JSON дубля"
+        "ru_RU": "Импорт JSON дубля",
+        "it_IT": "Importa JSON Registrazione (Import JSON)"
     },
     "挂载到时间轴 (Apply Take)": {
         "zh_CN": "挂载到时间轴 (Apply Take)",
@@ -1849,7 +2033,8 @@ TRANSLATIONS = {
         "es_ES": "Aplicar a Línea de Tiempo",
         "fr_FR": "Appliquer à la Chronologie",
         "ko_KR": "타임라인에 적용",
-        "ru_RU": "Применить к шкале"
+        "ru_RU": "Применить к шкале",
+        "it_IT": "Applica alla Timeline (Apply Take)"
     },
     "删除记录 (Delete Take)": {
         "zh_CN": "删除记录 (Delete Take)",
@@ -1859,7 +2044,8 @@ TRANSLATIONS = {
         "es_ES": "Eliminar Registro",
         "fr_FR": "Supprimer Enregistrement",
         "ko_KR": "기록 삭제",
-        "ru_RU": "Удалить запись"
+        "ru_RU": "Удалить запись",
+        "it_IT": "Elimina Registrazione (Delete Take)"
     },
     "使用选中的骨骼 (Use Selected Bone)": {
         "zh_CN": "使用选中的骨骼 (Use Selected Bone)",
@@ -1869,7 +2055,8 @@ TRANSLATIONS = {
         "es_ES": "Usar Hueso Seleccionado",
         "fr_FR": "Utiliser l'Os Sélectionné",
         "ko_KR": "선택된 뼈 사용",
-        "ru_RU": "Использовать выбранную кость"
+        "ru_RU": "Использовать выбранную кость",
+        "it_IT": "Usa Osso Selezionato"
     },
     "导出 JSON (Export Config)": {
         "zh_CN": "导出 JSON (Export Config)",
@@ -1879,7 +2066,8 @@ TRANSLATIONS = {
         "es_ES": "Exportar JSON (Export Config)",
         "fr_FR": "Exporter JSON (Export Config)",
         "ko_KR": "JSON 내보내기 (Export Config)",
-        "ru_RU": "Экспорт JSON (Export Config)"
+        "ru_RU": "Экспорт JSON (Export Config)",
+        "it_IT": "Esporta JSON (Export Config)"
     },
     "导入 JSON (Import Config)": {
         "zh_CN": "导入 JSON (Import Config)",
@@ -1889,7 +2077,8 @@ TRANSLATIONS = {
         "es_ES": "Importar JSON (Import Config)",
         "fr_FR": "Importer JSON (Import Config)",
         "ko_KR": "JSON 가져오기 (Import Config)",
-        "ru_RU": "Импорт JSON (Import Config)"
+        "ru_RU": "Импорт JSON (Import Config)",
+        "it_IT": "Importa JSON (Import Config)"
     }
 }
 
@@ -1914,6 +2103,8 @@ def get_os_language():
                 return 'es_ES'
             elif lang_l.startswith('fr'):
                 return 'fr_FR'
+            elif lang_l.startswith('it'):
+                return 'it_IT'
             elif lang_l.startswith('ko'):
                 return 'ko_KR'
             elif lang_l.startswith('ru'):
@@ -1931,7 +2122,7 @@ def get_saved_language():
         if os.path.exists(pref_path):
             with open(pref_path, 'r') as f:
                 saved = f.read().strip()
-                if saved in ('AUTO', 'EN', 'ZH', 'ZH_TW', 'JA', 'ES', 'FR', 'KO', 'RU'):
+                if saved in ('AUTO', 'EN', 'ZH', 'ZH_TW', 'JA', 'ES', 'FR', 'IT', 'KO', 'RU'):
                     return saved
     except:
         pass
@@ -1960,6 +2151,8 @@ def T_static(text):
         locale_key = 'es_ES'
     elif lang == 'FR':
         locale_key = 'fr_FR'
+    elif lang == 'IT':
+        locale_key = 'it_IT'
     elif lang == 'KO':
         locale_key = 'ko_KR'
     elif lang == 'RU':
@@ -1991,6 +2184,8 @@ def T(text):
         locale_key = 'es_ES'
     elif lang == 'FR':
         locale_key = 'fr_FR'
+    elif lang == 'IT':
+        locale_key = 'it_IT'
     elif lang == 'KO':
         locale_key = 'ko_KR'
     elif lang == 'RU':

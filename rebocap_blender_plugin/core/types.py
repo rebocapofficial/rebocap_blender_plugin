@@ -292,6 +292,7 @@ def register_types():
             ('JA', '日本語', 'Japanese'),
             ('ES', 'Español', 'Spanish'),
             ('FR', 'Français', 'French'),
+            ('IT', 'Italiano', 'Italian'),
             ('KO', '한국어', 'Korean'),
             ('RU', 'Русский', 'Russian')
         ],
