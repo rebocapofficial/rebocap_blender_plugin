@@ -11,6 +11,7 @@ from . import ops
 from . import ui
 from .ops import history
 from .ui import history_panel
+from .ui import puppet_canvas_hud
 from .core import timer
 
 bl_info = {
@@ -50,6 +51,7 @@ class_list = [
     history_panel.REBOCAP_UL_history_takes,
     history_panel.REBOCAP_PT_history_panel,
     ui.fk_panel.REBOCAP_PT_fk_panel,
+    puppet_canvas_hud.REBOCAP_OT_toggle_puppet_hud,
     ui.a2t_panel.REBOCAP_PT_a2t_panel,
     ui.CreateSkeletonPanel,
     ui.ik_panel.REBOCAP_PT_ik_tracking_panel,

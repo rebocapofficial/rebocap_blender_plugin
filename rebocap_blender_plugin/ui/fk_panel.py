@@ -31,10 +31,13 @@ class REBOCAP_PT_fk_panel(bpy.types.Panel):
         rebocap_bone_map = ctx.scene.rebocap_bone_map
         col = layout.column()
         
-        # 1. 独立人偶骨骼映射画布入口
+        # 1. 3D 视口人偶画布 HUD 入口
+        from .puppet_canvas_hud import PuppetCanvasState
         row_puppet = col.row(align=True)
-        row_puppet.scale_y = 1.25
-        row_puppet.operator('rebocap.open_puppet_mapper', text=T("👤 打开人偶骨骼映射画布 (Puppet View) ➔"), icon='USER')
+        row_puppet.scale_y = 1.3
+        is_active = PuppetCanvasState.is_active
+        btn_text = T("👤 关闭人偶骨骼视口画布 (Hide HUD)") if is_active else T("👤 开启人偶骨骼视口画布 (Puppet HUD) ➔")
+        row_puppet.operator('rebocap.toggle_puppet_hud', text=btn_text, icon='USER', depress=is_active)
         col.separator()
         
         row = col.row(align=True)
