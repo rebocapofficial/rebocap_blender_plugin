@@ -168,11 +168,6 @@ class ConnectionPanel(bpy.types.Panel):
 
     def _draw_bottom_elements(self, ctx, layout):
         layout.separator()
-        row = layout.row(align=True)
-        if hasattr(ctx.scene, 'rebocap_debug_log'):
-            row.prop(ctx.scene, 'rebocap_debug_log', text=T('Enable Debug Logs'), toggle=True)
-            
-        layout.separator()
         row = layout.row()
         row.prop(ctx.scene, "rebocap_keep_character_position", text="")
         row.label(text=T("保持角色当前起点 (Keep Character Position)"))
