@@ -647,11 +647,6 @@ class RebocapConnect(bpy.types.Operator):
             if getattr(ctx.scene, 'rebocap_pause_control', False):
                 return {'PASS_THROUGH'}
 
-            for window in ctx.window_manager.windows:
-                for area in window.screen.areas:
-                    if area.type in ('VIEW_3D', 'PROPERTIES'):
-                        area.tag_redraw()
-
             if getattr(ctx.scene, 'recording', False) and getattr(ctx.scene, 'rebocap_auto_extend_end', True):
                 if ctx.scene.frame_current >= ctx.scene.frame_end - 2:
                     ctx.scene.frame_end += 60
@@ -659,6 +654,12 @@ class RebocapConnect(bpy.types.Operator):
             try:
                 last_data = rebocap_app.get_last_msg()
                 if last_data is not None:
+                    # Only force redraw if we actually received real-time data
+                    for window in ctx.window_manager.windows:
+                        for area in window.screen.areas:
+                            if area.type in ('VIEW_3D', 'PROPERTIES'):
+                                area.tag_redraw()
+
                     trans, pose24, static_index, ts = last_data
                     self.drive_retarget(trans, pose24, static_index, ts)
                     self.drive_ik_tracking(trans, pose24)
