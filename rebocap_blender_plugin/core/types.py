@@ -259,6 +259,10 @@ def get_fps_mode_items(self, context):
 def on_language_changed(self, context):
     from .translation import set_saved_language
     set_saved_language(self.rebocap_language)
+    try:
+        bpy.ops.rebocap.language_changed_msg('INVOKE_DEFAULT')
+    except:
+        pass
 
 def register_types():
     bpy.utils.register_class(RebocapTake)
@@ -314,13 +318,13 @@ def register_types():
     from .translation import T_static
     
     bpy.types.Scene.rebocap_keep_character_position = bpy.props.BoolProperty(
-        name="保持角色当前起点",
+        name=T_static("保持角色当前起点"),
         description=T_static("勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点"),
         default=False
     )
     
     bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
-        name="按场景帧率显示动捕",
+        name=T_static("按场景帧率显示动捕"),
         description=T_static("勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率"),
         default=False
     )

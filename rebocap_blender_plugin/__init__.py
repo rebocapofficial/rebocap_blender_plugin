@@ -59,6 +59,7 @@ class_list = [
     ui.PickBoneOperator,
     ui.REBOCAP_OT_import_bone_map,
     ui.REBOCAP_OT_export_bone_map,
+    ui.REBOCAP_OT_language_changed_msg,
     history.REBOCAP_OT_apply_take,
     history.REBOCAP_OT_delete_take,
     history.REBOCAP_OT_export_take,

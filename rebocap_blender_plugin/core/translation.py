@@ -689,6 +689,16 @@ TRANSLATIONS = {
         "zh_CN": "💡 悬停查看对应骨骼，点击绿点快速选中",
         "ja_JP": "💡 ホバーでボーン名を確認、緑の点をクリックで選択"
     },
+    "💡 语言设置已保存！": {
+        "en_US": "💡 Language saved!",
+        "zh_CN": "💡 语言设置已保存！",
+        "ja_JP": "💡 言語設定を保存しました！"
+    },
+    "部分悬停提示需要重启 Blender 才能生效。": {
+        "en_US": "Please restart Blender to apply tooltips.",
+        "zh_CN": "部分悬停提示需要重启 Blender 才能生效。",
+        "ja_JP": "ツールチップを適用するにはBlenderを再起動してください。"
+    },
     "自动匹配场景 (Auto Scene)": {
         "en_US": "Auto Match Scene (Auto Scene)",
         "zh_CN": "自动匹配场景 (Auto Scene)",

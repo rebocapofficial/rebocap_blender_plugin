@@ -3,6 +3,21 @@ import json
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from ..core.translation import T
 
+class REBOCAP_OT_language_changed_msg(bpy.types.Operator):
+    bl_idname = "rebocap.language_changed_msg"
+    bl_label = "Language Changed"
+    
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self, width=300)
+        
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text=T("💡 语言设置已保存！"), icon='INFO')
+        layout.label(text=T("部分悬停提示需要重启 Blender 才能生效。"))
+        
+    def execute(self, context):
+        return {'FINISHED'}
+
 class REBOCAP_OT_export_bone_map(bpy.types.Operator, ExportHelper):
     bl_idname = "rebocap.export_bone_map"
     bl_label = "导出 JSON (Export Config)"
