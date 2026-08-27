@@ -678,6 +678,56 @@ TRANSLATIONS = {
         "en_US": "When checked, the viewport refresh rate drops to match the scene FPS to save GPU; otherwise, it runs at max real-time refresh rate.",
         "zh_CN": "勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
         "ja_JP": "チェックすると、ビューポートの更新がシーンのFPSに同期されGPUの負荷を減らします。チェックを外すと最高リアルタイム更新レートを維持します。",
+    },
+    "自动匹配场景 (Auto Scene)": {
+        "en_US": "Auto Match Scene (Auto Scene)",
+        "zh_CN": "自动匹配场景 (Auto Scene)",
+        "ja_JP": "シーン自動マッチ (Auto Scene)"
+    },
+    "自动根据当前 Blender 场景帧率重采样动作关键帧": {
+        "en_US": "Automatically resample keyframes to match the current Blender scene FPS.",
+        "zh_CN": "自动根据当前 Blender 场景帧率重采样动作关键帧",
+        "ja_JP": "現在のBlenderシーンのFPSに合わせてキーフレームを自動的にリサンプリングします。"
+    },
+    "24 FPS (电影/标准动画 Film)": {
+        "en_US": "24 FPS (Film/Animation)",
+        "zh_CN": "24 FPS (电影/标准动画 Film)",
+        "ja_JP": "24 FPS (映画/アニメ Film)"
+    },
+    "匹配 24 FPS 标准电影与影视动画帧率": {
+        "en_US": "Match 24 FPS standard film and animation framerate.",
+        "zh_CN": "匹配 24 FPS 标准电影与影视动画帧率",
+        "ja_JP": "24 FPS の標準的な映画・アニメーションのフレームレートに合わせます。"
+    },
+    "30 FPS (电视/短视频 TV/Video)": {
+        "en_US": "30 FPS (TV/Video)",
+        "zh_CN": "30 FPS (电视/短视频 TV/Video)",
+        "ja_JP": "30 FPS (テレビ/動画 TV/Video)"
+    },
+    "匹配 30 FPS 电视与视频帧率": {
+        "en_US": "Match 30 FPS TV and video framerate.",
+        "zh_CN": "匹配 30 FPS 电视与视频帧率",
+        "ja_JP": "30 FPS のテレビ・動画のフレームレートに合わせます。"
+    },
+    "60 FPS (原生动捕/流畅游戏 60Hz)": {
+        "en_US": "60 FPS (Native/Game 60Hz)",
+        "zh_CN": "60 FPS (原生动捕/流畅游戏 60Hz)",
+        "ja_JP": "60 FPS (ネイティブ/ゲーム 60Hz)"
+    },
+    "匹配 60 FPS 原生动捕高帧率": {
+        "en_US": "Match 60 FPS native high framerate mocap.",
+        "zh_CN": "匹配 60 FPS 原生动捕高帧率",
+        "ja_JP": "60 FPS のネイティブ高フレームレートキャプチャに合わせます。"
+    },
+    "自定义帧率 (Custom...)": {
+        "en_US": "Custom FPS (Custom...)",
+        "zh_CN": "自定义帧率 (Custom...)",
+        "ja_JP": "カスタムFPS (Custom...)"
+    },
+    "手动指定任意目标帧率数值": {
+        "en_US": "Manually specify any target framerate value.",
+        "zh_CN": "手动指定任意目标帧率数值",
+        "ja_JP": "任意のターゲットフレームレート数値を手動で指定します。"
     }
 }
 

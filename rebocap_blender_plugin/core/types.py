@@ -247,6 +247,15 @@ def on_active_take_changed(self, context):
     if hasattr(self, 'rebocap_has_new_take'):
         self.rebocap_has_new_take = False
 
+def get_fps_mode_items(self, context):
+    return [
+        ('SCENE', T('自动匹配场景 (Auto Scene)'), T('自动根据当前 Blender 场景帧率重采样动作关键帧')),
+        ('FPS_24', T('24 FPS (电影/标准动画 Film)'), T('匹配 24 FPS 标准电影与影视动画帧率')),
+        ('FPS_30', T('30 FPS (电视/短视频 TV/Video)'), T('匹配 30 FPS 电视与视频帧率')),
+        ('FPS_60', T('60 FPS (原生动捕/流畅游戏 60Hz)'), T('匹配 60 FPS 原生动捕高帧率')),
+        ('CUSTOM', T('自定义帧率 (Custom...)'), T('手动指定任意目标帧率数值'))
+    ]
+
 def register_types():
     bpy.utils.register_class(RebocapTake)
     bpy.types.Scene.rebocap_takes = bpy.props.CollectionProperty(type=RebocapTake)
@@ -298,28 +307,25 @@ def register_types():
     
     bpy.types.Scene.rebocap_keep_character_position = bpy.props.BoolProperty(
         name="保持角色当前起点",
-        description="勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点",
+        description="勾选后以角色当前物体位置为参考系动捕，不会强制吸回世界原点。\n"
+                    "EN: Capture relative to current position, do not snap to world origin.\n"
+                    "JA: 現在のオブジェクト位置を基準にしてキャプチャし、ワールド原点に強制的に戻りません。",
         default=False
     )
     
     bpy.types.Scene.rebocap_sync_viewport_fps = bpy.props.BoolProperty(
         name="按场景帧率显示动捕",
-        description="勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持默认的最高实时刷新率",
+        description="勾选后视口刷新率将降至与当前场景FPS一致以节省GPU性能；取消勾选则保持最高实时刷新率。\n"
+                    "EN: Viewport refresh rate drops to match scene FPS to save GPU; otherwise max refresh rate.\n"
+                    "JA: ビューポートの更新をシーンFPSに同期しGPU負荷を減らします。オフで最高レートを維持します。",
         default=False
     )
     
     bpy.types.Scene.rebocap_record_counter = bpy.props.IntProperty(name="Record Counter", default=0)
     
     bpy.types.Scene.rebocap_fps_mode = bpy.props.EnumProperty(
-        items=[
-            ('SCENE', '自动匹配场景 (Auto Scene)', '自动根据当前 Blender 场景帧率重采样动作关键帧，保证动作时长与播放速度 1:1 完美一致'),
-            ('FPS_24', '24 FPS (电影/标准动画 Film)', '匹配 24 FPS 标准电影与影视动画帧率'),
-            ('FPS_30', '30 FPS (电视/短视频 TV/Video)', '匹配 30 FPS 电视与视频帧率'),
-            ('FPS_60', '60 FPS (原生动捕/流畅游戏 60Hz)', '匹配 60 FPS 原生动捕高帧率'),
-            ('CUSTOM', '自定义帧率 (Custom...)', '手动指定任意目标帧率数值')
-        ],
-        name="FPS Mode",
-        default='SCENE'
+        items=get_fps_mode_items,
+        name="FPS Mode"
     )
     
     bpy.types.Scene.rebocap_target_fps = bpy.props.IntProperty(name="Target FPS", default=60, min=1, max=240)
