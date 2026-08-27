@@ -761,10 +761,21 @@ def get_os_language():
             lang, _ = locale.getlocale()
             
         if lang:
-            if lang.startswith('zh'):
+            lang_l = lang.lower()
+            if lang_l.startswith('zh_tw') or lang_l.startswith('zh_hk') or lang_l.startswith('zh_hant'):
+                return 'zh_TW'
+            elif lang_l.startswith('zh'):
                 return 'zh_CN'
-            elif lang.startswith('ja'):
+            elif lang_l.startswith('ja'):
                 return 'ja_JP'
+            elif lang_l.startswith('es'):
+                return 'es_ES'
+            elif lang_l.startswith('fr'):
+                return 'fr_FR'
+            elif lang_l.startswith('ko'):
+                return 'ko_KR'
+            elif lang_l.startswith('ru'):
+                return 'ru_RU'
     except:
         pass
     return 'en_US'
@@ -778,7 +789,7 @@ def get_saved_language():
         if os.path.exists(pref_path):
             with open(pref_path, 'r') as f:
                 saved = f.read().strip()
-                if saved in ('AUTO', 'EN', 'ZH', 'JA'):
+                if saved in ('AUTO', 'EN', 'ZH', 'ZH_TW', 'JA', 'ES', 'FR', 'KO', 'RU'):
                     return saved
     except:
         pass
@@ -799,15 +810,25 @@ def T_static(text):
         locale_key = get_os_language()
     elif lang == 'ZH':
         locale_key = 'zh_CN'
+    elif lang == 'ZH_TW':
+        locale_key = 'zh_TW'
     elif lang == 'JA':
         locale_key = 'ja_JP'
+    elif lang == 'ES':
+        locale_key = 'es_ES'
+    elif lang == 'FR':
+        locale_key = 'fr_FR'
+    elif lang == 'KO':
+        locale_key = 'ko_KR'
+    elif lang == 'RU':
+        locale_key = 'ru_RU'
     else:
         locale_key = 'en_US'
         
     if text in TRANSLATIONS:
         if locale_key in TRANSLATIONS[text]:
             return TRANSLATIONS[text][locale_key]
-        if locale_key == 'en_US' and 'en_US' in TRANSLATIONS[text]:
+        if 'en_US' in TRANSLATIONS[text]:
             return TRANSLATIONS[text]['en_US']
             
     return text
@@ -820,15 +841,25 @@ def T(text):
         locale_key = get_os_language()
     elif lang == 'ZH':
         locale_key = 'zh_CN'
+    elif lang == 'ZH_TW':
+        locale_key = 'zh_TW'
     elif lang == 'JA':
         locale_key = 'ja_JP'
+    elif lang == 'ES':
+        locale_key = 'es_ES'
+    elif lang == 'FR':
+        locale_key = 'fr_FR'
+    elif lang == 'KO':
+        locale_key = 'ko_KR'
+    elif lang == 'RU':
+        locale_key = 'ru_RU'
     else:
         locale_key = 'en_US'
         
     if text in TRANSLATIONS:
         if locale_key in TRANSLATIONS[text]:
             return TRANSLATIONS[text][locale_key]
-        if locale_key == 'en_US' and 'en_US' in TRANSLATIONS[text]:
+        if 'en_US' in TRANSLATIONS[text]:
             return TRANSLATIONS[text]['en_US']
             
     return text

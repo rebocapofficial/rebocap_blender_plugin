@@ -286,9 +286,14 @@ def register_types():
         name="Language",
         items=[
             ('AUTO', 'Auto', '自动跟随 Blender 语言 (Auto follows Blender)'),
-            ('EN', 'English', '强制使用英语 (Force English)'),
-            ('ZH', '中文', '强制使用简体中文 (Force Simplified Chinese)'),
-            ('JA', '日本語', '强制使用日语 (Force Japanese)')
+            ('EN', 'English', 'English'),
+            ('ZH', '简体中文', 'Simplified Chinese'),
+            ('ZH_TW', '繁體中文', 'Traditional Chinese'),
+            ('JA', '日本語', 'Japanese'),
+            ('ES', 'Español', 'Spanish'),
+            ('FR', 'Français', 'French'),
+            ('KO', '한국어', 'Korean'),
+            ('RU', 'Русский', 'Russian')
         ],
         default=get_saved_language(),
         update=on_language_changed
