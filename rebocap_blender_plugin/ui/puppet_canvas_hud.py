@@ -33,15 +33,6 @@ DEFAULT_SLOT_DEFS = [
     (21, "R_Palm",       [341.2, 457.5], 12.5, "R_Palm (右手掌)"),
 ]
 
-# Body wireframe bone link pairs (idx1, idx2)
-BONE_LINKS = [
-    (15, 12), (12, 9), (9, 6), (6, 3), (3, 0),       # Spine chain
-    (9, 13), (13, 16), (16, 18), (18, 20),           # Left arm
-    (9, 14), (14, 17), (17, 19), (19, 21),           # Right arm
-    (0, 1), (1, 4), (4, 7), (7, 10),                 # Left leg
-    (0, 2), (2, 5), (5, 8), (8, 11),                 # Right leg
-]
-
 IMG_REF_W = 389.0
 IMG_REF_H = 865.0
 
@@ -77,21 +68,6 @@ def draw_rect_border(x, y, w, h, color, line_width=1.0):
         shader = _get_shader_2d_uniform()
         vertices = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
         indices = [(0, 1), (1, 2), (2, 3), (3, 0)]
-        batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
-        shader.bind()
-        shader.uniform_float("color", color)
-        gpu.state.line_width_set(line_width)
-        batch.draw(shader)
-        gpu.state.line_width_set(1.0)
-    except Exception:
-        pass
-
-
-def draw_line(x1, y1, x2, y2, color, line_width=1.5):
-    try:
-        shader = _get_shader_2d_uniform()
-        vertices = [(x1, y1), (x2, y2)]
-        indices = [(0, 1)]
         batch = batch_for_shader(shader, 'LINES', {"pos": vertices}, indices=indices)
         shader.bind()
         shader.uniform_float("color", color)
@@ -140,7 +116,7 @@ def draw_ring(cx, cy, r, color, line_width=2.0, segments=24):
         pass
 
 
-def draw_image(image_texture, x, y, w, h, color=(1.0, 1.0, 1.0, 1.0)):
+def draw_image(image_texture, x, y, w, h):
     if not image_texture:
         return
     try:
@@ -153,9 +129,9 @@ def draw_image(image_texture, x, y, w, h, color=(1.0, 1.0, 1.0, 1.0)):
         try:
             shader.uniform_sampler("image", image_texture)
         except Exception:
-            shader.uniform_float("image", image_texture)
+            pass
         batch.draw(shader)
-    except Exception:
+    except Exception as e:
         pass
 
 
@@ -191,7 +167,7 @@ class PuppetCanvasState:
 
 
 def ensure_texture_loaded():
-    if PuppetCanvasState.image_texture:
+    if PuppetCanvasState.image_texture is not None:
         return PuppetCanvasState.image_texture
         
     res_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "resources")
@@ -209,6 +185,14 @@ def ensure_texture_loaded():
         except Exception:
             return None
             
+    # Force pixel decoding in Blender RAM
+    try:
+        if not bpy_img.has_data or bpy_img.size[0] == 0:
+            bpy_img.reload()
+        _ = len(bpy_img.pixels)
+    except Exception:
+        pass
+
     PuppetCanvasState.bpy_image = bpy_img
     try:
         PuppetCanvasState.image_texture = gpu.texture.from_image(bpy_img)
@@ -233,7 +217,7 @@ def draw_puppet_hud_callback():
     ph = PuppetCanvasState.h
     header_h = 28.0
     
-    # 1. 绘制主体卡片背景 (半透明黑灰色) + 细边框
+    # 1. 绘制主体卡片背景 (半透明深黑) + 细边框
     draw_rect(px, py, pw, ph, (0.11, 0.12, 0.14, 0.94))
     draw_rect_border(px, py, pw, ph, (0.28, 0.30, 0.35, 0.95), line_width=1.5)
     
@@ -247,44 +231,33 @@ def draw_puppet_hud_callback():
     btn_close_y = py + ph - 20.0
     draw_text("✕", btn_close_x, btn_close_y, size=12, color=(0.8, 0.8, 0.85, 1.0))
     
-    # 3. 计算 22 个插槽在视口屏幕上的绝对坐标
-    body_pad_x = 12.0
+    # 3. 绘制 1:1 人体线稿 PNG 图片作为背景底图 (mannequin_outline.png)
+    body_pad_x = 14.0
     body_pad_bottom = 28.0
     body_w = pw - body_pad_x * 2.0
     body_h = ph - header_h - body_pad_bottom
     body_x = px + body_pad_x
     body_y = py + body_pad_bottom
+    
+    tex = ensure_texture_loaded()
+    if tex:
+        draw_image(tex, body_x, body_y, body_w, body_h)
+        
+    # 4. 计算 22 个发光同心圆插槽 (原点) 在视口中的坐标
     scale_x = body_w / IMG_REF_W
     scale_y = body_h / IMG_REF_H
     
-    # 绘制人体线稿图片底图 (mannequin_outline.png)
-    tex = ensure_texture_loaded()
-    if tex:
-        draw_image(tex, body_x, body_y, body_w, body_h, color=(1.0, 1.0, 1.0, 0.85))
-        
-    slot_screen_coords = {}
     for idx, b_name, ref_pos, radius, label in DEFAULT_SLOT_DEFS:
         cx = body_x + ref_pos[0] * scale_x
         cy = body_y + (IMG_REF_H - ref_pos[1]) * scale_y
-        slot_screen_coords[idx] = (cx, cy, radius * 0.52)
-        
-    # 4. 绘制人偶骨骼拓扑骨架连线 (Vector Skeleton Bone Links)
-    for idx1, idx2 in BONE_LINKS:
-        if idx1 in slot_screen_coords and idx2 in slot_screen_coords:
-            p1 = slot_screen_coords[idx1]
-            p2 = slot_screen_coords[idx2]
-            draw_line(p1[0], p1[1], p2[0], p2[1], (0.38, 0.44, 0.54, 0.55), line_width=1.5)
-            
-    # 5. 绘制 22 个发光同心圆插槽 (原点)
-    for idx, b_name, ref_pos, radius, label in DEFAULT_SLOT_DEFS:
-        cx, cy, r = slot_screen_coords[idx]
+        r = radius * 0.52
         
         # 判断映射状态
         mapped_bone = getattr(bone_map, f"node_{idx}", "") if bone_map else ""
         is_mapped = bool(mapped_bone and mapped_bone.strip())
         is_hovered = (PuppetCanvasState.hovered_slot == idx)
         
-        # 5.1 光晕与外圈
+        # 4.1 发光外环与中心圆点 (1:1 还原 Maya 视觉)
         if is_hovered:
             draw_ring(cx, cy, r + 3.0, (0.95, 0.61, 0.07, 0.65), line_width=3.5) # 橙黄发光
             draw_ring(cx, cy, r, (1.0, 1.0, 1.0, 1.0), line_width=2.0)
@@ -293,10 +266,10 @@ def draw_puppet_hud_callback():
             draw_ring(cx, cy, r, (0.18, 0.80, 0.44, 1.0), line_width=2.2)      # 绿色已映射
             draw_circle(cx, cy, r * 0.42, (1.0, 1.0, 1.0, 0.95))
         else:
-            draw_ring(cx, cy, r, (0.50, 0.53, 0.60, 0.85), line_width=1.5)     # 灰色未映射
-            draw_circle(cx, cy, r * 0.38, (0.28, 0.30, 0.35, 0.85))
+            draw_ring(cx, cy, r, (0.55, 0.58, 0.65, 0.85), line_width=1.5)     # 灰色未映射
+            draw_circle(cx, cy, r * 0.38, (0.30, 0.32, 0.38, 0.85))
             
-    # 6. 底部状态提示条
+    # 5. 底部状态提示条
     if PuppetCanvasState.hovered_slot >= 0:
         h_idx = PuppetCanvasState.hovered_slot
         h_item = DEFAULT_SLOT_DEFS[h_idx]
@@ -377,7 +350,7 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
         pw = PuppetCanvasState.w
         ph = PuppetCanvasState.h
         header_h = 28.0
-        body_pad_x = 12.0
+        body_pad_x = 14.0
         body_pad_bottom = 28.0
         body_w = pw - body_pad_x * 2.0
         body_h = ph - header_h - body_pad_bottom
@@ -424,6 +397,7 @@ class REBOCAP_OT_toggle_puppet_hud(bpy.types.Operator):
             return {'FINISHED'}
             
         PuppetCanvasState.is_active = True
+        PuppetCanvasState.image_texture = None  # Reset texture to ensure fresh load on open
         PuppetCanvasState.draw_handle = bpy.types.SpaceView3D.draw_handler_add(
             draw_puppet_hud_callback, (), 'WINDOW', 'POST_PIXEL'
         )
