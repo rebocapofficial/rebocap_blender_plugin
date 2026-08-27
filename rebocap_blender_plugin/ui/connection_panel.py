@@ -164,20 +164,32 @@ class ConnectionPanel(bpy.types.Panel):
             row.operator('rebocap.restore_pose', text=T("Restore T-Pose"), icon='FILE_REFRESH')
             
             row = col.row(align=True)
+            row.prop(ctx.scene, 'rebocap_auto_extend_end', text="", icon='TIME')
             
             import time
-            if not ctx.scene.recording:
-                row.prop(ctx.scene, 'rebocap_auto_extend_end', text="", icon='TIME')
-                time_since_stop = time.time() - ctx.scene.rebocap_last_record_stop_time
-                if time_since_stop < 2.0:
-                    row.enabled = False
-                    row.operator('rebocap.start_record', text=f"{T('Wait')} {2.0 - time_since_stop:.1f}s", icon='REC')
+            is_recording = getattr(ctx.scene, 'recording', False)
+            
+            # Left Button: Start Record
+            sub_start = row.row(align=True)
+            sub_start.enabled = not is_recording
+            if not is_recording:
+                time_since_stop = time.time() - getattr(ctx.scene, 'rebocap_last_record_stop_time', 0.0)
+                if time_since_stop < 1.0:
+                    sub_start.enabled = False
+                    sub_start.operator('rebocap.start_record', text=f"{T('Wait')} {1.0 - time_since_stop:.1f}s", icon='REC')
                 else:
-                    row.operator('rebocap.start_record', text=T("Start Record"), icon='REC')
+                    sub_start.operator('rebocap.start_record', text=T("Start Record"), icon='REC')
             else:
-                row.alert = True
-                row.operator('rebocap.stop_record', text=T("Stop Record"), icon='PAUSE', depress=True)
-                row.alert = False
+                sub_start.operator('rebocap.start_record', text=T("Start Record"), icon='REC')
+                
+            # Right Button: Stop Record
+            sub_stop = row.row(align=True)
+            sub_stop.enabled = is_recording
+            if is_recording:
+                sub_stop.alert = True
+                sub_stop.operator('rebocap.stop_record', text=T("Stop Record"), icon='PAUSE', depress=True)
+            else:
+                sub_stop.operator('rebocap.stop_record', text=T("Stop Record"), icon='PAUSE')
             
         self._draw_bottom_elements(ctx, layout)
 
