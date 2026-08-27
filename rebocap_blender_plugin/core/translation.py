@@ -639,6 +639,16 @@ TRANSLATIONS = {
         "zh_CN": "头部 (Head)",
         "ja_JP": "頭 (Head)",
     },
+    "Import Bone Map JSON": {
+        "en_US": "Import JSON",
+        "zh_CN": "导入映射json",
+        "ja_JP": "マッピングJSONをインポート",
+    },
+    "Export Bone Map JSON": {
+        "en_US": "Export JSON",
+        "zh_CN": "导出映射json",
+        "ja_JP": "マッピングJSONをエクスポート",
+    },
 }
 
 import locale

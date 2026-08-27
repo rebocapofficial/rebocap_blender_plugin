@@ -73,8 +73,8 @@ class REBOCAP_PT_fk_panel(bpy.types.Panel):
             
             # JSON 导入导出按键
             row = box.row(align=True)
-            row.operator("rebocap.import_bone_map", text=T("Import JSON"), icon='IMPORT')
-            row.operator("rebocap.export_bone_map", text=T("Export JSON"), icon='EXPORT')
+            row.operator("rebocap.import_bone_map", text=T("Import Bone Map JSON"), icon='IMPORT')
+            row.operator("rebocap.export_bone_map", text=T("Export Bone Map JSON"), icon='EXPORT')
             box.separator()
 
             row = box.row(align=True).split(factor=0.15, align=True)
