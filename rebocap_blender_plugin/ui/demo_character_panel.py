@@ -1,4 +1,4 @@
-﻿import bpy
+import bpy
 from ..core.translation import T, T_static
 from ..ops.demo_character import is_demo_character_present
 
@@ -13,7 +13,7 @@ class REBOCAP_PT_demo_character_panel(bpy.types.Panel):
     bl_order = 7
 
     def draw_header(self, context):
-        self.layout.label(text=T("官方示范角色 (Official Demo Character)"), icon='COMMUNITY')
+        self.layout.label(text=T("示范角色 (Demo Character)"))
 
     def draw(self, context):
         layout = self.layout
@@ -30,15 +30,15 @@ class REBOCAP_PT_demo_character_panel(bpy.types.Panel):
             # Action button: Remove
             row_btn = box.row(align=True)
             row_btn.alert = True
-            row_btn.operator("rebocap.toggle_demo_character", text=T("移除官方示范角色"), icon='TRASH')
+            row_btn.operator("rebocap.toggle_demo_character", text=T("移除示范角色"), icon='TRASH')
             row_btn.alert = False
         else:
             row_stat = box.row(align=True)
-            row_stat.label(text="开箱即用的官方标准伴随角色", icon='INFO')
+            row_stat.label(text="开箱即用的标准伴随角色", icon='INFO')
             
             # Action button: Import
             row_btn = box.row(align=True)
-            row_btn.operator("rebocap.toggle_demo_character", text=T("导入官方示范角色"), icon='IMPORT')
+            row_btn.operator("rebocap.toggle_demo_character", text=T("导入示范角色"), icon='IMPORT')
 
         # Offset settings
         box_pos = layout.box()

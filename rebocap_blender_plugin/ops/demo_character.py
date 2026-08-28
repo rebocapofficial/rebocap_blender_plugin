@@ -1,4 +1,4 @@
-﻿import os
+import os
 import bpy
 from mathutils import Vector, Quaternion
 from ..core.translation import T, T_static
@@ -46,21 +46,21 @@ def update_demo_character_offset(self, context):
 
 class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
     bl_idname = "rebocap.toggle_demo_character"
-    bl_label = T_static("导入官方示范角色")
-    bl_description = T_static("一键导入/移除官方标准示范角色，实时伴随动捕，不影响生产录制管线")
+    bl_label = T_static("导入示范角色")
+    bl_description = T_static("一键导入/移除示范角色，实时伴随动捕，不影响生产录制管线")
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
         if is_demo_character_present():
             remove_demo_character()
-            self.report({'INFO'}, "已移除官方示范角色")
+            self.report({'INFO'}, "已移除示范角色")
             return {'FINISHED'}
 
         addon_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         fbx_path = os.path.join(addon_dir, 'assets', 'rebo_robot.fbx')
         
         if not os.path.exists(fbx_path):
-            self.report({'ERROR'}, f"未找到官方角色模型文件: {fbx_path}")
+            self.report({'ERROR'}, f"未找到示范角色模型文件: {fbx_path}")
             return {'CANCELLED'}
 
         # Deselect all
@@ -108,7 +108,7 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             else:
                 armature_obj.location = Vector((0.0, 0.0, 0.0))
             
-            self.report({'INFO'}, "官方示范角色已成功载入")
+            self.report({'INFO'}, "示范角色已成功载入")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")

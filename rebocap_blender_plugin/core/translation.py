@@ -2156,6 +2156,50 @@ TRANSLATIONS = {
         "it_IT": "Attiva/disattiva il personaggio di dimostrazione ufficiale con un clic.",
         "ko_KR": "원클릭으로 공식 데모 캐릭터를 토글합니다. 프로덕션 테이크에 영향을 주지 않습니다.",
         "ru_RU": "Быстрое переключение демонстрационного персонажа без влияния на пайплайн записи."
+    },
+    "示范角色 (Demo Character)": {
+        "zh_CN": "示范角色 (Demo Character)",
+        "zh_TW": "示範角色 (Demo Character)",
+        "en_US": "Demo Character",
+        "ja_JP": "デモキャラクター (Demo Character)",
+        "es_ES": "Personaje de Demostración",
+        "fr_FR": "Personnage de Démonstration",
+        "it_IT": "Personaggio di Dimostrazione",
+        "ko_KR": "데모 캐릭터 (Demo Character)",
+        "ru_RU": "Демо-персонаж"
+    },
+    "导入示范角色": {
+        "zh_CN": "导入示范角色",
+        "zh_TW": "導入示範角色",
+        "en_US": "Import Demo Character",
+        "ja_JP": "デモキャラクターを読み込み",
+        "es_ES": "Importar Personaje de Demostración",
+        "fr_FR": "Importer le Personnage de Démonstration",
+        "it_IT": "Importa Personaggio di Dimostrazione",
+        "ko_KR": "데모 캐릭터 가져오기",
+        "ru_RU": "Импортировать демо-персонажа"
+    },
+    "移除示范角色": {
+        "zh_CN": "移除示范角色",
+        "zh_TW": "移除示範角色",
+        "en_US": "Remove Demo Character",
+        "ja_JP": "デモキャラクターを削除",
+        "es_ES": "Eliminar Personaje de Demostración",
+        "fr_FR": "Supprimer le Personnage de Démonstration",
+        "it_IT": "Rimuovi Personaggio di Dimostrazione",
+        "ko_KR": "데모 캐릭터 제거",
+        "ru_RU": "Удалить демо-персонажа"
+    },
+    "一键导入/移除示范角色，实时伴随动捕，不影响生产录制管线": {
+        "zh_CN": "一键导入/移除示范角色，实时伴随动捕，不影响生产录制管线",
+        "zh_TW": "一鍵導入/移除示範角色，實時伴隨動捕，不影響生產錄製管線",
+        "en_US": "One-click toggle for demo character. Real-time follow without polluting production take pipelines.",
+        "ja_JP": "ワンクリックでデモキャラクターを切り替え。本番録画パイプラインに影響しません。",
+        "es_ES": "Alternar personaje de demostración con un clic sin afectar las tomas.",
+        "fr_FR": "Basculer le personnage de démonstration en un clic sans affecter les prises.",
+        "it_IT": "Attiva/disattiva il personaggio di dimostrazione con un clic.",
+        "ko_KR": "원클릭으로 데모 캐릭터를 토글합니다. 프로덕션 테이크에 영향을 주지 않습니다.",
+        "ru_RU": "Быстрое переключение демонстрационного персонажа без влияния на пайплайн записи."
     }
 }
 
