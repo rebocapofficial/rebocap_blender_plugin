@@ -15,3 +15,5 @@ from .foot_contact import REBOCAP_OT_place_all_foot_contact_points
 from .puppet_mapper import REBOCAP_OT_puppet_mapper, REBOCAP_OT_clear_all_bone_map
 from . import ik_tracking
 from . import a2t_ops
+from . import demo_character
+

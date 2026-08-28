@@ -1,14 +1,14 @@
-# Rebocap Blender Plugin (Beta 11.6)
+# Rebocap Blender Plugin (Beta 11.7)
 
 Official Blender Addon for the Rebocap Motion Capture System.
 
-[![Release](https://img.shields.io/badge/Release-Beta_11.6-blue.svg)](https://github.com/rebocapofficial/rebocap_blender_plugin/releases)
+[![Release](https://img.shields.io/badge/Release-Beta_11.7-blue.svg)](https://github.com/rebocapofficial/rebocap_blender_plugin/releases)
 [![Blender](https://img.shields.io/badge/Blender-3.6_%7C_4.2_LTS_%7C_5.x-orange.svg)](https://www.blender.org/)
 [![License](https://img.shields.io/badge/License-GPL_v3-green.svg)](LICENSE)
 
 ---
 
-## 🚀 Key Features in Beta 11.6:
+## 🚀 Key Features in Beta 11.7:
 
 1. **🛡️ Dual Physical Button Layout (Anti-Misfire Protection)**:
    - Separated `[ 🔴 Start Record ]` and `[ ⏹️ Stop Record ]` into dual independent physical buttons.
@@ -41,7 +41,7 @@ Official Blender Addon for the Rebocap Motion Capture System.
 ---
 
 ## 📦 Installation
-1. Download the latest `rebocap_blender_plugin_Beta11_6.zip` from [Releases](https://github.com/rebocapofficial/rebocap_blender_plugin/releases).
+1. Download the latest `rebocap_blender_plugin_Beta11_7.zip` from [Releases](https://github.com/rebocapofficial/rebocap_blender_plugin/releases).
 2. In Blender, navigate to `Edit` ➔ `Preferences` ➔ `Add-ons` ➔ `Install...` (or `Get Extensions` ➔ `Install from Disk...` in Blender 4.2+).
 3. Select the `.zip` file and enable **Rebocap Motion Capture**.
 

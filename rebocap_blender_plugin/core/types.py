@@ -256,6 +256,13 @@ def get_fps_mode_items(self, context):
         ('CUSTOM', T('自定义帧率 (Custom...)'), T('手动指定任意目标帧率数值'))
     ]
 
+def on_demo_preset_changed(self, context):
+    try:
+        from ..ops.demo_character import update_demo_character_offset
+        update_demo_character_offset(self, context)
+    except Exception:
+        pass
+
 def on_language_changed(self, context):
     from .translation import set_saved_language
     set_saved_language(self.rebocap_language)
@@ -279,6 +286,17 @@ def register_types():
     bpy.types.Scene.rebocap_show_auto_detect_help = bpy.props.BoolProperty(
         name="Show Auto Detect Help",
         default=False
+    )
+    
+    bpy.types.Scene.rebocap_demo_preset = bpy.props.EnumProperty(
+        name="Demo Character Position Preset",
+        items=[
+            ('SIDE_R', '右侧 (+1.2m)', '将示范角色放置在右侧 1.2 米处'),
+            ('CENTER', '居中 (0m)', '将示范角色放置在世界原点中心'),
+            ('SIDE_L', '左侧 (-1.2m)', '将示范角色放置在左侧 1.2 米处')
+        ],
+        default='SIDE_R',
+        update=on_demo_preset_changed
     )
     
     from .translation import get_saved_language

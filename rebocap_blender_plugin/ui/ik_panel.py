@@ -23,13 +23,6 @@ class REBOCAP_PT_ik_tracking_panel(bpy.types.Panel):
         
         row_size = action_box.row()
         row_size.prop(context.scene, "rebocap_tracking_node_size", text=T("Node Size (mm)"))
-        
-        has_character = any(obj.get("rebocap_robot_character") for obj in bpy.data.objects)
-        row4 = action_box.row()
-        if has_character:
-            row4.operator("rebocap.import_character", text=T("Cancel Usage"), icon='CANCEL')
-        else:
-            row4.operator("rebocap.import_character", text=T("Use Rebocap Character"), icon='USER')
             
         # Config Path and Auto Detect
         box = layout.box()

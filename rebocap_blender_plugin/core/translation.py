@@ -45,6 +45,17 @@ TRANSLATIONS = {
         "en_US": "Tracking Point Mode",
         "it_IT": "Modalità Punti di Tracciamento"
     },
+    "Version: Beta 11.7": {
+        "zh_CN": "Version: Beta 11.7",
+        "ja_JP": "Version: Beta 11.7",
+        "en_US": "Version: Beta 11.7",
+        "zh_TW": "Version: Beta 11.7",
+        "es_ES": "Version: Beta 11.7",
+        "fr_FR": "Version: Beta 11.7",
+        "ko_KR": "Version: Beta 11.7",
+        "ru_RU": "Version: Beta 11.7",
+        "it_IT": "Versione: Beta 11.7"
+    },
     "Version: Beta 11.6": {
         "zh_CN": "Version: Beta 11.6",
         "ja_JP": "Version: Beta 11.6",
@@ -2090,6 +2101,61 @@ TRANSLATIONS = {
         "ko_KR": "JSON 가져오기 (Import Config)",
         "ru_RU": "Импорт JSON (Import Config)",
         "it_IT": "Importa JSON (Import Config)"
+    },
+    "官方示范角色 (Official Demo Character)": {
+        "zh_CN": "官方示范角色 (Official Demo Character)",
+        "zh_TW": "官方示範角色 (Official Demo Character)",
+        "en_US": "Official Demo Character",
+        "ja_JP": "公式デモキャラクター (Official Demo Character)",
+        "es_ES": "Personaje de Demostración Oficial",
+        "fr_FR": "Personnage de Démonstration Officiel",
+        "it_IT": "Personaggio Ufficiale di Dimostrazione",
+        "ko_KR": "공식 데모 캐릭터 (Official Demo Character)",
+        "ru_RU": "Официальный демо-персонаж"
+    },
+    "导入官方示范角色": {
+        "zh_CN": "导入官方示范角色",
+        "zh_TW": "導入官方示範角色",
+        "en_US": "Import Demo Character",
+        "ja_JP": "公式デモキャラクターを読み込み",
+        "es_ES": "Importar Personaje de Demostración",
+        "fr_FR": "Importer le Personnage de Démonstration",
+        "it_IT": "Importa Personaggio di Dimostrazione",
+        "ko_KR": "공식 데모 캐릭터 가져오기",
+        "ru_RU": "Импортировать демо-персонажа"
+    },
+    "移除官方示范角色": {
+        "zh_CN": "移除官方示范角色",
+        "zh_TW": "移除官方示範角色",
+        "en_US": "Remove Demo Character",
+        "ja_JP": "公式デモキャラクターを削除",
+        "es_ES": "Eliminar Personaje de Demostración",
+        "fr_FR": "Supprimer le Personnage de Démonstration",
+        "it_IT": "Rimuovi Personaggio di Dimostrazione",
+        "ko_KR": "공식 데모 캐릭터 제거",
+        "ru_RU": "Удалить демо-персонажа"
+    },
+    "站位设置 (Position Preset):": {
+        "zh_CN": "站位设置 (Position Preset):",
+        "zh_TW": "站位設置 (Position Preset):",
+        "en_US": "Position Preset:",
+        "ja_JP": "配置プリセット (Position Preset):",
+        "es_ES": "Ajuste de Posición:",
+        "fr_FR": "Préréglage de Position :",
+        "it_IT": "Preimpostazione Posizione:",
+        "ko_KR": "위치 프리셋:",
+        "ru_RU": "Пресет позиции:"
+    },
+    "一键导入/移除官方标准示范角色，实时伴随动捕，不影响生产录制管线": {
+        "zh_CN": "一键导入/移除官方标准示范角色，实时伴随动捕，不影响生产录制管线",
+        "zh_TW": "一鍵導入/移除官方標準示範角色，實時伴隨動捕，不影響生產錄製管線",
+        "en_US": "One-click toggle for official demo character. Real-time follow without polluting production take pipelines.",
+        "ja_JP": "ワンクリックで公式デモキャラクターを切り替え。本番録画パイプラインに影響しません。",
+        "es_ES": "Alternar personaje de demostración con un clic sin afectar las tomas.",
+        "fr_FR": "Basculer le personnage de démonstration en un clic sans affecter les prises.",
+        "it_IT": "Attiva/disattiva il personaggio di dimostrazione ufficiale con un clic.",
+        "ko_KR": "원클릭으로 공식 데모 캐릭터를 토글합니다. 프로덕션 테이크에 영향을 주지 않습니다.",
+        "ru_RU": "Быстрое переключение демонстрационного персонажа без влияния на пайплайн записи."
     }
 }
 

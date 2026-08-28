@@ -478,6 +478,41 @@ class RebocapConnect(bpy.types.Operator):
         rebocap_connected = True
         return {'RUNNING_MODAL'}
 
+    def drive_demo_character(self, trans, pose24):
+        demo_robot = None
+        for obj in bpy.data.objects:
+            if obj.get("rebocap_demo_character") and obj.type == 'ARMATURE':
+                demo_robot = obj
+                break
+                
+        if not demo_robot:
+            return
+            
+        hip_pbone = demo_robot.pose.bones.get('mixamorig:Hips')
+        if hip_pbone:
+            hip_pbone.location = Vector((trans[0], trans[1], trans[2]))
+            
+        bone_mapping_list = [
+            'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
+            'mixamorig:LeftLeg', 'mixamorig:RightLeg', 'mixamorig:Spine1', 'mixamorig:LeftFoot',
+            'mixamorig:RightFoot', 'mixamorig:Spine2', 'mixamorig:LeftToeBase', 'mixamorig:RightToeBase',
+            'mixamorig:Neck', 'mixamorig:LeftShoulder', 'mixamorig:RightShoulder', 'mixamorig:Head',
+            'mixamorig:LeftArm', 'mixamorig:RightArm', 'mixamorig:LeftForeArm', 'mixamorig:RightForeArm',
+            'mixamorig:LeftHand', 'mixamorig:RightHand'
+        ]
+        all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
+        
+        for idx, bone_name in enumerate(bone_mapping_list):
+            if idx in (10, 11, 22, 23):
+                continue
+            pbone = demo_robot.pose.bones.get(bone_name)
+            data_bone = demo_robot.data.bones.get(bone_name)
+            if pbone and data_bone:
+                pbone.rotation_mode = 'QUATERNION'
+                rest_to_world = demo_robot.matrix_world.to_quaternion() @ data_bone.matrix_local.to_quaternion()
+                rest_from_world = rest_to_world.inverted()
+                pbone.rotation_quaternion = rest_from_world @ all_pose[idx] @ rest_to_world
+
     def drive_ik_tracking(self, trans, pose24):
         root_name = "Rebocap_Root"
         if root_name not in bpy.data.objects:
@@ -492,7 +527,6 @@ class RebocapConnect(bpy.types.Operator):
         
         pelvis_node = bpy.data.objects.get("Rebocap_Pelvis")
         if pelvis_node:
-            # apply root translation from mocap
             pelvis_node.location = Vector((trans[0], trans[1], trans[2]))
             
         for i, name in enumerate(joints):
@@ -500,37 +534,6 @@ class RebocapConnect(bpy.types.Operator):
             if node:
                 pose = pose24[i]
                 node.rotation_quaternion = Quaternion([pose[3], pose[0], pose[1], pose[2]])
-                
-        # Drive rebo_robot mathematically if it exists
-        rebo_robot = None
-        for obj in bpy.data.objects:
-            if obj.get("rebocap_robot_character") and obj.type == 'ARMATURE':
-                rebo_robot = obj
-                break
-                
-        if rebo_robot:
-            bone_mapping_list = [
-                'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
-                'mixamorig:LeftLeg', 'mixamorig:RightLeg', 'mixamorig:Spine1', 'mixamorig:LeftFoot',
-                'mixamorig:RightFoot', 'mixamorig:Spine2', 'mixamorig:LeftToeBase', 'mixamorig:RightToeBase',
-                'mixamorig:Neck', 'mixamorig:LeftShoulder', 'mixamorig:RightShoulder', 'mixamorig:Head',
-                'mixamorig:LeftArm', 'mixamorig:RightArm', 'mixamorig:LeftForeArm', 'mixamorig:RightForeArm',
-                'mixamorig:LeftHand', 'mixamorig:RightHand'
-            ]
-            all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
-            
-            for idx, bone_name in enumerate(bone_mapping_list):
-                if idx in (10, 11, 22, 23):
-                    continue
-                pbone = rebo_robot.pose.bones.get(bone_name)
-                data_bone = rebo_robot.data.bones.get(bone_name)
-                if pbone and data_bone:
-                    pbone.rotation_mode = 'QUATERNION'
-                    rest_to_world = rebo_robot.matrix_world.to_quaternion() @ data_bone.matrix_local.to_quaternion()
-                    rest_from_world = rest_to_world.inverted()
-                    pbone.rotation_quaternion = rest_from_world @ all_pose[idx] @ rest_to_world
-                    
-        # Ensure we return correctly
         return
 
 
@@ -662,6 +665,7 @@ class RebocapConnect(bpy.types.Operator):
                         # Full speed redraw (60Hz default)
                         trans, pose24, static_index, ts = last_data
                         self.drive_retarget(trans, pose24, static_index, ts)
+                        self.drive_demo_character(trans, pose24)
                         self.drive_ik_tracking(trans, pose24)
                         for window in ctx.window_manager.windows:
                             for area in window.screen.areas:
@@ -683,6 +687,7 @@ class RebocapConnect(bpy.types.Operator):
                             # Move math inside throttle! Mutating RNA forces Blender depsgraph redraw.
                             trans, pose24, static_index, ts = last_data
                             self.drive_retarget(trans, pose24, static_index, ts)
+                            self.drive_demo_character(trans, pose24)
                             self.drive_ik_tracking(trans, pose24)
                             
                             for window in ctx.window_manager.windows:
@@ -929,7 +934,7 @@ def stop_record(ctx):
         take.recorded_fps = 60.0
         ctx.scene.rebocap_active_take_index = len(ctx.scene.rebocap_takes) - 1
 
-    if has_ik:
+    if has_ik and not has_fk:
         take_name = f"Take_IK_{counter}"
         stop_record_ik_tracking(ctx, record_list, begin_t, take_id, take_name)
         
