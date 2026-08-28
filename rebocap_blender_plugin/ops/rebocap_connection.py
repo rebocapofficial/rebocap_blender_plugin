@@ -470,6 +470,15 @@ class RebocapConnect(bpy.types.Operator):
             if obj.name.startswith("Rebocap_") and obj.type == 'EMPTY':
                 cached_initial_pose[obj.name] = (obj.location.copy(), obj.rotation_quaternion.copy(), obj.rotation_euler.copy())
 
+        # Also ensure demo character body shape is updated
+        try:
+            from .demo_character import get_demo_character_armature, apply_demo_character_body_shape
+            demo_arm = get_demo_character_armature()
+            if demo_arm:
+                apply_demo_character_body_shape(demo_arm, ctx.scene)
+        except Exception:
+            pass
+
         self.reinit_data()
         ctx.window_manager.modal_handler_add(self)
         global rebocap_timer
