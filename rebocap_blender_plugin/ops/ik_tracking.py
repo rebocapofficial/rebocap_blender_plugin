@@ -1,4 +1,4 @@
-import bpy
+﻿import bpy
 import os
 import pickle
 import subprocess
@@ -499,4 +499,5 @@ def update_or_create_sole_mesh(side, foot_obj, ankle_world_pos=None, ankle_h=0.0
     obj.rotation_quaternion = (1, 0, 0, 0)
     obj.rotation_euler = (0, 0, 0)
     return obj
+
 
