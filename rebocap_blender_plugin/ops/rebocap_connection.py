@@ -489,8 +489,10 @@ class RebocapConnect(bpy.types.Operator):
             return
             
         hip_pbone = demo_robot.pose.bones.get('mixamorig:Hips')
-        if hip_pbone:
-            hip_pbone.location = Vector((trans[0], trans[1], trans[2]))
+        hip_bone_data = demo_robot.data.bones.get('mixamorig:Hips')
+        if hip_pbone and hip_bone_data:
+            target_pos = Vector((trans[0], trans[1], trans[2]))
+            hip_pbone.location = hip_bone_data.matrix_local.inverted() @ target_pos
             
         bone_mapping_list = [
             'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
@@ -502,10 +504,11 @@ class RebocapConnect(bpy.types.Operator):
         ]
         all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
         
-        if not hasattr(self, 'cached_demo_t_pose_matrices') or self.cached_demo_t_pose_matrices is None:
-            self.cached_demo_t_pose_matrices = compute_hierarchical_t_pose(demo_robot, bpy.context.scene, is_retarget=True)
+        global cached_demo_t_pose_matrices
+        if 'cached_demo_t_pose_matrices' not in globals() or cached_demo_t_pose_matrices is None:
+            cached_demo_t_pose_matrices = compute_hierarchical_t_pose(demo_robot, bpy.context.scene, is_retarget=True)
             
-        t_pose_matrices = self.cached_demo_t_pose_matrices
+        t_pose_matrices = cached_demo_t_pose_matrices
         demo_arm_quat = demo_robot.matrix_world.to_quaternion()
         
         for idx, bone_name in enumerate(bone_mapping_list):
