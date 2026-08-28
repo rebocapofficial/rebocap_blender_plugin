@@ -63,6 +63,7 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             self.report({'ERROR'}, f"未找到官方角色模型文件: {fbx_path}")
             return {'CANCELLED'}
 
+        # Deselect all
         for obj in list(context.selected_objects):
             obj.select_set(False)
 
@@ -74,14 +75,31 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
 
         imported_objs = list(context.selected_objects)
         armature_obj = None
+        mesh_objs = []
 
         for obj in imported_objs:
             obj["rebocap_demo_character"] = True
             if obj.type == 'ARMATURE':
                 armature_obj = obj
-                obj.name = "Rebocap_Demo_Character"
+                obj.name = "Rebo_Official_Demo_Character"
+            elif obj.type == 'MESH':
+                mesh_objs.append(obj)
+                obj.name = "Rebo_Official_Demo_Mesh"
 
         if armature_obj:
+            # Apply all transforms (rotation and scale) so the model stands upright at scale 1.0
+            bpy.ops.object.select_all(action='DESELECT')
+            armature_obj.select_set(True)
+            for m in mesh_objs:
+                m.select_set(True)
+            context.view_layer.objects.active = armature_obj
+            
+            try:
+                bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+            except Exception as e:
+                print(f"[Rebocap] transform_apply notice: {e}")
+
+            # Apply position preset
             preset = getattr(context.scene, 'rebocap_demo_preset', 'SIDE_R')
             if preset == 'SIDE_R':
                 armature_obj.location = Vector((1.2, 0.0, 0.0))
@@ -89,9 +107,6 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 armature_obj.location = Vector((-1.2, 0.0, 0.0))
             else:
                 armature_obj.location = Vector((0.0, 0.0, 0.0))
-
-            armature_obj.rotation_mode = 'XYZ'
-            armature_obj.rotation_euler = (0, 0, 0)
             
             self.report({'INFO'}, "官方示范角色已成功载入")
             return {'FINISHED'}

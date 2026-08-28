@@ -45,7 +45,6 @@ class_list = [
     ops.a2t_ops.REBOCAP_OT_import_a2t_json,
     ops.a2t_ops.REBOCAP_OT_reset_a2t_offsets,
     ops.ik_tracking.REBOCAP_OT_create_tracking_nodes,
-    ops.ik_tracking.REBOCAP_OT_import_character,
     core.RebocapBones,
     ui.REBOCAP_OT_change_scene_fps,
     ui.ConnectionPanel,
