@@ -470,15 +470,6 @@ class RebocapConnect(bpy.types.Operator):
             if obj.name.startswith("Rebocap_") and obj.type == 'EMPTY':
                 cached_initial_pose[obj.name] = (obj.location.copy(), obj.rotation_quaternion.copy(), obj.rotation_euler.copy())
 
-        # Also ensure demo character body shape is updated
-        try:
-            from .demo_character import get_demo_character_armature, apply_demo_character_body_shape
-            demo_arm = get_demo_character_armature()
-            if demo_arm:
-                apply_demo_character_body_shape(demo_arm, ctx.scene)
-        except Exception:
-            pass
-
         self.reinit_data()
         ctx.window_manager.modal_handler_add(self)
         global rebocap_timer
@@ -511,16 +502,22 @@ class RebocapConnect(bpy.types.Operator):
         ]
         all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
         
+        if not hasattr(self, 'cached_demo_t_pose_matrices') or self.cached_demo_t_pose_matrices is None:
+            self.cached_demo_t_pose_matrices = compute_hierarchical_t_pose(demo_robot, bpy.context.scene, is_retarget=True)
+            
+        t_pose_matrices = self.cached_demo_t_pose_matrices
+        demo_arm_quat = demo_robot.matrix_world.to_quaternion()
+        
         for idx, bone_name in enumerate(bone_mapping_list):
             if idx in (10, 11, 22, 23):
                 continue
             pbone = demo_robot.pose.bones.get(bone_name)
-            data_bone = demo_robot.data.bones.get(bone_name)
-            if pbone and data_bone:
+            if pbone and bone_name in t_pose_matrices:
                 pbone.rotation_mode = 'QUATERNION'
-                rest_to_world = demo_robot.matrix_world.to_quaternion() @ data_bone.matrix_local.to_quaternion()
-                rest_from_world = rest_to_world.inverted()
-                pbone.rotation_quaternion = rest_from_world @ all_pose[idx] @ rest_to_world
+                t_mat = t_pose_matrices[bone_name]
+                virtual_rest_to_world = demo_arm_quat @ t_mat.to_quaternion()
+                virtual_rest_from_world = virtual_rest_to_world.inverted()
+                pbone.rotation_quaternion = virtual_rest_from_world @ all_pose[idx] @ virtual_rest_to_world
 
     def drive_ik_tracking(self, trans, pose24):
         root_name = "Rebocap_Root"

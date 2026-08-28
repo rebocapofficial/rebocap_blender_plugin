@@ -215,15 +215,6 @@ def parse_and_update_ik_config(path, rebocap_props, operator=None):
         rebocap_props.sk_final_height = float(sk.get(b'final_height', 180.0))
         rebocap_props.sk_skeleton_ratio = float(sk.get(b'skeleton_ratio', 1.0))
         
-        # Auto-update demo character body shape if present
-        try:
-            from .demo_character import get_demo_character_armature, apply_demo_character_body_shape
-            demo_arm = get_demo_character_armature()
-            if demo_arm:
-                apply_demo_character_body_shape(demo_arm, bpy.context.scene)
-        except Exception:
-            pass
-
         if operator:
             operator.report({'INFO'}, f"Config updated from Rebocap")
             
