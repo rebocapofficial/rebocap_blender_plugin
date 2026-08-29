@@ -1,7 +1,8 @@
 import os
 import bpy
-from mathutils import Vector, Matrix, Quaternion
+from mathutils import Vector
 from ..core.translation import T, T_static
+from .ik_tracking import parse_and_update_ik_config, find_rebocap_config_path
 
 
 def get_demo_character_armature():
@@ -31,91 +32,64 @@ def remove_demo_character():
             bpy.data.armatures.remove(arm_data, do_unlink=True)
 
 
-def update_demo_character_offset(self, context):
-    arm = get_demo_character_armature()
-    if not arm:
-        return
-    preset = getattr(context.scene, 'rebocap_demo_preset', 'SIDE_R')
-    if preset == 'SIDE_R':
-        arm.location = Vector((1.2, 0.0, 0.0))
-    elif preset == 'SIDE_L':
-        arm.location = Vector((-1.2, 0.0, 0.0))
-    elif preset == 'CENTER':
-        arm.location = Vector((0.0, 0.0, 0.0))
-
-
-def adapt_demo_character_bone_lengths(arm_obj):
+def align_demo_character_bones_to_tracking_nodes(arm_obj):
     """
-    根据上位机追踪点动态调整示范角色的骨骼比例，彻底消除尖刺和悬空。
+    第一阶段核心逻辑：
+    直接将 FBX 角色的各个骨骼（Edit Bones）的头部和尾部精确挪动到对应的追踪点位置上。
+    完全不执行任何缩放逻辑，纯粹进行骨骼关键点位置重合。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
-        
-    bone_node_map = {
+
+    bone_tracking_map = {
         'mixamorig:Hips': ('Rebocap_Pelvis', 'Rebocap_Spine1'),
-        'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
-        'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
-        'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
-        'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
         'mixamorig:Spine': ('Rebocap_Spine1', 'Rebocap_Spine2'),
         'mixamorig:Spine1': ('Rebocap_Spine2', 'Rebocap_Spine3'),
         'mixamorig:Spine2': ('Rebocap_Spine3', 'Rebocap_Neck'),
         'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
+        'mixamorig:Head': ('Rebocap_Head', 'Rebocap_Head'),
         'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
-        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
-        'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
         'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
+        'mixamorig:LeftHand': ('Rebocap_L_Hand', 'Rebocap_L_Hand_end'),
+        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
+        'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
         'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
+        'mixamorig:RightHand': ('Rebocap_R_Hand', 'Rebocap_R_Hand_end'),
+        'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
+        'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
+        'mixamorig:LeftFoot': ('Rebocap_L_Foot', 'Rebocap_L_Toe'),
+        'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
+        'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
+        'mixamorig:RightFoot': ('Rebocap_R_Foot', 'Rebocap_R_Toe'),
     }
-    
-    pelvis_node = bpy.data.objects.get('Rebocap_Pelvis')
-    if not pelvis_node:
-        return
 
-    # 1. 设置所有骨骼的缩放继承模式为 ALIGNED（沿局部轴缩放不产生形变），并重置缩放
-    for pb in arm_obj.pose.bones:
-        pb.scale = (1.0, 1.0, 1.0)
-        if pb.parent:
-            pb.bone.inherit_scale = 'ALIGNED'
-            
-    # 2. 匹配映射骨骼的长度 (仅在 Y 轴上施加缩放，叶子骨骼保持 1.0，彻底消除尖刺)
-    for bname, (h_name, t_name) in bone_node_map.items():
-        pb = arm_obj.pose.bones.get(bname)
-        nh = bpy.data.objects.get(h_name)
-        nt = bpy.data.objects.get(t_name)
-        if pb and nh and nt:
-            # 获取追踪点之间的真实世界距离
-            target_len = (nt.matrix_world.translation - nh.matrix_world.translation).length
-            
-            # 使用骨骼的世界空间坐标计算当前真实世界长度，无视 FBX 导入时的 0.01 缩放
-            world_head = arm_obj.matrix_world @ pb.bone.head_local
-            world_tail = arm_obj.matrix_world @ pb.bone.tail_local
-            base_len = (world_tail - world_head).length
-            
-            if base_len > 0.001:
-                desired_scale = target_len / base_len
-                # 只需要在自身 Y 轴上缩放，ALIGNED 模式会自动保持子骨骼不形变
-                pb.scale.y = max(desired_scale, 0.01)
+    # 切换至编辑模式移动骨骼
+    bpy.context.view_layer.objects.active = arm_obj
+    bpy.ops.object.mode_set(mode='EDIT')
 
-    # 3. 修复悬空问题：将 Hips 的静止高度直接对齐到上位机的 Pelvis 高度
-    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
-    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
-    if hip_pb and hip_db:
-        # 计算世界空间 Z 轴高度差
-        z_offset = pelvis_node.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
-        world_offset = Vector((0.0, 0.0, z_offset))
-        # 将世界空间偏移量转换到骨骼的局部坐标空间
-        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
-        hip_pb.location = local_offset
+    for bname, (h_node_name, t_node_name) in bone_tracking_map.items():
+        eb = arm_obj.data.edit_bones.get(bname)
+        nh = bpy.data.objects.get(h_node_name)
+        nt = bpy.data.objects.get(t_node_name)
+        if eb and nh and nt:
+            target_head = arm_obj.matrix_world.inverted() @ nh.matrix_world.translation
+            target_tail = arm_obj.matrix_world.inverted() @ nt.matrix_world.translation
 
+            eb.head = target_head
+            if (target_tail - target_head).length > 0.001:
+                eb.tail = target_tail
+            else:
+                eb.tail = target_head + Vector((0.0, 0.0, 0.05))
+
+    bpy.ops.object.mode_set(mode='OBJECT')
     bpy.context.view_layer.update()
 
 
 class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
     bl_idname = "rebocap.toggle_demo_character"
     bl_label = T_static("导入示范角色")
-    bl_description = T_static("一键导入/移除示范角色，实时伴随动捕，不影响生产录制管线")
+    bl_description = T_static("一键导入/移除示范角色")
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -130,6 +104,19 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
         if not os.path.exists(fbx_path):
             self.report({'ERROR'}, f"未找到示范角色模型文件: {fbx_path}")
             return {'CANCELLED'}
+
+        # 确保场景中已有追踪节点数据
+        if not bpy.data.objects.get('Rebocap_Pelvis'):
+            try:
+                rebocap = context.scene.rebocap_bone_map
+                if rebocap.sk_upper_leg <= 0.001:
+                    cfg_path = rebocap.ik_config_path or find_rebocap_config_path()
+                    if cfg_path and os.path.exists(cfg_path):
+                        parse_and_update_ik_config(cfg_path, rebocap, None)
+                bpy.ops.rebocap.create_tracking_nodes()
+                bpy.context.view_layer.update()
+            except Exception as e:
+                print(f"[Rebocap] auto generate tracking nodes notice: {e}")
 
         # 取消选择场景已有物体
         for obj in list(context.selected_objects):
@@ -162,7 +149,6 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 m.select_set(True)
             context.view_layer.objects.active = armature_obj
             
-            # 使用针对 Blender 5.2+ 兼容的 temp_override 调用
             try:
                 area = None
                 window = None
@@ -184,27 +170,10 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 
             bpy.context.view_layer.update()
 
-            # 2. 如果场景中已有追踪节点，直接自适应骨骼长短；如果还没有，自动生成追踪点并完成对齐
-            if bpy.data.objects.get('Rebocap_Pelvis'):
-                adapt_demo_character_bone_lengths(armature_obj)
-            else:
-                try:
-                    bpy.ops.rebocap.create_tracking_nodes()
-                    bpy.context.view_layer.update()
-                    adapt_demo_character_bone_lengths(armature_obj)
-                except Exception:
-                    pass
+            # 2. 将各个骨骼挪到对应追踪点位置上（完全不进行缩放计算）
+            align_demo_character_bones_to_tracking_nodes(armature_obj)
 
-            # 3. 应用站位预设
-            preset = getattr(context.scene, 'rebocap_demo_preset', 'SIDE_R')
-            if preset == 'SIDE_R':
-                armature_obj.location = Vector((1.2, 0.0, 0.0))
-            elif preset == 'SIDE_L':
-                armature_obj.location = Vector((-1.2, 0.0, 0.0))
-            else:
-                armature_obj.location = Vector((0.0, 0.0, 0.0))
-            
-            self.report({'INFO'}, "示范角色已成功载入并完成上位机骨骼身形自适应")
+            self.report({'INFO'}, "示范角色已载入并对齐至追踪点")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")

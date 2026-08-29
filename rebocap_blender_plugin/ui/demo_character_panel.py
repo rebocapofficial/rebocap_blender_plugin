@@ -20,32 +20,12 @@ class REBOCAP_PT_demo_character_panel(bpy.types.Panel):
         scene = context.scene
         has_char = is_demo_character_present()
 
-        box = layout.box()
-
-        # Status row
+        # Action button
         if has_char:
-            row_stat = box.row(align=True)
-            row_stat.label(text="● 示范角色已载入 (在场中)", icon='CHECKMARK')
-            
-            # Action button: Remove
-            row_btn = box.row(align=True)
+            row_btn = layout.row(align=True)
             row_btn.alert = True
             row_btn.operator("rebocap.toggle_demo_character", text=T("移除示范角色"), icon='TRASH')
             row_btn.alert = False
         else:
-            row_stat = box.row(align=True)
-            row_stat.label(text="开箱即用的标准伴随角色", icon='INFO')
-            
-            # Action button: Import
-            row_btn = box.row(align=True)
+            row_btn = layout.row(align=True)
             row_btn.operator("rebocap.toggle_demo_character", text=T("导入示范角色"), icon='IMPORT')
-
-        # Offset settings
-        box_pos = layout.box()
-        box_pos.label(text=T("站位设置 (Position Preset):"))
-        row_pos = box_pos.row(align=True)
-        row_pos.prop(scene, "rebocap_demo_preset", expand=True)
-
-        col_desc = layout.column(align=True)
-        col_desc.label(text="💡 提示: 示范角色仅用于视口实时伴随，", icon='LIGHT')
-        col_desc.label(text="   录制时不会向历史列表生成多余切片。")
