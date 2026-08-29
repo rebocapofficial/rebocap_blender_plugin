@@ -48,6 +48,7 @@ def adapt_demo_character_bone_lengths(arm_obj):
     """
     通过 Pose Bone Scale（缩放模式）动态调整示范角色的四肢长短，使其与骨架追踪点的物理尺寸一致，
     同时保持 Edit Bones 完整不被破坏，从而确保解算旋转矩阵和轴向 100% 绝对正确！
+    兼容 Armature 的任意 Object 级别 Scale，并带有零除保护抗崩溃算法。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
@@ -87,24 +88,33 @@ def adapt_demo_character_bone_lengths(arm_obj):
         if pb.parent:
             pb.bone.inherit_scale = 'ALIGNED'
             
+    # 获取骨架对象自身的世界缩放，以防 transform_apply 失败时依然能保持完美的尺寸匹配
+    arm_world_scale_y = arm_obj.matrix_world.to_scale().y
+            
     # 2. 递归地计算并应用累积的 Y 轴抗缩放系数
     def apply_scale(pb, cumulative_scale_y):
+        if cumulative_scale_y < 0.001:
+            cumulative_scale_y = 0.001
+            
         if pb.name in target_lengths:
             target_len = target_lengths[pb.name]
-            base_len = pb.bone.length
-            # 该骨骼实际需要达到的绝对世界缩放比例 (相对于自身长度)
-            desired_scale_y = target_len / base_len if base_len > 0.001 else 1.0
+            base_len_world = pb.bone.length * arm_world_scale_y
             
-            # 因为它会继承父级传递下来的 Y 轴缩放，所以自身的 scale 需要抵消掉父级的影响
-            local_scale_y = desired_scale_y / cumulative_scale_y if cumulative_scale_y > 0.001 else desired_scale_y
+            desired_scale_y = target_len / base_len_world if base_len_world > 0.001 else 1.0
             
+            # 防护重叠节点导致的长度为0，防止向子骨骼传递 0.0 缩放
+            if desired_scale_y < 0.001:
+                desired_scale_y = 0.001
+                
+            # 抵消父级缩放
+            local_scale_y = desired_scale_y / cumulative_scale_y
             pb.scale = (1.0, local_scale_y, 1.0)
             
             for child in pb.children:
                 apply_scale(child, desired_scale_y)
         else:
-            # 如果该骨骼不需要改变长度，那么它需要完全抵消父级的缩放影响，以保持自身 1.0 的世界长度系数
-            local_scale_y = 1.0 / cumulative_scale_y if cumulative_scale_y > 0.001 else 1.0
+            # 不受控的骨骼只需完全抵消父级影响，自身世界长度比例保持 1.0
+            local_scale_y = 1.0 / cumulative_scale_y
             pb.scale = (1.0, local_scale_y, 1.0)
             
             for child in pb.children:
@@ -168,16 +178,27 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             context.view_layer.objects.active = armature_obj
             
             try:
-                # Add context override to ensure transform_apply works even if called from Properties panel
                 override = context.copy()
-                for window in context.window_manager.windows:
-                    for area in window.screen.areas:
-                        if area.type == 'VIEW_3D':
-                            override['area'] = area
+                for w in context.window_manager.windows:
+                    for a in w.screen.areas:
+                        if a.type == 'VIEW_3D':
+                            override['area'] = a
+                            override['window'] = w
                             break
-                bpy.ops.object.transform_apply(override, location=False, rotation=True, scale=True)
+                            
+                if hasattr(context, "temp_override") and 'area' in override:
+                    with context.temp_override(**override):
+                        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+                else:
+                    try:
+                        bpy.ops.object.transform_apply(override, location=False, rotation=True, scale=True)
+                    except Exception:
+                        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
             except Exception as e:
                 print(f"[Rebocap] transform_apply notice: {e}")
+                
+            # 必须立刻更新一次视口，否则 transform_apply 或默认的 0.01 缩放不会刷新到 matrix_world 中
+            bpy.context.view_layer.update()
 
             # 2. 如果场景中已有追踪节点，直接对齐骨骼长短；如果还没有，自动生成追踪点并完成对齐
             if bpy.data.objects.get('Rebocap_Pelvis'):
@@ -185,6 +206,7 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             else:
                 try:
                     bpy.ops.rebocap.create_tracking_nodes()
+                    bpy.context.view_layer.update()
                     adapt_demo_character_bone_lengths(armature_obj)
                 except Exception:
                     pass
