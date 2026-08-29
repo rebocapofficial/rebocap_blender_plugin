@@ -95,15 +95,28 @@ def adapt_demo_character_scale_isolated(arm_obj):
                 ratio = max(min(t_len / cur_len, 3.0), 0.1)
                 pb.scale = (ratio, ratio, ratio)
 
-    # 4. 骨盆（Hips）对齐 Pelvis 追踪点高度，实现双脚踩实地面
-    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
+    # 4. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐
+    node_l_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
+    node_r_thigh = bpy.data.objects.get('Rebocap_R_Upper_leg')
     hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
     hip_db = arm_obj.data.bones.get('mixamorig:Hips')
-    if node_pelvis and hip_pb and hip_db:
-        z_offset = node_pelvis.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
-        world_offset = Vector((0.0, 0.0, z_offset))
-        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
-        hip_pb.location = local_offset
+    l_thigh_db = arm_obj.data.bones.get('mixamorig:LeftUpLeg')
+    r_thigh_db = arm_obj.data.bones.get('mixamorig:RightUpLeg')
+
+    if node_l_thigh and node_r_thigh and hip_pb and hip_db and l_thigh_db and r_thigh_db:
+        # 计算左右大腿关节在世界空间的目标几何中心
+        target_thigh_center = (node_l_thigh.matrix_world.translation + node_r_thigh.matrix_world.translation) * 0.5
+        # 计算 FBX 原生大腿根关节在骨架空间中的几何中心
+        base_thigh_center = (l_thigh_db.head_local + r_thigh_db.head_local) * 0.5
+        diff_world = target_thigh_center - base_thigh_center
+        # 转换为 Hips 局部坐标并消除大腿根部悬空与高度偏差
+        hip_pb.location = hip_db.matrix_local.to_3x3().inverted() @ diff_world
+
+        # 胯宽等比自适应（让大腿根部与追踪点左右横向精准吻合）
+        target_hip_w = (node_l_thigh.matrix_world.translation - node_r_thigh.matrix_world.translation).length
+        base_hip_w = (l_thigh_db.head - r_thigh_db.head).length
+        if base_hip_w > 0.001:
+            hip_pb.scale.x = target_hip_w / base_hip_w
 
     # 5. 隐藏骨骼线框显示，保持角色表面光洁
     arm_obj.data.display_type = 'WIRE'
