@@ -122,7 +122,7 @@ def adapt_demo_character_scale_isolated(arm_obj):
                 ratio = max(min(t_len / cur_len, 3.0), 0.1)
                 pb.scale = (ratio, ratio, ratio)
 
-    # 6. 脚部骨骼三维等比自适应（跟随鞋底追踪点长度等比缩放，彻底消除非等比剪切引起的脚尖上翘）
+    # 6. 脚部骨骼长宽独立精准自适应（X轴精准贴合鞋底宽度，Y/Z轴等比保持脚掌水平贴地）
     for side in ['L', 'R']:
         sole_obj = bpy.data.objects.get(f'Rebocap_{side}_Sole')
         foot_pb_name = 'mixamorig:LeftFoot' if side == 'L' else 'mixamorig:RightFoot'
@@ -133,16 +133,21 @@ def adapt_demo_character_scale_isolated(arm_obj):
         if sole_obj and foot_pb:
             pts = [sole_obj.matrix_world @ v.co for v in sole_obj.data.vertices]
             if len(pts) >= 7:
-                # pts[1] 是脚尖，pts[4] 是脚后跟
+                # 目标鞋底线框横向宽度与纵向长度
+                w_target = max(v.x for v in pts) - min(v.x for v in pts)
                 l_target = (pts[1] - pts[4]).length
-                # FBX 原生鞋体基准长度 (长: 29.6cm)
+                
+                # FBX 原生鞋体基准尺寸 (宽: 14.38cm, 长: 29.61cm)
+                base_w = 0.1438
                 base_l = 0.2961
+                
+                s_width = max(min(w_target / base_w, 3.0), 0.1)
                 s_len = max(min(l_target / base_l, 3.0), 0.1)
                 
-                # 保持三维等比缩放，避免倾斜骨骼坐标系非等比缩放产生剪切上翘
-                foot_pb.scale = (s_len, s_len, s_len)
+                # X 轴独立缩放贴合鞋宽，Y/Z 轴保持一致消除矢状面倾斜剪切
+                foot_pb.scale = (s_width, s_len, s_len)
                 if toe_pb:
-                    toe_pb.scale = (s_len, s_len, s_len)
+                    toe_pb.scale = (s_width, s_len, s_len)
 
     bpy.context.view_layer.update()
 
