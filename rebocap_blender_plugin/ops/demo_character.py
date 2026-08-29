@@ -70,12 +70,52 @@ def adapt_demo_character_scale_isolated(arm_obj):
                 if s in arm_obj.pose.bones:
                     arm_obj.pose.bones[s].scale = (ratio, ratio, ratio)
 
-    # 3. 四肢各段主干骨骼三维等比拉伸（长短与粗细协调）
+    # 3. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐（下半身基准）
+    node_l_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
+    node_r_thigh = bpy.data.objects.get('Rebocap_R_Upper_leg')
+    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
+    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
+    l_thigh_db = arm_obj.data.bones.get('mixamorig:LeftUpLeg')
+    r_thigh_db = arm_obj.data.bones.get('mixamorig:RightUpLeg')
+
+    if node_l_thigh and node_r_thigh and hip_pb and hip_db and l_thigh_db and r_thigh_db:
+        target_thigh_center = (node_l_thigh.matrix_world.translation + node_r_thigh.matrix_world.translation) * 0.5
+        base_thigh_center = (l_thigh_db.head_local + r_thigh_db.head_local) * 0.5
+        diff_world = target_thigh_center - base_thigh_center
+        hip_pb.location = hip_db.matrix_local.to_3x3().inverted() @ diff_world
+
+        target_hip_w = (node_l_thigh.matrix_world.translation - node_r_thigh.matrix_world.translation).length
+        base_hip_w = (l_thigh_db.head - r_thigh_db.head).length
+        if base_hip_w > 0.001:
+            hip_pb.scale.x = target_hip_w / base_hip_w
+
+    bpy.context.view_layer.update()
+
+    # 4. 肩部锁骨（Shoulder/Clavicle）位置与跨度对齐（上半身肩窝基准）
+    for sh_name, arm_name, sh_node_name, arm_node_name in [
+        ('mixamorig:LeftShoulder', 'mixamorig:LeftArm', 'Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
+        ('mixamorig:RightShoulder', 'mixamorig:RightArm', 'Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm')]:
+        sh_pb = arm_obj.pose.bones.get(sh_name)
+        sh_db = arm_obj.data.bones.get(sh_name)
+        node_sh = bpy.data.objects.get(sh_node_name)
+        node_arm = bpy.data.objects.get(arm_node_name)
+        
+        if sh_pb and sh_db and node_sh and node_arm:
+            cur_sh_head_w = arm_obj.matrix_world @ sh_pb.head
+            delta_head_w = node_sh.matrix_world.translation - cur_sh_head_w
+            sh_pb.location += sh_db.matrix_local.to_3x3().inverted() @ delta_head_w
+            
+            t_len = (node_arm.matrix_world.translation - node_sh.matrix_world.translation).length
+            if sh_pb.bone.length > 0.001:
+                ratio = t_len / sh_pb.bone.length
+                sh_pb.scale = (ratio, ratio, ratio)
+
+    bpy.context.view_layer.update()
+
+    # 5. 四肢各段主干骨骼三维等比拉伸（大腿、小腿、大臂、小臂、脖子）
     limb_map = {
-        'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
         'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
-        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
         'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
         'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
         'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
@@ -95,30 +135,7 @@ def adapt_demo_character_scale_isolated(arm_obj):
                 ratio = max(min(t_len / cur_len, 3.0), 0.1)
                 pb.scale = (ratio, ratio, ratio)
 
-    # 4. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐
-    node_l_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
-    node_r_thigh = bpy.data.objects.get('Rebocap_R_Upper_leg')
-    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
-    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
-    l_thigh_db = arm_obj.data.bones.get('mixamorig:LeftUpLeg')
-    r_thigh_db = arm_obj.data.bones.get('mixamorig:RightUpLeg')
-
-    if node_l_thigh and node_r_thigh and hip_pb and hip_db and l_thigh_db and r_thigh_db:
-        # 计算左右大腿关节在世界空间的目标几何中心
-        target_thigh_center = (node_l_thigh.matrix_world.translation + node_r_thigh.matrix_world.translation) * 0.5
-        # 计算 FBX 原生大腿根关节在骨架空间中的几何中心
-        base_thigh_center = (l_thigh_db.head_local + r_thigh_db.head_local) * 0.5
-        diff_world = target_thigh_center - base_thigh_center
-        # 转换为 Hips 局部坐标并消除大腿根部悬空与高度偏差
-        hip_pb.location = hip_db.matrix_local.to_3x3().inverted() @ diff_world
-
-        # 胯宽等比自适应（让大腿根部与追踪点左右横向精准吻合）
-        target_hip_w = (node_l_thigh.matrix_world.translation - node_r_thigh.matrix_world.translation).length
-        base_hip_w = (l_thigh_db.head - r_thigh_db.head).length
-        if base_hip_w > 0.001:
-            hip_pb.scale.x = target_hip_w / base_hip_w
-
-    # 5. 隐藏骨骼线框显示，保持角色表面光洁
+    # 6. 隐藏骨骼线框显示，保持角色表面光洁
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
 
