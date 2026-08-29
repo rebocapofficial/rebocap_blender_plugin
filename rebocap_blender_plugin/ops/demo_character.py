@@ -32,96 +32,71 @@ def remove_demo_character():
             bpy.data.armatures.remove(arm_data, do_unlink=True)
 
 
-def align_demo_character_bones_to_tracking_nodes(arm_obj):
+def adapt_demo_character_bone_stretch(arm_obj):
     """
-    第一阶段核心逻辑：
-    1. 直接将 FBX 角色的受控骨骼（Edit Bones）头部和尾部精确挪动到对应的追踪点位置上。
-    2. 对于无直接追踪点的末端/子骨骼（手指 HandIndex1~4、头顶 HeadTop_End、脚尖 Toe_End 等），
-       严格以其父级骨骼（如小臂、脖子、小腿）的长度变化比例为基准，以 FBX 原始矢量为方向进行等比缩放和无缝跟随。
+    姿态模式下的平滑骨骼轴向伸缩（Pose Mode Stretch / Scale）：
+    1. FBX 静止基准（Edit Bones）保持 100% 完整无修改，确保蒙皮权重和几何曲面永远不碎裂、不拉扯。
+    2. 在姿态模式下，使各段受控骨骼（大腿、小腿、手臂、脊椎）仅沿局部 Y 轴平滑伸缩至目标长度。
+    3. 子骨骼继承缩放设为 'NONE'，彻底杜绝父级缩放传递到手指和末端造成尖刺变形。
+    4. 臀部（Hips）初始基准高度对齐 Pelvis 追踪点，实现双脚踩实地面。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
 
-    # 切换至编辑模式，记录原始 FBX 空间下的骨骼起点与终点矢量
-    bpy.context.view_layer.objects.active = arm_obj
-    bpy.ops.object.mode_set(mode='EDIT')
+    # 1. 重置所有姿态骨骼，继承缩放设为 NONE，防止缩放层层叠加
+    for pb in arm_obj.pose.bones:
+        pb.scale = (1.0, 1.0, 1.0)
+        if pb.parent:
+            pb.bone.inherit_scale = 'NONE'
 
-    orig_heads = {b.name: b.head.copy() for b in arm_obj.data.edit_bones}
-    orig_tails = {b.name: b.tail.copy() for b in arm_obj.data.edit_bones}
+    # 2. 脊椎段综合伸缩 (Spine + Spine1 + Spine2 作为一个整体平滑过渡)
+    node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
+    node_neck = bpy.data.objects.get('Rebocap_Neck')
+    if node_spine1 and node_neck:
+        target_spine_len = (node_neck.matrix_world.translation - node_spine1.matrix_world.translation).length
+        spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
+        base_spine_len = sum(arm_obj.pose.bones[s].bone.length for s in spine_bones if s in arm_obj.pose.bones)
+        if base_spine_len > 0.001:
+            spine_ratio = max(target_spine_len / base_spine_len, 0.1)
+            for sname in spine_bones:
+                if sname in arm_obj.pose.bones:
+                    arm_obj.pose.bones[sname].scale.y = spine_ratio
 
-    bone_tracking_map = {
-        'mixamorig:Hips': ('Rebocap_Pelvis', 'Rebocap_Spine1'),
-        'mixamorig:Spine': ('Rebocap_Spine1', 'Rebocap_Spine2'),
-        'mixamorig:Spine1': ('Rebocap_Spine2', 'Rebocap_Spine3'),
-        'mixamorig:Spine2': ('Rebocap_Spine3', 'Rebocap_Neck'),
-        'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
+    # 3. 四肢各段骨骼的独立 Y 轴自适应伸缩
+    limb_map = {
         'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
         'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
-        'mixamorig:LeftHand': ('Rebocap_L_Hand', 'Rebocap_L_Hand_end'),
         'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
         'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
         'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
-        'mixamorig:RightHand': ('Rebocap_R_Hand', 'Rebocap_R_Hand_end'),
         'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
         'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
-        'mixamorig:LeftFoot': ('Rebocap_L_Foot', 'Rebocap_L_Toe'),
         'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
         'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
-        'mixamorig:RightFoot': ('Rebocap_R_Foot', 'Rebocap_R_Toe'),
+        'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
     }
 
-    # 1. 挪动主干受控骨骼到对应追踪点
-    for bname, (h_node_name, t_node_name) in bone_tracking_map.items():
-        eb = arm_obj.data.edit_bones.get(bname)
-        nh = bpy.data.objects.get(h_node_name)
-        nt = bpy.data.objects.get(t_node_name)
-        if eb and nh and nt:
-            target_head = arm_obj.matrix_world.inverted() @ nh.matrix_world.translation
-            target_tail = arm_obj.matrix_world.inverted() @ nt.matrix_world.translation
+    for bname, (h_node, t_node) in limb_map.items():
+        pb = arm_obj.pose.bones.get(bname)
+        nh = bpy.data.objects.get(h_node)
+        nt = bpy.data.objects.get(t_node)
+        if pb and nh and nt:
+            target_len = (nt.matrix_world.translation - nh.matrix_world.translation).length
+            base_len = pb.bone.length
+            if base_len > 0.001:
+                pb.scale.y = max(target_len / base_len, 0.1)
 
-            eb.head = target_head
-            if (target_tail - target_head).length > 0.001:
-                eb.tail = target_tail
-            else:
-                eb.tail = target_head + Vector((0.0, 0.0, 0.05))
+    # 4. 将 Hips 初始静止高度对齐到 Rebocap_Pelvis，消除悬空
+    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
+    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
+    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
+    if node_pelvis and hip_pb and hip_db:
+        z_offset = node_pelvis.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
+        world_offset = Vector((0.0, 0.0, z_offset))
+        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
+        hip_pb.location = local_offset
 
-    # 2. 未映射子骨骼分组处理 (子骨骼列表, 挂载锚点骨骼, 参考基准父骨骼)
-    unmapped_groups = [
-        # 左手手指 -> 锚定在左手掌，基准参考左小臂长度
-        (['mixamorig:LeftHandIndex1', 'mixamorig:LeftHandIndex2', 'mixamorig:LeftHandIndex3', 'mixamorig:LeftHandIndex4'], 'mixamorig:LeftHand', 'mixamorig:LeftForeArm'),
-        # 右手手指 -> 锚定在右手掌，基准参考右小臂长度
-        (['mixamorig:RightHandIndex1', 'mixamorig:RightHandIndex2', 'mixamorig:RightHandIndex3', 'mixamorig:RightHandIndex4'], 'mixamorig:RightHand', 'mixamorig:RightForeArm'),
-        # 头部与头顶 -> 锚定在脖子末端，基准参考脊柱/脖子
-        (['mixamorig:Head', 'mixamorig:HeadTop_End'], 'mixamorig:Neck', 'mixamorig:Spine2'),
-        # 左脚趾 -> 锚定在左脚掌，基准参考左小腿长度
-        (['mixamorig:LeftToeBase', 'mixamorig:LeftToe_End'], 'mixamorig:LeftFoot', 'mixamorig:LeftLeg'),
-        # 右脚趾 -> 锚定在右脚掌，基准参考右小腿长度
-        (['mixamorig:RightToeBase', 'mixamorig:RightToe_End'], 'mixamorig:RightFoot', 'mixamorig:RightLeg'),
-    ]
-
-    for child_names, anchor_name, ref_name in unmapped_groups:
-        anchor_eb = arm_obj.data.edit_bones.get(anchor_name)
-        ref_eb = arm_obj.data.edit_bones.get(ref_name)
-        if not anchor_eb or not ref_eb or ref_name not in orig_heads:
-            continue
-        
-        orig_ref_len = (orig_tails[ref_name] - orig_heads[ref_name]).length
-        curr_ref_len = ref_eb.length
-        scale = (curr_ref_len / orig_ref_len) if orig_ref_len > 1e-4 else 1.0
-        
-        orig_anchor_origin = orig_heads[anchor_name]
-        new_anchor_origin = anchor_eb.head
-        
-        for cname in child_names:
-            ceb = arm_obj.data.edit_bones.get(cname)
-            if ceb and cname in orig_heads:
-                rel_head = orig_heads[cname] - orig_anchor_origin
-                rel_tail = orig_tails[cname] - orig_anchor_origin
-                ceb.head = new_anchor_origin + rel_head * scale
-                ceb.tail = new_anchor_origin + rel_tail * scale
-
-    bpy.ops.object.mode_set(mode='OBJECT')
     bpy.context.view_layer.update()
 
 
@@ -209,10 +184,10 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 
             bpy.context.view_layer.update()
 
-            # 2. 将各个骨骼挪到对应追踪点位置上（完全不进行缩放计算）
-            align_demo_character_bones_to_tracking_nodes(armature_obj)
+            # 2. 姿态模式下的平滑骨骼轴向伸缩自适应（确保蒙皮完整光滑）
+            adapt_demo_character_bone_stretch(armature_obj)
 
-            self.report({'INFO'}, "示范角色已载入并对齐至追踪点")
+            self.report({'INFO'}, "示范角色已载入并完成骨骼平滑伸缩对齐")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")
