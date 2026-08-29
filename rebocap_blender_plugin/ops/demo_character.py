@@ -35,11 +35,19 @@ def remove_demo_character():
 def align_demo_character_bones_to_tracking_nodes(arm_obj):
     """
     第一阶段核心逻辑：
-    直接将 FBX 角色的各个骨骼（Edit Bones）的头部和尾部精确挪动到对应的追踪点位置上。
-    完全不执行任何缩放逻辑，纯粹进行骨骼关键点位置重合。
+    1. 直接将 FBX 角色的受控骨骼（Edit Bones）头部和尾部精确挪动到对应的追踪点位置上。
+    2. 对于无直接追踪点的末端/子骨骼（手指 HandIndex1~4、头顶 HeadTop_End、脚尖 Toe_End 等），
+       严格以其父级骨骼（如小臂、脖子、小腿）的长度变化比例为基准，以 FBX 原始矢量为方向进行等比缩放和无缝跟随。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
+
+    # 切换至编辑模式，记录原始 FBX 空间下的骨骼起点与终点矢量
+    bpy.context.view_layer.objects.active = arm_obj
+    bpy.ops.object.mode_set(mode='EDIT')
+
+    orig_heads = {b.name: b.head.copy() for b in arm_obj.data.edit_bones}
+    orig_tails = {b.name: b.tail.copy() for b in arm_obj.data.edit_bones}
 
     bone_tracking_map = {
         'mixamorig:Hips': ('Rebocap_Pelvis', 'Rebocap_Spine1'),
@@ -47,7 +55,6 @@ def align_demo_character_bones_to_tracking_nodes(arm_obj):
         'mixamorig:Spine1': ('Rebocap_Spine2', 'Rebocap_Spine3'),
         'mixamorig:Spine2': ('Rebocap_Spine3', 'Rebocap_Neck'),
         'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
-        'mixamorig:Head': ('Rebocap_Head', 'Rebocap_Head'),
         'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
         'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
@@ -64,10 +71,7 @@ def align_demo_character_bones_to_tracking_nodes(arm_obj):
         'mixamorig:RightFoot': ('Rebocap_R_Foot', 'Rebocap_R_Toe'),
     }
 
-    # 切换至编辑模式移动骨骼
-    bpy.context.view_layer.objects.active = arm_obj
-    bpy.ops.object.mode_set(mode='EDIT')
-
+    # 1. 挪动主干受控骨骼到对应追踪点
     for bname, (h_node_name, t_node_name) in bone_tracking_map.items():
         eb = arm_obj.data.edit_bones.get(bname)
         nh = bpy.data.objects.get(h_node_name)
@@ -81,6 +85,41 @@ def align_demo_character_bones_to_tracking_nodes(arm_obj):
                 eb.tail = target_tail
             else:
                 eb.tail = target_head + Vector((0.0, 0.0, 0.05))
+
+    # 2. 未映射子骨骼分组处理 (子骨骼列表, 挂载锚点骨骼, 参考基准父骨骼)
+    unmapped_groups = [
+        # 左手手指 -> 锚定在左手掌，基准参考左小臂长度
+        (['mixamorig:LeftHandIndex1', 'mixamorig:LeftHandIndex2', 'mixamorig:LeftHandIndex3', 'mixamorig:LeftHandIndex4'], 'mixamorig:LeftHand', 'mixamorig:LeftForeArm'),
+        # 右手手指 -> 锚定在右手掌，基准参考右小臂长度
+        (['mixamorig:RightHandIndex1', 'mixamorig:RightHandIndex2', 'mixamorig:RightHandIndex3', 'mixamorig:RightHandIndex4'], 'mixamorig:RightHand', 'mixamorig:RightForeArm'),
+        # 头部与头顶 -> 锚定在脖子末端，基准参考脊柱/脖子
+        (['mixamorig:Head', 'mixamorig:HeadTop_End'], 'mixamorig:Neck', 'mixamorig:Spine2'),
+        # 左脚趾 -> 锚定在左脚掌，基准参考左小腿长度
+        (['mixamorig:LeftToeBase', 'mixamorig:LeftToe_End'], 'mixamorig:LeftFoot', 'mixamorig:LeftLeg'),
+        # 右脚趾 -> 锚定在右脚掌，基准参考右小腿长度
+        (['mixamorig:RightToeBase', 'mixamorig:RightToe_End'], 'mixamorig:RightFoot', 'mixamorig:RightLeg'),
+    ]
+
+    for child_names, anchor_name, ref_name in unmapped_groups:
+        anchor_eb = arm_obj.data.edit_bones.get(anchor_name)
+        ref_eb = arm_obj.data.edit_bones.get(ref_name)
+        if not anchor_eb or not ref_eb or ref_name not in orig_heads:
+            continue
+        
+        orig_ref_len = (orig_tails[ref_name] - orig_heads[ref_name]).length
+        curr_ref_len = ref_eb.length
+        scale = (curr_ref_len / orig_ref_len) if orig_ref_len > 1e-4 else 1.0
+        
+        orig_anchor_origin = orig_heads[anchor_name]
+        new_anchor_origin = anchor_eb.head
+        
+        for cname in child_names:
+            ceb = arm_obj.data.edit_bones.get(cname)
+            if ceb and cname in orig_heads:
+                rel_head = orig_heads[cname] - orig_anchor_origin
+                rel_tail = orig_tails[cname] - orig_anchor_origin
+                ceb.head = new_anchor_origin + rel_head * scale
+                ceb.tail = new_anchor_origin + rel_tail * scale
 
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.context.view_layer.update()
