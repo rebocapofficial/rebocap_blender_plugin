@@ -122,7 +122,72 @@ def adapt_demo_character_scale_isolated(arm_obj):
                 ratio = max(min(t_len / cur_len, 3.0), 0.1)
                 pb.scale = (ratio, ratio, ratio)
 
-    # 6. 隐藏骨骼线框显示，保持角色表面光洁
+    # 6. 方案 A：脚部骨骼三轴独立自适应（匹配 6 个鞋底追踪点长、宽、高）
+    for side in ['L', 'R']:
+        sole_obj = bpy.data.objects.get(f'Rebocap_{side}_Sole')
+        foot_pb_name = 'mixamorig:LeftFoot' if side == 'L' else 'mixamorig:RightFoot'
+        toe_pb_name = 'mixamorig:LeftToeBase' if side == 'L' else 'mixamorig:RightToeBase'
+        foot_pb = arm_obj.pose.bones.get(foot_pb_name)
+        toe_pb = arm_obj.pose.bones.get(toe_pb_name)
+        
+        if sole_obj and foot_pb:
+            pts = [sole_obj.matrix_world @ v.co for v in sole_obj.data.vertices]
+            if len(pts) >= 7:
+                # pts[1] 是脚尖，pts[4] 是脚后跟
+                l_target = (pts[1] - pts[4]).length
+                # pts[0] 和 pts[2] 是前掌横向跨度
+                w_target = (pts[0] - pts[2]).length
+                # pts[6] 是脚踝高度，地面 Z = 0
+                h_target = pts[6].z
+                
+                # FBX 原生鞋体基准尺寸 (长: 29.6cm, 宽: 14.4cm, 踝高: 10.6cm)
+                base_l, base_w, base_h = 0.2961, 0.1438, 0.1066
+                s_len = max(min(l_target / base_l, 3.0), 0.1)
+                s_width = max(min(w_target / base_w, 3.0), 0.1)
+                s_height = max(min(h_target / base_h, 3.0), 0.1)
+                
+                foot_pb.scale = (s_width, s_len, s_height)
+                if toe_pb:
+                    toe_pb.scale = (s_width, s_len, s_height)
+
+    bpy.context.view_layer.update()
+
+    # 7. 鞋底精准平齐踩地校准 (Sole Ground Leveling)
+    mesh_obj = None
+    for child in arm_obj.children:
+        if child.type == 'MESH':
+            mesh_obj = child
+            break
+    if not mesh_obj:
+        for o in bpy.data.objects:
+            if o.type == 'MESH' and o.get('rebocap_demo_character'):
+                mesh_obj = o
+                break
+
+    if mesh_obj:
+        try:
+            depsgraph = bpy.context.evaluated_depsgraph_get()
+            eval_mesh_obj = mesh_obj.evaluated_get(depsgraph)
+            eval_mesh = eval_mesh_obj.to_mesh()
+            vg_foot = mesh_obj.vertex_groups.get('mixamorig:LeftFoot')
+            vg_toe = mesh_obj.vertex_groups.get('mixamorig:LeftToeBase')
+            if vg_foot and vg_toe:
+                foot_verts_z = [
+                    (eval_mesh_obj.matrix_world @ v.co).z
+                    for v in eval_mesh.vertices
+                    if any(g.group in (vg_foot.index, vg_toe.index) and g.weight > 0.1 for g in mesh_obj.data.vertices[v.index].groups)
+                ]
+                if foot_verts_z:
+                    min_z = min(foot_verts_z)
+                    if abs(min_z) > 0.0005 and hip_pb and hip_db:
+                        world_offset = Vector((0.0, 0.0, -min_z))
+                        local_offset = hip_db.matrix_local.to_3x3().inverted() @ world_offset
+                        hip_pb.location += local_offset
+            eval_mesh_obj.to_mesh_clear()
+        except Exception:
+            pass
+
+    # 8. 隐藏骨骼线框显示，保持角色表面光洁
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
 
