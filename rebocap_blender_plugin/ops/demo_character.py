@@ -1,6 +1,6 @@
 ﻿import os
 import bpy
-from mathutils import Vector, Quaternion
+from mathutils import Vector, Matrix, Quaternion
 from ..core.translation import T, T_static
 
 
@@ -46,9 +46,10 @@ def update_demo_character_offset(self, context):
 
 def adapt_demo_character_bone_lengths(arm_obj):
     """
-    通过 Pose Bone Scale（缩放模式）动态调整示范角色的四肢长短，使其与骨架追踪点的物理尺寸一致，
-    同时保持 Edit Bones 完整不被破坏，从而确保解算旋转矩阵和轴向 100% 绝对正确！
-    兼容 Armature 的任意 Object 级别 Scale，并带有零除保护抗崩溃算法。
+    基于上位机 Rebocap3D (PoseDriver) 原理：
+    在 Pose Mode 中通过 Y 轴局部比例缩放（Pose Bone Scale）自适应骨骼长短，
+    使示范角色四肢关节与骨架追踪点 1:1 物理重合，
+    同时保持 Edit Bones 完整不被破坏，确保骨骼轴向与旋转绝对正确。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
@@ -80,16 +81,16 @@ def adapt_demo_character_bone_lengths(arm_obj):
         nh = bpy.data.objects.get(h_name)
         nt = bpy.data.objects.get(t_name)
         if nh and nt:
-            # 追踪点都是世界坐标对齐在(0,0,0)根节点下，因此距离就是它们之间的实际物理长度
             target_lengths[bname] = (nt.matrix_world.translation - nh.matrix_world.translation).length
 
-    # 1. 设置所有子骨骼为 ALIGNED 继承缩放，这样它们只会沿着自己的局部轴向继承缩放，而不会发生形变或拉扯
+    # 1. 设置所有子骨骼为 ALIGNED 继承缩放，确保缩放只沿局部 Y 轴传递
     for pb in arm_obj.pose.bones:
         if pb.parent:
             pb.bone.inherit_scale = 'ALIGNED'
             
-    # 获取骨架对象自身的世界缩放，以防 transform_apply 失败时依然能保持完美的尺寸匹配
     arm_world_scale_y = arm_obj.matrix_world.to_scale().y
+    if arm_world_scale_y < 0.0001:
+        arm_world_scale_y = 1.0
             
     # 2. 递归地计算并应用累积的 Y 轴抗缩放系数
     def apply_scale(pb, cumulative_scale_y):
@@ -101,19 +102,15 @@ def adapt_demo_character_bone_lengths(arm_obj):
             base_len_world = pb.bone.length * arm_world_scale_y
             
             desired_scale_y = target_len / base_len_world if base_len_world > 0.001 else 1.0
-            
-            # 防护重叠节点导致的长度为0，防止向子骨骼传递 0.0 缩放
             if desired_scale_y < 0.001:
                 desired_scale_y = 0.001
                 
-            # 抵消父级缩放
             local_scale_y = desired_scale_y / cumulative_scale_y
             pb.scale = (1.0, local_scale_y, 1.0)
             
             for child in pb.children:
                 apply_scale(child, desired_scale_y)
         else:
-            # 不受控的骨骼只需完全抵消父级影响，自身世界长度比例保持 1.0
             local_scale_y = 1.0 / cumulative_scale_y
             pb.scale = (1.0, local_scale_y, 1.0)
             
@@ -146,7 +143,7 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             self.report({'ERROR'}, f"未找到示范角色模型文件: {fbx_path}")
             return {'CANCELLED'}
 
-        # Deselect all
+        # 取消选择场景已有物体
         for obj in list(context.selected_objects):
             obj.select_set(False)
 
@@ -177,30 +174,29 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 m.select_set(True)
             context.view_layer.objects.active = armature_obj
             
+            # 使用针对 Blender 5.2+ 兼容的 temp_override 调用
             try:
-                override = context.copy()
+                area = None
+                window = None
                 for w in context.window_manager.windows:
                     for a in w.screen.areas:
                         if a.type == 'VIEW_3D':
-                            override['area'] = a
-                            override['window'] = w
+                            area = a
+                            window = w
                             break
-                            
-                if hasattr(context, "temp_override") and 'area' in override:
-                    with context.temp_override(**override):
+                    if area: break
+                    
+                if hasattr(context, "temp_override") and area:
+                    with context.temp_override(window=window, area=area):
                         bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
                 else:
-                    try:
-                        bpy.ops.object.transform_apply(override, location=False, rotation=True, scale=True)
-                    except Exception:
-                        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+                    bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
             except Exception as e:
                 print(f"[Rebocap] transform_apply notice: {e}")
                 
-            # 必须立刻更新一次视口，否则 transform_apply 或默认的 0.01 缩放不会刷新到 matrix_world 中
             bpy.context.view_layer.update()
 
-            # 2. 如果场景中已有追踪节点，直接对齐骨骼长短；如果还没有，自动生成追踪点并完成对齐
+            # 2. 如果场景中已有追踪节点，直接自适应骨骼长短；如果还没有，自动生成追踪点并完成对齐
             if bpy.data.objects.get('Rebocap_Pelvis'):
                 adapt_demo_character_bone_lengths(armature_obj)
             else:
@@ -220,7 +216,7 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             else:
                 armature_obj.location = Vector((0.0, 0.0, 0.0))
             
-            self.report({'INFO'}, "示范角色已成功载入并对齐骨架身形")
+            self.report({'INFO'}, "示范角色已成功载入并完成上位机骨骼身形自适应")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")

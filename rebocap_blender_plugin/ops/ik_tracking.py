@@ -1,4 +1,4 @@
-﻿import bpy
+import bpy
 import os
 import pickle
 import subprocess
@@ -232,6 +232,13 @@ class REBOCAP_OT_create_tracking_nodes(bpy.types.Operator):
 
     def execute(self, context):
         rebocap = context.scene.rebocap_bone_map
+        if rebocap.sk_upper_leg <= 0.001:
+            cfg_path = rebocap.ik_config_path
+            if not cfg_path or not os.path.exists(cfg_path):
+                cfg_path = find_rebocap_config_path()
+            if cfg_path and os.path.exists(cfg_path):
+                parse_and_update_ik_config(cfg_path, rebocap, None)
+            
         root_name = "Rebocap_Root"
         
         # 1. Clean existing tracking nodes
@@ -393,6 +400,9 @@ class REBOCAP_OT_create_tracking_nodes(bpy.types.Operator):
                 empty.parent = parent
                 empty.location = offsets[i]
                 
+        # Refresh view layer so all tracking nodes have up-to-date matrix_world
+        context.view_layer.update()
+        
         # Generate wireframe foot soles
         ankle_h = raw_joints_world[7][2] if 7 in raw_joints_world else ((rebocap.sk_ankle if rebocap.sk_ankle > 0 else 9.0) * (scale if not rebocap.sk_use_imported else 0.01))
         foot_l = (rebocap.sk_foot if rebocap.sk_foot > 0 else 27.0) * (scale if not rebocap.sk_use_imported else 0.01)
@@ -400,6 +410,16 @@ class REBOCAP_OT_create_tracking_nodes(bpy.types.Operator):
             update_or_create_sole_mesh('L', objects[7], raw_joints_world.get(7), ankle_h, foot_l, collection)
         if 8 in objects:
             update_or_create_sole_mesh('R', objects[8], raw_joints_world.get(8), ankle_h, foot_l, collection)
+
+        # Auto-adapt demo character bone lengths if present in scene
+        try:
+            from .demo_character import get_demo_character_armature, adapt_demo_character_bone_lengths
+            demo_arm = get_demo_character_armature()
+            if demo_arm:
+                bpy.context.view_layer.update()
+                adapt_demo_character_bone_lengths(demo_arm)
+        except Exception:
+            pass
                 
         self.report({'INFO'}, "Generated Tracking Nodes successfully")
         return {'FINISHED'}
