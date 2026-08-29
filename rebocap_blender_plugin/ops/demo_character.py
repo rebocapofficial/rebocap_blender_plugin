@@ -186,9 +186,11 @@ def adapt_demo_character_scale_isolated(arm_obj):
         except Exception:
             pass
 
-    # 8. 隐藏骨骼线框显示，保持角色表面光洁
+    # 8. 隐藏骨骼线框显示，保持角色表面光洁，并记录基准贴地坐标供实时驱动增量使用
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
+    if hip_pb:
+        arm_obj['rebocap_adapted_hip_location'] = list(hip_pb.location)
 
     bpy.context.view_layer.update()
 

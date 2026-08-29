@@ -419,6 +419,7 @@ class RebocapConnect(bpy.types.Operator):
         self.initial_mocap_trans = None
         self.initial_root_location = None
         self.cached_t_pose_matrices = None
+        self._demo_initial_trans = None
 
     def execute(self, ctx):
         global rebocap_app, rebocap_connected, drive_direct_when_connect
@@ -489,13 +490,24 @@ class RebocapConnect(bpy.types.Operator):
             hip_pbone = demo_robot.pose.bones.get('mixamorig:Hips')
             hip_bone_data = demo_robot.data.bones.get('mixamorig:Hips')
             if hip_pbone and hip_bone_data:
-                # trans 是追踪点相对原点的坐标。因为 demo_robot 可能有 SIDE_R 偏移 (X=1.2)，
-                # 所以我们期望臀部在 Armature 空间中的坐标直接等于 trans。
-                armature_target = Vector((trans[0], trans[1], trans[2]))
-                # 计算与静止状态下的 Armature 空间坐标的偏移量
-                armature_offset = armature_target - hip_bone_data.head
-                # 将 Armature 空间偏移量转换到骨骼的 Local 空间以赋予 location
-                hip_pbone.location = hip_bone_data.matrix_local.to_3x3().inverted() @ armature_offset
+                # 获取标定好的静止基础贴地位移
+                base_loc = Vector(demo_robot.get('rebocap_adapted_hip_location', hip_pbone.location))
+                
+                # 获取静止骨盆高度作为初始基准
+                if not hasattr(self, '_demo_initial_trans') or self._demo_initial_trans is None:
+                    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
+                    if node_pelvis:
+                        self._demo_initial_trans = node_pelvis.matrix_world.translation.copy()
+                    else:
+                        self._demo_initial_trans = Vector((trans[0], trans[1], trans[2]))
+                        
+                cur_trans = Vector((trans[0], trans[1], trans[2]))
+                delta_trans = cur_trans - self._demo_initial_trans
+                
+                # 将世界增量转换到骨骼局部空间并叠加，静止时增量为0保持绝对贴地
+                world_to_local_rot = (demo_robot.matrix_world.to_3x3() @ hip_bone_data.matrix_local.to_3x3()).inverted()
+                delta_local = world_to_local_rot @ delta_trans
+                hip_pbone.location = base_loc + delta_local
                 
             bone_mapping_list = [
                 'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
