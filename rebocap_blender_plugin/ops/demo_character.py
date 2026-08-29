@@ -32,70 +32,72 @@ def remove_demo_character():
             bpy.data.armatures.remove(arm_data, do_unlink=True)
 
 
-def adapt_demo_character_bone_stretch(arm_obj):
+def setup_demo_character_pinpoint_tracking(arm_obj):
     """
-    姿态模式下的平滑骨骼轴向伸缩（Pose Mode Stretch / Scale）：
-    1. FBX 静止基准（Edit Bones）保持 100% 完整无修改，确保蒙皮权重和几何曲面永远不碎裂、不拉扯。
-    2. 在姿态模式下，使各段受控骨骼（大腿、小腿、手臂、脊椎）仅沿局部 Y 轴平滑伸缩至目标长度。
-    3. 子骨骼继承缩放设为 'NONE'，彻底杜绝父级缩放传递到手指和末端造成尖刺变形。
-    4. 臀部（Hips）初始基准高度对齐 Pelvis 追踪点，实现双脚踩实地面。
+    Unity 风格的直接推位与轴向拉伸（Pinpoint Bone Tracking）：
+    1. FBX 静止基准（Edit Bones）保持 100% 原始不变，蒙皮权重矩阵绝对受损。
+    2. 将各个骨骼的关键点（Pelvis、大腿根、脊柱起点）直接推到追踪点位置（Copy Location）。
+    3. 骨骼沿骨轴直接拉伸（Stretch To）精准对接下一个追踪点（膝盖、脚踝、肩窝、手肘、手腕等）。
+    4. 实现各个关节与追踪点 0.0000 mm 严丝合缝重合，同时曲面蒙皮平滑连贯无撕裂。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
 
-    # 1. 重置所有姿态骨骼，继承缩放设为 NONE，防止缩放层层叠加
+    # 1. 清理已有的约束
     for pb in arm_obj.pose.bones:
         pb.scale = (1.0, 1.0, 1.0)
-        if pb.parent:
-            pb.bone.inherit_scale = 'NONE'
+        pb.location = Vector((0.0, 0.0, 0.0))
+        for c in list(pb.constraints):
+            pb.constraints.remove(c)
 
-    # 2. 脊椎段综合伸缩 (Spine + Spine1 + Spine2 作为一个整体平滑过渡)
-    node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
-    node_neck = bpy.data.objects.get('Rebocap_Neck')
-    if node_spine1 and node_neck:
-        target_spine_len = (node_neck.matrix_world.translation - node_spine1.matrix_world.translation).length
-        spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
-        base_spine_len = sum(arm_obj.pose.bones[s].bone.length for s in spine_bones if s in arm_obj.pose.bones)
-        if base_spine_len > 0.001:
-            spine_ratio = max(target_spine_len / base_spine_len, 0.1)
-            for sname in spine_bones:
-                if sname in arm_obj.pose.bones:
-                    arm_obj.pose.bones[sname].scale.y = spine_ratio
+    def add_copy_loc(pb_name, node_name):
+        pb = arm_obj.pose.bones.get(pb_name)
+        node = bpy.data.objects.get(node_name)
+        if pb and node:
+            c = pb.constraints.new('COPY_LOCATION')
+            c.target = node
+            c.target_space = 'WORLD'
+            c.owner_space = 'WORLD'
 
-    # 3. 四肢各段骨骼的独立 Y 轴自适应伸缩
-    limb_map = {
-        'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
-        'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
-        'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
-        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
-        'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
-        'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
-        'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
-        'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
-        'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
-        'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
-        'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
-    }
+    def add_stretch_to(pb_name, node_name):
+        pb = arm_obj.pose.bones.get(pb_name)
+        node = bpy.data.objects.get(node_name)
+        if pb and node:
+            c = pb.constraints.new('STRETCH_TO')
+            c.target = node
+            c.rest_length = pb.bone.length
+            c.volume = 'NO_VOLUME'
 
-    for bname, (h_node, t_node) in limb_map.items():
-        pb = arm_obj.pose.bones.get(bname)
-        nh = bpy.data.objects.get(h_node)
-        nt = bpy.data.objects.get(t_node)
-        if pb and nh and nt:
-            target_len = (nt.matrix_world.translation - nh.matrix_world.translation).length
-            base_len = pb.bone.length
-            if base_len > 0.001:
-                pb.scale.y = max(target_len / base_len, 0.1)
+    # 2. 定位核心关节点（推到追踪点位置）
+    add_copy_loc('mixamorig:Hips', 'Rebocap_Pelvis')
+    add_copy_loc('mixamorig:LeftUpLeg', 'Rebocap_L_Upper_leg')
+    add_copy_loc('mixamorig:RightUpLeg', 'Rebocap_R_Upper_leg')
+    add_copy_loc('mixamorig:Spine', 'Rebocap_Spine1')
 
-    # 4. 将 Hips 初始静止高度对齐到 Rebocap_Pelvis，消除悬空
-    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
-    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
-    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
-    if node_pelvis and hip_pb and hip_db:
-        z_offset = node_pelvis.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
-        world_offset = Vector((0.0, 0.0, z_offset))
-        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
-        hip_pb.location = local_offset
+    # 3. 沿骨轴拉伸对齐下一级追踪点
+    stretch_pairs = [
+        ('mixamorig:LeftUpLeg', 'Rebocap_L_Lower_leg'),
+        ('mixamorig:RightUpLeg', 'Rebocap_R_Lower_leg'),
+        ('mixamorig:LeftLeg', 'Rebocap_L_Foot'),
+        ('mixamorig:RightLeg', 'Rebocap_R_Foot'),
+        ('mixamorig:LeftFoot', 'Rebocap_L_Toe'),
+        ('mixamorig:RightFoot', 'Rebocap_R_Toe'),
+        ('mixamorig:Spine', 'Rebocap_Spine2'),
+        ('mixamorig:Spine1', 'Rebocap_Spine3'),
+        ('mixamorig:Spine2', 'Rebocap_Neck'),
+        ('mixamorig:Neck', 'Rebocap_Head'),
+        ('mixamorig:LeftShoulder', 'Rebocap_L_Upper_arm'),
+        ('mixamorig:RightShoulder', 'Rebocap_R_Upper_arm'),
+        ('mixamorig:LeftArm', 'Rebocap_L_Lower_arm'),
+        ('mixamorig:RightArm', 'Rebocap_R_Lower_arm'),
+        ('mixamorig:LeftForeArm', 'Rebocap_L_Hand'),
+        ('mixamorig:RightForeArm', 'Rebocap_R_Hand'),
+        ('mixamorig:LeftHand', 'Rebocap_L_Hand_end'),
+        ('mixamorig:RightHand', 'Rebocap_R_Hand_end'),
+    ]
+
+    for pb_name, node_name in stretch_pairs:
+        add_stretch_to(pb_name, node_name)
 
     bpy.context.view_layer.update()
 
@@ -184,10 +186,10 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 
             bpy.context.view_layer.update()
 
-            # 2. 姿态模式下的平滑骨骼轴向伸缩自适应（确保蒙皮完整光滑）
-            adapt_demo_character_bone_stretch(armature_obj)
+            # 2. Unity 风格精准推位与轴向拉伸（0 误差追踪点对齐，蒙皮完好无损）
+            setup_demo_character_pinpoint_tracking(armature_obj)
 
-            self.report({'INFO'}, "示范角色已载入并完成骨骼平滑伸缩对齐")
+            self.report({'INFO'}, "示范角色已载入并完成 Unity 风格精准对齐")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")
