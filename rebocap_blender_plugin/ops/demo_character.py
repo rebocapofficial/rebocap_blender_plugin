@@ -60,17 +60,26 @@ def adapt_demo_character_scale_isolated(arm_obj):
     # 2. 脊椎段综合等比伸缩 (Spine + Spine1 + Spine2 平滑过渡)
     node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
     node_neck = bpy.data.objects.get('Rebocap_Neck')
+    spine_ratio = 1.0
     if node_spine1 and node_neck:
         t_spine = (node_neck.matrix_world.translation - node_spine1.matrix_world.translation).length
         spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
         cur_spine = sum(arm_obj.pose.bones[s].bone.length for s in spine_bones if s in arm_obj.pose.bones)
         if cur_spine > 0.001:
-            ratio = max(min(t_spine / cur_spine, 3.0), 0.1)
+            spine_ratio = max(min(t_spine / cur_spine, 3.0), 0.1)
             for s in spine_bones:
                 if s in arm_obj.pose.bones:
-                    arm_obj.pose.bones[s].scale = (ratio, ratio, ratio)
+                    arm_obj.pose.bones[s].scale = (spine_ratio, spine_ratio, spine_ratio)
 
-    # 3. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐（下半身基准）
+    # 3. 头部与脖子紧凑等比自适应（跟随上半身躯干比例，彻底消除长颈鹿脖子与大头畸形）
+    neck_pb = arm_obj.pose.bones.get('mixamorig:Neck')
+    head_pb = arm_obj.pose.bones.get('mixamorig:Head')
+    if neck_pb:
+        neck_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
+    if head_pb:
+        head_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
+
+    # 4. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐（下半身基准）
     node_l_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
     node_r_thigh = bpy.data.objects.get('Rebocap_R_Upper_leg')
     hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
@@ -89,40 +98,18 @@ def adapt_demo_character_scale_isolated(arm_obj):
         if base_hip_w > 0.001:
             hip_pb.scale.x = target_hip_w / base_hip_w
 
-    bpy.context.view_layer.update()
-
-    # 4. 肩部锁骨（Shoulder/Clavicle）位置与跨度对齐（上半身肩窝基准）
-    for sh_name, arm_name, sh_node_name, arm_node_name in [
-        ('mixamorig:LeftShoulder', 'mixamorig:LeftArm', 'Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
-        ('mixamorig:RightShoulder', 'mixamorig:RightArm', 'Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm')]:
-        sh_pb = arm_obj.pose.bones.get(sh_name)
-        sh_db = arm_obj.data.bones.get(sh_name)
-        node_sh = bpy.data.objects.get(sh_node_name)
-        node_arm = bpy.data.objects.get(arm_node_name)
-        
-        if sh_pb and sh_db and node_sh and node_arm:
-            cur_sh_head_w = arm_obj.matrix_world @ sh_pb.head
-            delta_head_w = node_sh.matrix_world.translation - cur_sh_head_w
-            sh_pb.location += sh_db.matrix_local.to_3x3().inverted() @ delta_head_w
-            
-            t_len = (node_arm.matrix_world.translation - node_sh.matrix_world.translation).length
-            if sh_pb.bone.length > 0.001:
-                ratio = t_len / sh_pb.bone.length
-                sh_pb.scale = (ratio, ratio, ratio)
-
-    bpy.context.view_layer.update()
-
-    # 5. 四肢各段主干骨骼三维等比拉伸（大腿、小腿、大臂、小臂、脖子）
+    # 5. 四肢各段主干骨骼三维等比拉伸（锁骨、大臂、小臂、大腿、小腿）
     limb_map = {
+        'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
         'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
+        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
         'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
         'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
         'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
         'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
         'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
         'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
-        'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
     }
 
     for bname, (n1, n2) in limb_map.items():
