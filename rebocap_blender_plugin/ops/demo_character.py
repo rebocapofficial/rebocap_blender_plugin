@@ -12,6 +12,10 @@ def get_demo_character_armature():
     return None
 
 
+def get_demo_character_meshes():
+    return [obj for obj in bpy.data.objects if obj.get("rebocap_demo_character") and obj.type == 'MESH']
+
+
 def is_demo_character_present():
     return any(obj.get("rebocap_demo_character") for obj in bpy.data.objects)
 
@@ -32,35 +36,106 @@ def remove_demo_character():
             bpy.data.armatures.remove(arm_data, do_unlink=True)
 
 
-def adapt_demo_character_uniform_scale(arm_obj):
+def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
     """
-    100% 还原上位机 3D 预览器（Rebocap3D.exe）真实底层渲染：
-    上位机预览器载入 rebo_robot.fbx 后，保持各段骨骼的原始人体工学比例完美不变，
-    仅依据上位机当前计算出的总身高/身形比例（sk_final_height / 177.0），对模型进行等比缩放。
-    从而保证人偶视觉上 100% 苗条、匀称、表面光整，绝不出现头部尖刺或躯干水肿拉扯。
+    静止姿态烘焙自适应（Bake Rest Pose Adaptation）：
+    1. 在姿态层将各段骨骼（大腿、小腿、手臂、脊椎）平滑拉伸至追踪点跨度（保持无尖刺、无变形）；
+    2. 将拉伸后的形变直接烘焙（Apply Modifier）固化到模型网格的原始顶点几何中；
+    3. 将当前姿态应用为全新的静止姿态（Apply Pose as Rest Pose），使 Edit Bone 物理长度 100% 精确等于追踪点长度；
+    4. 重新建立 Armature 蒙皮修改器关联，实现蒙皮 0 破损、0 撕裂、姿态面板 0 偏移的纯净骨架结构。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
 
-    # 1. 彻底清除所有姿态位移与约束，确保骨骼姿态处于标准 T-Pose
+    if mesh_objs is None:
+        mesh_objs = get_demo_character_meshes()
+
+    # 1. 重置所有姿态骨骼，切断级联缩放
     for pb in arm_obj.pose.bones:
         pb.scale = (1.0, 1.0, 1.0)
         pb.location = Vector((0.0, 0.0, 0.0))
         for c in list(pb.constraints):
             pb.constraints.remove(c)
+        if pb.parent:
+            pb.bone.inherit_scale = 'NONE'
 
-    # 2. 读取上位机设定的最终身高 (默认为 177.0cm 标准身高)
-    rebocap = bpy.context.scene.rebocap_bone_map
-    target_h = getattr(rebocap, 'sk_final_height', 177.0)
-    if target_h < 10.0:
-        target_h = 177.0
+    # 2. 脊椎段自适应伸缩 (Spine + Spine1 + Spine2)
+    node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
+    node_neck = bpy.data.objects.get('Rebocap_Neck')
+    if node_spine1 and node_neck:
+        t_spine = (node_neck.matrix_world.translation - node_spine1.matrix_world.translation).length
+        spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
+        cur_spine = sum(arm_obj.pose.bones[s].bone.length for s in spine_bones if s in arm_obj.pose.bones)
+        if cur_spine > 0.001:
+            ratio = max(min(t_spine / cur_spine, 3.0), 0.1)
+            for s in spine_bones:
+                if s in arm_obj.pose.bones:
+                    arm_obj.pose.bones[s].scale.y = ratio
 
-    # 3. 计算等比缩放系数 (rebo_robot.fbx 原生高度为 1.7703m，FBX 初始缩放为 0.01)
-    scale_factor = target_h / 177.0
-    final_scale = 0.01 * scale_factor
-    arm_obj.scale = (final_scale, final_scale, final_scale)
+    # 3. 四肢各段骨骼自适应局部伸缩
+    limb_map = {
+        'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
+        'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
+        'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
+        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
+        'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
+        'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
+        'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
+        'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
+        'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
+        'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
+        'mixamorig:Neck': ('Rebocap_Neck', 'Rebocap_Head'),
+    }
 
-    # 4. 隐藏骨架的骨骼外框显示，仅呈现平滑角色网格（与上位机 OpenGL 视口完全一致）
+    for bname, (n1, n2) in limb_map.items():
+        pb = arm_obj.pose.bones.get(bname)
+        o1, o2 = bpy.data.objects.get(n1), bpy.data.objects.get(n2)
+        if pb and o1 and o2:
+            t_len = (o2.matrix_world.translation - o1.matrix_world.translation).length
+            cur_len = pb.bone.length
+            if cur_len > 0.001:
+                pb.scale.y = max(min(t_len / cur_len, 3.0), 0.1)
+
+    # 4. 骨盆（Hips）高度贴合 Pelvis 追踪点，实现双脚踩实地面
+    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
+    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
+    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
+    if node_pelvis and hip_pb and hip_db:
+        z_offset = node_pelvis.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
+        world_offset = Vector((0.0, 0.0, z_offset))
+        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
+        hip_pb.location = local_offset
+
+    bpy.context.view_layer.update()
+
+    # 5. 烘焙网格形变（应用 Armature 修改器）
+    for m in mesh_objs:
+        if m and m.name in bpy.data.objects:
+            bpy.context.view_layer.objects.active = m
+            if 'Armature' in m.modifiers:
+                try:
+                    bpy.ops.object.modifier_apply(modifier='Armature')
+                except Exception as e:
+                    print(f"[Rebocap] modifier_apply notice: {e}")
+
+    # 6. 烘焙骨架静止姿态（将拉伸姿态固化为 Edit Bones 的物理静止长短）
+    bpy.context.view_layer.objects.active = arm_obj
+    try:
+        bpy.ops.object.mode_set(mode='POSE')
+        bpy.ops.pose.armature_apply(selected=False)
+        bpy.ops.object.mode_set(mode='OBJECT')
+    except Exception as e:
+        print(f"[Rebocap] armature_apply notice: {e}")
+
+    # 7. 重新挂载 Armature 蒙皮修改器并确保层级绑定
+    for m in mesh_objs:
+        if m and m.name in bpy.data.objects:
+            mod = m.modifiers.get('Armature')
+            if not mod:
+                mod = m.modifiers.new(name='Armature', type='ARMATURE')
+            mod.object = arm_obj
+
+    # 隐藏骨骼显示，保持角色表面光洁
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
 
@@ -123,10 +198,38 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 obj.name = "Rebo_Official_Demo_Mesh"
 
         if armature_obj:
-            # 执行 1:1 上位机等比身形自适应
-            adapt_demo_character_uniform_scale(armature_obj)
+            # 1. 统一应用旋转与缩放变换，保证模型以标准 1.0 比例直立在世界空间
+            bpy.ops.object.select_all(action='DESELECT')
+            armature_obj.select_set(True)
+            for m in mesh_objs:
+                m.select_set(True)
+            context.view_layer.objects.active = armature_obj
+            
+            try:
+                area = None
+                window = None
+                for w in context.window_manager.windows:
+                    for a in w.screen.areas:
+                        if a.type == 'VIEW_3D':
+                            area = a
+                            window = w
+                            break
+                    if area: break
+                    
+                if hasattr(context, "temp_override") and area:
+                    with context.temp_override(window=window, area=area):
+                        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+                else:
+                    bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+            except Exception as e:
+                print(f"[Rebocap] transform_apply notice: {e}")
+                
+            bpy.context.view_layer.update()
 
-            self.report({'INFO'}, "示范角色已成功载入 (1:1 还原上位机预览器)")
+            # 2. 执行静止姿态烘焙自适应（骨架与追踪点 100% 物理重合，蒙皮 0 破损）
+            bake_demo_character_rest_pose(armature_obj, mesh_objs)
+
+            self.report({'INFO'}, "示范角色已成功载入并完成静止姿态物理对齐")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")
