@@ -485,42 +485,38 @@ class RebocapConnect(bpy.types.Operator):
                 demo_robot = obj
                 break
                 
-        if not demo_robot:
-            return
+        if demo_robot:
+            hip_pbone = demo_robot.pose.bones.get('mixamorig:Hips')
+            hip_bone_data = demo_robot.data.bones.get('mixamorig:Hips')
+            if hip_pbone and hip_bone_data:
+                # trans 是追踪点相对原点的坐标。因为 demo_robot 可能有 SIDE_R 偏移 (X=1.2)，
+                # 所以我们期望臀部在 Armature 空间中的坐标直接等于 trans。
+                armature_target = Vector((trans[0], trans[1], trans[2]))
+                # 计算与静止状态下的 Armature 空间坐标的偏移量
+                armature_offset = armature_target - hip_bone_data.head
+                # 将 Armature 空间偏移量转换到骨骼的 Local 空间以赋予 location
+                hip_pbone.location = hip_bone_data.matrix_local.to_3x3().inverted() @ armature_offset
+                
+            bone_mapping_list = [
+                'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
+                'mixamorig:LeftLeg', 'mixamorig:RightLeg', 'mixamorig:Spine1', 'mixamorig:LeftFoot',
+                'mixamorig:RightFoot', 'mixamorig:Spine2', 'mixamorig:LeftToeBase', 'mixamorig:RightToeBase',
+                'mixamorig:Neck', 'mixamorig:LeftShoulder', 'mixamorig:RightShoulder', 'mixamorig:Head',
+                'mixamorig:LeftArm', 'mixamorig:RightArm', 'mixamorig:LeftForeArm', 'mixamorig:RightForeArm',
+                'mixamorig:LeftHand', 'mixamorig:RightHand'
+            ]
+            all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
             
-        hip_pbone = demo_robot.pose.bones.get('mixamorig:Hips')
-        hip_bone_data = demo_robot.data.bones.get('mixamorig:Hips')
-        if hip_pbone and hip_bone_data:
-            target_pos = Vector((trans[0], trans[1], trans[2]))
-            hip_pbone.location = hip_bone_data.matrix_local.inverted() @ target_pos
-            
-        bone_mapping_list = [
-            'mixamorig:Hips', 'mixamorig:LeftUpLeg', 'mixamorig:RightUpLeg', 'mixamorig:Spine',
-            'mixamorig:LeftLeg', 'mixamorig:RightLeg', 'mixamorig:Spine1', 'mixamorig:LeftFoot',
-            'mixamorig:RightFoot', 'mixamorig:Spine2', 'mixamorig:LeftToeBase', 'mixamorig:RightToeBase',
-            'mixamorig:Neck', 'mixamorig:LeftShoulder', 'mixamorig:RightShoulder', 'mixamorig:Head',
-            'mixamorig:LeftArm', 'mixamorig:RightArm', 'mixamorig:LeftForeArm', 'mixamorig:RightForeArm',
-            'mixamorig:LeftHand', 'mixamorig:RightHand'
-        ]
-        all_pose = [Quaternion([pose[3], pose[0], pose[1], pose[2]]) for pose in pose24]
-        
-        global cached_demo_t_pose_matrices
-        if 'cached_demo_t_pose_matrices' not in globals() or cached_demo_t_pose_matrices is None:
-            cached_demo_t_pose_matrices = compute_hierarchical_t_pose(demo_robot, bpy.context.scene, is_retarget=True)
-            
-        t_pose_matrices = cached_demo_t_pose_matrices
-        demo_arm_quat = demo_robot.matrix_world.to_quaternion()
-        
-        for idx, bone_name in enumerate(bone_mapping_list):
-            if idx in (10, 11, 22, 23):
-                continue
-            pbone = demo_robot.pose.bones.get(bone_name)
-            if pbone and bone_name in t_pose_matrices:
-                pbone.rotation_mode = 'QUATERNION'
-                t_mat = t_pose_matrices[bone_name]
-                virtual_rest_to_world = demo_arm_quat @ t_mat.to_quaternion()
-                virtual_rest_from_world = virtual_rest_to_world.inverted()
-                pbone.rotation_quaternion = virtual_rest_from_world @ all_pose[idx] @ virtual_rest_to_world
+            for idx, bone_name in enumerate(bone_mapping_list):
+                if idx in (10, 11, 22, 23):
+                    continue
+                pbone = demo_robot.pose.bones.get(bone_name)
+                data_bone = demo_robot.data.bones.get(bone_name)
+                if pbone and data_bone:
+                    pbone.rotation_mode = 'QUATERNION'
+                    rest_to_world = demo_robot.matrix_world.to_quaternion() @ data_bone.matrix_local.to_quaternion()
+                    rest_from_world = rest_to_world.inverted()
+                    pbone.rotation_quaternion = rest_from_world @ all_pose[idx] @ rest_to_world
 
     def drive_ik_tracking(self, trans, pose24):
         root_name = "Rebocap_Root"

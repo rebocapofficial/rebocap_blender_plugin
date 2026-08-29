@@ -1,4 +1,4 @@
-﻿import os
+import os
 import bpy
 from mathutils import Vector, Matrix, Quaternion
 from ..core.translation import T, T_static
@@ -46,10 +46,7 @@ def update_demo_character_offset(self, context):
 
 def adapt_demo_character_bone_lengths(arm_obj):
     """
-    基于上位机 Rebocap3D (PoseDriver) 原理：
-    在 Pose Mode 中通过 Y 轴局部比例缩放（Pose Bone Scale）自适应骨骼长短，
-    使示范角色四肢关节与骨架追踪点 1:1 物理重合，
-    同时保持 Edit Bones 完整不被破坏，确保骨骼轴向与旋转绝对正确。
+    根据上位机追踪点动态调整示范角色的骨骼比例，彻底消除尖刺和悬空。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
@@ -72,55 +69,43 @@ def adapt_demo_character_bone_lengths(arm_obj):
         'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
     }
     
-    if not bpy.data.objects.get('Rebocap_Pelvis'):
+    pelvis_node = bpy.data.objects.get('Rebocap_Pelvis')
+    if not pelvis_node:
         return
-        
-    # 计算需要的目标长度
-    target_lengths = {}
-    for bname, (h_name, t_name) in bone_node_map.items():
-        nh = bpy.data.objects.get(h_name)
-        nt = bpy.data.objects.get(t_name)
-        if nh and nt:
-            target_lengths[bname] = (nt.matrix_world.translation - nh.matrix_world.translation).length
 
-    # 1. 设置所有子骨骼为 ALIGNED 继承缩放，确保缩放只沿局部 Y 轴传递
+    # 1. 设置所有骨骼的缩放继承模式为 ALIGNED（沿局部轴缩放不产生形变），并重置缩放
     for pb in arm_obj.pose.bones:
+        pb.scale = (1.0, 1.0, 1.0)
         if pb.parent:
             pb.bone.inherit_scale = 'ALIGNED'
             
-    arm_world_scale_y = arm_obj.matrix_world.to_scale().y
-    if arm_world_scale_y < 0.0001:
-        arm_world_scale_y = 1.0
+    # 2. 匹配映射骨骼的长度 (仅在 Y 轴上施加缩放，叶子骨骼保持 1.0，彻底消除尖刺)
+    for bname, (h_name, t_name) in bone_node_map.items():
+        pb = arm_obj.pose.bones.get(bname)
+        nh = bpy.data.objects.get(h_name)
+        nt = bpy.data.objects.get(t_name)
+        if pb and nh and nt:
+            # 获取追踪点之间的真实世界距离
+            target_len = (nt.matrix_world.translation - nh.matrix_world.translation).length
             
-    # 2. 递归地计算并应用累积的 Y 轴抗缩放系数
-    def apply_scale(pb, cumulative_scale_y):
-        if cumulative_scale_y < 0.001:
-            cumulative_scale_y = 0.001
-            
-        if pb.name in target_lengths:
-            target_len = target_lengths[pb.name]
-            base_len_world = pb.bone.length * arm_world_scale_y
-            
-            desired_scale_y = target_len / base_len_world if base_len_world > 0.001 else 1.0
-            if desired_scale_y < 0.001:
-                desired_scale_y = 0.001
-                
-            local_scale_y = desired_scale_y / cumulative_scale_y
-            pb.scale = (1.0, local_scale_y, 1.0)
-            
-            for child in pb.children:
-                apply_scale(child, desired_scale_y)
-        else:
-            local_scale_y = 1.0 / cumulative_scale_y
-            pb.scale = (1.0, local_scale_y, 1.0)
-            
-            for child in pb.children:
-                apply_scale(child, 1.0)
-                
-    root_bones = [pb for pb in arm_obj.pose.bones if not pb.parent]
-    for pb in root_bones:
-        apply_scale(pb, 1.0)
-        
+            # 由于 transform_apply 已经执行，bone.length 就是真实长度
+            base_len = pb.bone.length
+            if base_len > 0.001:
+                desired_scale = target_len / base_len
+                # 只需要在自身 Y 轴上缩放，ALIGNED 模式会自动保持子骨骼不形变
+                pb.scale.y = max(desired_scale, 0.01)
+
+    # 3. 修复悬空问题：将 Hips 的静止高度直接对齐到上位机的 Pelvis 高度
+    hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
+    hip_db = arm_obj.data.bones.get('mixamorig:Hips')
+    if hip_pb and hip_db:
+        # 计算世界空间 Z 轴高度差
+        z_offset = pelvis_node.matrix_world.translation.z - (arm_obj.matrix_world @ hip_db.head).z
+        world_offset = Vector((0.0, 0.0, z_offset))
+        # 将世界空间偏移量转换到骨骼的局部坐标空间
+        local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
+        hip_pb.location = local_offset
+
     bpy.context.view_layer.update()
 
 
