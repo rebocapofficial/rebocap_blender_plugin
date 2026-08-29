@@ -38,9 +38,9 @@ def remove_demo_character():
 
 def adapt_demo_character_scale_isolated(arm_obj):
     """
-    改版方案一：独立缩放隔离法（Clean Local Scaling with Scale Isolation）
+    改版方案一：独立等比缩放隔离法（Proportional 3D Limb Scaling with Scale Isolation）
     1. 在姿态模式下，强制全身所有骨骼的 inherit_scale = 'NONE'，彻底切断父级缩放的级联传递；
-    2. 仅对大腿、小腿、大臂、小臂、脊椎 5 组受控主干骨骼应用纯粹的一对一 scale.y 局部伸缩；
+    2. 肢体粗细与长短同步等比收放（scale = (ratio, ratio, ratio)），彻底消除单向压扁带来的水肿矮胖感；
     3. 手指（HandIndex1~4）、头顶（HeadTop_End）、脚尖等末端骨骼严格锁定为 (1.0, 1.0, 1.0)，0 避雷针尖刺、0 畸变；
     4. 骨盆（Hips）高度下沉对齐 Pelvis 追踪点，实现双脚踩实地面；
     5. 全程非破坏性纯姿态层计算，FBX 原始网格与绑定骨架 100% 纯净无损。
@@ -57,7 +57,7 @@ def adapt_demo_character_scale_isolated(arm_obj):
         if pb.parent:
             pb.bone.inherit_scale = 'NONE'
 
-    # 2. 脊椎段综合伸缩 (Spine + Spine1 + Spine2 平滑过渡)
+    # 2. 脊椎段综合等比伸缩 (Spine + Spine1 + Spine2 平滑过渡)
     node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
     node_neck = bpy.data.objects.get('Rebocap_Neck')
     if node_spine1 and node_neck:
@@ -68,9 +68,9 @@ def adapt_demo_character_scale_isolated(arm_obj):
             ratio = max(min(t_spine / cur_spine, 3.0), 0.1)
             for s in spine_bones:
                 if s in arm_obj.pose.bones:
-                    arm_obj.pose.bones[s].scale.y = ratio
+                    arm_obj.pose.bones[s].scale = (ratio, ratio, ratio)
 
-    # 3. 四肢各段主干骨骼独立局部 Y 轴拉伸
+    # 3. 四肢各段主干骨骼三维等比拉伸（长短与粗细协调）
     limb_map = {
         'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
@@ -92,7 +92,8 @@ def adapt_demo_character_scale_isolated(arm_obj):
             t_len = (o2.matrix_world.translation - o1.matrix_world.translation).length
             cur_len = pb.bone.length
             if cur_len > 0.001:
-                pb.scale.y = max(min(t_len / cur_len, 3.0), 0.1)
+                ratio = max(min(t_len / cur_len, 3.0), 0.1)
+                pb.scale = (ratio, ratio, ratio)
 
     # 4. 骨盆（Hips）对齐 Pelvis 追踪点高度，实现双脚踩实地面
     node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
