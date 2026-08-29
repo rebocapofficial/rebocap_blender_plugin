@@ -36,21 +36,19 @@ def remove_demo_character():
             bpy.data.armatures.remove(arm_data, do_unlink=True)
 
 
-def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
+def adapt_demo_character_scale_isolated(arm_obj):
     """
-    静止姿态烘焙自适应（Bake Rest Pose Adaptation）：
-    1. 在姿态层将各段骨骼（大腿、小腿、手臂、脊椎）平滑拉伸至追踪点跨度（保持无尖刺、无变形）；
-    2. 将拉伸后的形变直接烘焙（Apply Modifier）固化到模型网格的原始顶点几何中；
-    3. 将当前姿态应用为全新的静止姿态（Apply Pose as Rest Pose），使 Edit Bone 物理长度 100% 精确等于追踪点长度；
-    4. 重新建立 Armature 蒙皮修改器关联，实现蒙皮 0 破损、0 撕裂、姿态面板 0 偏移的纯净骨架结构。
+    改版方案一：独立缩放隔离法（Clean Local Scaling with Scale Isolation）
+    1. 在姿态模式下，强制全身所有骨骼的 inherit_scale = 'NONE'，彻底切断父级缩放的级联传递；
+    2. 仅对大腿、小腿、大臂、小臂、脊椎 5 组受控主干骨骼应用纯粹的一对一 scale.y 局部伸缩；
+    3. 手指（HandIndex1~4）、头顶（HeadTop_End）、脚尖等末端骨骼严格锁定为 (1.0, 1.0, 1.0)，0 避雷针尖刺、0 畸变；
+    4. 骨盆（Hips）高度下沉对齐 Pelvis 追踪点，实现双脚踩实地面；
+    5. 全程非破坏性纯姿态层计算，FBX 原始网格与绑定骨架 100% 纯净无损。
     """
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
 
-    if mesh_objs is None:
-        mesh_objs = get_demo_character_meshes()
-
-    # 1. 重置所有姿态骨骼，切断级联缩放
+    # 1. 彻底清除所有约束，重置位移与缩放，并对所有子骨骼切断缩放继承
     for pb in arm_obj.pose.bones:
         pb.scale = (1.0, 1.0, 1.0)
         pb.location = Vector((0.0, 0.0, 0.0))
@@ -59,7 +57,7 @@ def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
         if pb.parent:
             pb.bone.inherit_scale = 'NONE'
 
-    # 2. 脊椎段自适应伸缩 (Spine + Spine1 + Spine2)
+    # 2. 脊椎段综合伸缩 (Spine + Spine1 + Spine2 平滑过渡)
     node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
     node_neck = bpy.data.objects.get('Rebocap_Neck')
     if node_spine1 and node_neck:
@@ -72,7 +70,7 @@ def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
                 if s in arm_obj.pose.bones:
                     arm_obj.pose.bones[s].scale.y = ratio
 
-    # 3. 四肢各段骨骼自适应局部伸缩
+    # 3. 四肢各段主干骨骼独立局部 Y 轴拉伸
     limb_map = {
         'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
         'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
@@ -96,7 +94,7 @@ def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
             if cur_len > 0.001:
                 pb.scale.y = max(min(t_len / cur_len, 3.0), 0.1)
 
-    # 4. 骨盆（Hips）高度贴合 Pelvis 追踪点，实现双脚踩实地面
+    # 4. 骨盆（Hips）对齐 Pelvis 追踪点高度，实现双脚踩实地面
     node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
     hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
     hip_db = arm_obj.data.bones.get('mixamorig:Hips')
@@ -106,36 +104,7 @@ def bake_demo_character_rest_pose(arm_obj, mesh_objs=None):
         local_offset = hip_db.matrix_local.to_3x3().inverted() @ (arm_obj.matrix_world.to_3x3().inverted() @ world_offset)
         hip_pb.location = local_offset
 
-    bpy.context.view_layer.update()
-
-    # 5. 烘焙网格形变（应用 Armature 修改器）
-    for m in mesh_objs:
-        if m and m.name in bpy.data.objects:
-            bpy.context.view_layer.objects.active = m
-            if 'Armature' in m.modifiers:
-                try:
-                    bpy.ops.object.modifier_apply(modifier='Armature')
-                except Exception as e:
-                    print(f"[Rebocap] modifier_apply notice: {e}")
-
-    # 6. 烘焙骨架静止姿态（将拉伸姿态固化为 Edit Bones 的物理静止长短）
-    bpy.context.view_layer.objects.active = arm_obj
-    try:
-        bpy.ops.object.mode_set(mode='POSE')
-        bpy.ops.pose.armature_apply(selected=False)
-        bpy.ops.object.mode_set(mode='OBJECT')
-    except Exception as e:
-        print(f"[Rebocap] armature_apply notice: {e}")
-
-    # 7. 重新挂载 Armature 蒙皮修改器并确保层级绑定
-    for m in mesh_objs:
-        if m and m.name in bpy.data.objects:
-            mod = m.modifiers.get('Armature')
-            if not mod:
-                mod = m.modifiers.new(name='Armature', type='ARMATURE')
-            mod.object = arm_obj
-
-    # 隐藏骨骼显示，保持角色表面光洁
+    # 5. 隐藏骨骼线框显示，保持角色表面光洁
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
 
@@ -226,10 +195,10 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 
             bpy.context.view_layer.update()
 
-            # 2. 执行静止姿态烘焙自适应（骨架与追踪点 100% 物理重合，蒙皮 0 破损）
-            bake_demo_character_rest_pose(armature_obj, mesh_objs)
+            # 2. 执行改版方案一（独立缩放隔离法自适应）
+            adapt_demo_character_scale_isolated(armature_obj)
 
-            self.report({'INFO'}, "示范角色已成功载入并完成静止姿态物理对齐")
+            self.report({'INFO'}, "示范角色已成功载入（改版方案一：独立缩放隔离）")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")

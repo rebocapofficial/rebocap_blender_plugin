@@ -411,13 +411,13 @@ class REBOCAP_OT_create_tracking_nodes(bpy.types.Operator):
         if 8 in objects:
             update_or_create_sole_mesh('R', objects[8], raw_joints_world.get(8), ankle_h, foot_l, collection)
 
-        # Auto-adapt demo character rest pose bake if present in scene
+        # Auto-adapt demo character scale isolated if present in scene
         try:
-            from .demo_character import get_demo_character_armature, bake_demo_character_rest_pose
+            from .demo_character import get_demo_character_armature, adapt_demo_character_scale_isolated
             demo_arm = get_demo_character_armature()
             if demo_arm:
                 bpy.context.view_layer.update()
-                bake_demo_character_rest_pose(demo_arm)
+                adapt_demo_character_scale_isolated(demo_arm)
         except Exception as e:
             print(f"[Rebocap] auto-refresh demo character notice: {e}")
                 
