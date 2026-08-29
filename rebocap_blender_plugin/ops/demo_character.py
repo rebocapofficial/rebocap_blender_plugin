@@ -88,8 +88,11 @@ def adapt_demo_character_bone_lengths(arm_obj):
             # 获取追踪点之间的真实世界距离
             target_len = (nt.matrix_world.translation - nh.matrix_world.translation).length
             
-            # 由于 transform_apply 已经执行，bone.length 就是真实长度
-            base_len = pb.bone.length
+            # 使用骨骼的世界空间坐标计算当前真实世界长度，无视 FBX 导入时的 0.01 缩放
+            world_head = arm_obj.matrix_world @ pb.bone.head_local
+            world_tail = arm_obj.matrix_world @ pb.bone.tail_local
+            base_len = (world_tail - world_head).length
+            
             if base_len > 0.001:
                 desired_scale = target_len / base_len
                 # 只需要在自身 Y 轴上缩放，ALIGNED 模式会自动保持子骨骼不形变
