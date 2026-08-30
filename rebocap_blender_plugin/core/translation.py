@@ -2200,6 +2200,83 @@ TRANSLATIONS = {
         "it_IT": "Attiva/disattiva il personaggio di dimostrazione con un clic.",
         "ko_KR": "원클릭으로 데모 캐릭터를 토글합니다. 프로덕션 테이크에 영향을 주지 않습니다.",
         "ru_RU": "Быстрое переключение демонстрационного персонажа без влияния на пайплайн записи."
+    },
+    "水平偏开位置:": {
+        "zh_CN": "水平偏开位置:",
+        "zh_TW": "水平偏開位置:",
+        "en_US": "Horizontal Offset:",
+        "ja_JP": "水平オフセット:",
+        "es_ES": "Desplazamiento horizontal:",
+        "fr_FR": "Décalage horizontal :",
+        "it_IT": "Offset Orizzontale:",
+        "ko_KR": "수평 오프셋:",
+        "ru_RU": "Смещение по горизонтали:"
+    },
+    "左 2m": {
+        "zh_CN": "左 2m",
+        "zh_TW": "左 2m",
+        "en_US": "Left 2m",
+        "ja_JP": "左 2m",
+        "es_ES": "Izq. 2m",
+        "fr_FR": "Gauche 2m",
+        "it_IT": "Sinistra 2m",
+        "ko_KR": "왼쪽 2m",
+        "ru_RU": "Влево 2м"
+    },
+    "居中": {
+        "zh_CN": "居中",
+        "zh_TW": "置中",
+        "en_US": "Center",
+        "ja_JP": "中央",
+        "es_ES": "Centro",
+        "fr_FR": "Centre",
+        "it_IT": "Centro",
+        "ko_KR": "중앙",
+        "ru_RU": "По центру"
+    },
+    "右 2m": {
+        "zh_CN": "右 2m",
+        "zh_TW": "右 2m",
+        "en_US": "Right 2m",
+        "ja_JP": "右 2m",
+        "es_ES": "Der. 2m",
+        "fr_FR": "Droite 2m",
+        "it_IT": "Destra 2m",
+        "ko_KR": "오른쪽 2m",
+        "ru_RU": "Вправо 2м"
+    },
+    "-1m 步进": {
+        "zh_CN": "-1m 步进",
+        "zh_TW": "-1m 步進",
+        "en_US": "-1m Step",
+        "ja_JP": "-1m ステップ",
+        "es_ES": "Paso -1m",
+        "fr_FR": "Pas -1m",
+        "it_IT": "-1m Passo",
+        "ko_KR": "-1m 스텝",
+        "ru_RU": "Шаг -1м"
+    },
+    "+1m 步进": {
+        "zh_CN": "+1m 步进",
+        "zh_TW": "+1m 步進",
+        "en_US": "+1m Step",
+        "ja_JP": "+1m ステップ",
+        "es_ES": "Paso +1m",
+        "fr_FR": "Pas +1m",
+        "it_IT": "+1m Passo",
+        "ko_KR": "+1m 스텝",
+        "ru_RU": "Шаг +1м"
+    },
+    "注：示范角色为娱乐预览功能，非实机绑定。": {
+        "zh_CN": "注：示范角色为娱乐预览功能，非实机绑定。",
+        "zh_TW": "注：示範角色為娛樂預覽功能，非實機綁定。",
+        "en_US": "Note: Demo character is for preview/entertainment only.",
+        "ja_JP": "注：デモキャラクターはプレビュー・エンタメ用です。",
+        "es_ES": "Nota: El personaje demo es solo para vista previa/entretenimiento.",
+        "fr_FR": "Remarque : Le personnage de démonstration est uniquement destiné à l'aperçu/au divertissement.",
+        "it_IT": "Nota: Il personaggio demo è solo per anteprima/svago.",
+        "ko_KR": "참고: 데모 캐릭터는 엔터테인먼트 미리보기 기능입니다.",
+        "ru_RU": "Примечание: Демо-персонаж предназначен только для предварительного просмотра и развлечения."
     }
 }
 

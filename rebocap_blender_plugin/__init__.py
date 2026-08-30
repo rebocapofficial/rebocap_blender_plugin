@@ -19,7 +19,7 @@ bl_info = {
     "author": "Rebocap",
     "description": "",
     "blender": (3, 6, 0),
-    "version": (11, 7, 0),
+    "version": (11, 8, 0),
     "location": "",
     "warning": "",
     "doc_url": "https://doc.rebocap.com/zh_cn/plugins/blender.html",
@@ -64,6 +64,7 @@ class_list = [
     history.REBOCAP_OT_export_take,
     history.REBOCAP_OT_import_take,
     ops.demo_character.REBOCAP_OT_toggle_demo_character,
+    ops.demo_character.REBOCAP_OT_offset_demo_character,
     ui.demo_character_panel.REBOCAP_PT_demo_character_panel,
 ]
 
@@ -114,7 +115,7 @@ def _cleanup_old_pycache():
 
 def register():
     global done_module_release, pyd_module, register_ts
-    print("start register rebocap Beta 11.7!")
+    print("start register rebocap Beta 11.8!")
 
     # 1. Clean stale pycache
     _cleanup_old_pycache()

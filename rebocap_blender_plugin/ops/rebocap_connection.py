@@ -420,6 +420,7 @@ class RebocapConnect(bpy.types.Operator):
         self.initial_root_location = None
         self.cached_t_pose_matrices = None
         self._demo_initial_trans = None
+        self._demo_initial_poses = None
 
     def execute(self, ctx):
         global rebocap_app, rebocap_connected, drive_direct_when_connect
@@ -491,18 +492,17 @@ class RebocapConnect(bpy.types.Operator):
             hip_bone_data = demo_robot.data.bones.get('mixamorig:Hips')
             if hip_pbone and hip_bone_data:
                 # 获取标定好的静止基础贴地位移
-                base_loc = Vector(demo_robot.get('rebocap_adapted_hip_location', hip_pbone.location))
+                base_loc = Vector(demo_robot.get('rebocap_adapted_hip_location', (0.0, 0.0, 0.0)))
                 
-                # 获取静止骨盆高度作为初始基准
-                if not hasattr(self, '_demo_initial_trans') or self._demo_initial_trans is None:
+                # 获取当前模式下的静止骨盆高
+                rest_pelvis_z = demo_robot.get('rebocap_rest_pelvis_z', None)
+                if rest_pelvis_z is None:
                     node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
-                    if node_pelvis:
-                        self._demo_initial_trans = node_pelvis.matrix_world.translation.copy()
-                    else:
-                        self._demo_initial_trans = Vector((trans[0], trans[1], trans[2]))
+                    rest_pelvis_z = node_pelvis.matrix_world.translation.z if node_pelvis else trans[2]
+                    demo_robot['rebocap_rest_pelvis_z'] = float(rest_pelvis_z)
                         
-                cur_trans = Vector((trans[0], trans[1], trans[2]))
-                delta_trans = cur_trans - self._demo_initial_trans
+                delta_z = trans[2] - rest_pelvis_z
+                delta_trans = Vector((trans[0], trans[1], delta_z))
                 
                 # 将世界增量转换到骨骼局部空间并叠加，静止时增量为0保持绝对贴地
                 world_to_local_rot = (demo_robot.matrix_world.to_3x3() @ hip_bone_data.matrix_local.to_3x3()).inverted()

@@ -1,6 +1,6 @@
 import os
 import bpy
-from mathutils import Vector
+from mathutils import Vector, Quaternion, Euler
 from ..core.translation import T, T_static
 from .ik_tracking import parse_and_update_ik_config, find_rebocap_config_path
 
@@ -48,38 +48,56 @@ def adapt_demo_character_scale_isolated(arm_obj):
     if not arm_obj or arm_obj.type != 'ARMATURE':
         return
 
-    # 1. 彻底清除所有约束，重置位移与缩放，并对所有子骨骼切断缩放继承
+    # 1. 彻底清除所有约束，重置位移、旋转与缩放，并对所有子骨骼切断缩放继承
     for pb in arm_obj.pose.bones:
         pb.scale = (1.0, 1.0, 1.0)
         pb.location = Vector((0.0, 0.0, 0.0))
+        pb.rotation_quaternion = Quaternion((1.0, 0.0, 0.0, 0.0))
+        pb.rotation_euler = (0.0, 0.0, 0.0)
         for c in list(pb.constraints):
             pb.constraints.remove(c)
         if pb.parent:
             pb.bone.inherit_scale = 'NONE'
 
-    # 2. 脊椎段综合等比伸缩 (Spine + Spine1 + Spine2 平滑过渡)
-    node_spine1 = bpy.data.objects.get('Rebocap_Spine1')
-    node_neck = bpy.data.objects.get('Rebocap_Neck')
-    spine_ratio = 1.0
-    if node_spine1 and node_neck:
-        t_spine = (node_neck.matrix_world.translation - node_spine1.matrix_world.translation).length
-        spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
-        cur_spine = sum(arm_obj.pose.bones[s].bone.length for s in spine_bones if s in arm_obj.pose.bones)
-        if cur_spine > 0.001:
-            spine_ratio = max(min(t_spine / cur_spine, 3.0), 0.1)
-            for s in spine_bones:
-                if s in arm_obj.pose.bones:
-                    arm_obj.pose.bones[s].scale = (spine_ratio, spine_ratio, spine_ratio)
+    # 2. 脚部骨骼长宽独立精准自适应（X轴横向加宽15%增强饱满度与包裹感，Y/Z轴等比保持脚掌水平贴地）
+    sole_obj = bpy.data.objects.get('Rebocap_L_Sole')
+    s_len = 1.0
+    s_width = 1.0
+    if sole_obj:
+        pts = [sole_obj.matrix_world @ v.co for v in sole_obj.data.vertices]
+        if len(pts) >= 7:
+            w_target = max(v.x for v in pts) - min(v.x for v in pts)
+            l_target = (pts[1] - pts[4]).length
+            s_width = max(min((w_target / 0.1438) * 1.15, 3.0), 0.1)
+            s_len = max(min(l_target / 0.2961, 3.0), 0.1)
+            
+    for side in ['Left', 'Right']:
+        foot_pb = arm_obj.pose.bones.get(f'mixamorig:{side}Foot')
+        toe_pb = arm_obj.pose.bones.get(f'mixamorig:{side}ToeBase')
+        if foot_pb:
+            foot_pb.scale = (s_width, s_len, s_len)
+        if toe_pb:
+            toe_pb.scale = (s_width, s_len, s_len)
 
-    # 3. 头部与脖子紧凑等比自适应（跟随上半身躯干比例，彻底消除长颈鹿脖子与大头畸形）
-    neck_pb = arm_obj.pose.bones.get('mixamorig:Neck')
-    head_pb = arm_obj.pose.bones.get('mixamorig:Head')
-    if neck_pb:
-        neck_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
-    if head_pb:
-        head_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
+    # 3. 大腿与小腿三维等比适配（消除脚底悬空与膝盖错位）
+    node_knee = bpy.data.objects.get('Rebocap_L_Lower_leg')
+    node_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
+    if node_knee and node_thigh:
+        current_ankle_h = 0.0928 * s_len
+        target_calf_len = max(0.05, (node_knee.matrix_world.translation - Vector((node_knee.matrix_world.translation.x, node_knee.matrix_world.translation.y, current_ankle_h))).length)
+        target_thigh_len = (node_knee.matrix_world.translation - node_thigh.matrix_world.translation).length
+        
+        for side in ['Left', 'Right']:
+            up_leg_pb = arm_obj.pose.bones.get(f'mixamorig:{side}UpLeg')
+            leg_pb = arm_obj.pose.bones.get(f'mixamorig:{side}Leg')
+            if up_leg_pb and up_leg_pb.bone.length > 0.001:
+                ratio_thigh = target_thigh_len / up_leg_pb.bone.length
+                up_leg_pb.scale = (ratio_thigh, ratio_thigh, ratio_thigh)
+            if leg_pb and leg_pb.bone.length > 0.001:
+                ratio_calf = target_calf_len / leg_pb.bone.length
+                leg_pb.scale = (ratio_calf, ratio_calf, ratio_calf)
 
-    # 4. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐（下半身基准）
+    # 4. 骨盆（Hips）大腿根关节中心精准对位与胯宽对齐
     node_l_thigh = bpy.data.objects.get('Rebocap_L_Upper_leg')
     node_r_thigh = bpy.data.objects.get('Rebocap_R_Upper_leg')
     hip_pb = arm_obj.pose.bones.get('mixamorig:Hips')
@@ -98,101 +116,79 @@ def adapt_demo_character_scale_isolated(arm_obj):
         if base_hip_w > 0.001:
             hip_pb.scale.x = target_hip_w / base_hip_w
 
-    # 5. 四肢各段主干骨骼三维等比拉伸（锁骨、大臂、小臂、大腿、小腿）
-    limb_map = {
-        'mixamorig:LeftShoulder': ('Rebocap_L_Shoulder', 'Rebocap_L_Upper_arm'),
-        'mixamorig:LeftArm': ('Rebocap_L_Upper_arm', 'Rebocap_L_Lower_arm'),
-        'mixamorig:LeftForeArm': ('Rebocap_L_Lower_arm', 'Rebocap_L_Hand'),
-        'mixamorig:RightShoulder': ('Rebocap_R_Shoulder', 'Rebocap_R_Upper_arm'),
-        'mixamorig:RightArm': ('Rebocap_R_Upper_arm', 'Rebocap_R_Lower_arm'),
-        'mixamorig:RightForeArm': ('Rebocap_R_Lower_arm', 'Rebocap_R_Hand'),
-        'mixamorig:LeftUpLeg': ('Rebocap_L_Upper_leg', 'Rebocap_L_Lower_leg'),
-        'mixamorig:LeftLeg': ('Rebocap_L_Lower_leg', 'Rebocap_L_Foot'),
-        'mixamorig:RightUpLeg': ('Rebocap_R_Upper_leg', 'Rebocap_R_Lower_leg'),
-        'mixamorig:RightLeg': ('Rebocap_R_Lower_leg', 'Rebocap_R_Foot'),
-    }
-
-    for bname, (n1, n2) in limb_map.items():
-        pb = arm_obj.pose.bones.get(bname)
-        o1, o2 = bpy.data.objects.get(n1), bpy.data.objects.get(n2)
-        if pb and o1 and o2:
-            t_len = (o2.matrix_world.translation - o1.matrix_world.translation).length
-            cur_len = pb.bone.length
-            if cur_len > 0.001:
-                ratio = max(min(t_len / cur_len, 3.0), 0.1)
-                pb.scale = (ratio, ratio, ratio)
-
-    # 6. 脚部骨骼长宽独立精准自适应（X轴精准贴合鞋底宽度，Y/Z轴等比保持脚掌水平贴地）
-    for side in ['L', 'R']:
-        sole_obj = bpy.data.objects.get(f'Rebocap_{side}_Sole')
-        foot_pb_name = 'mixamorig:LeftFoot' if side == 'L' else 'mixamorig:RightFoot'
-        toe_pb_name = 'mixamorig:LeftToeBase' if side == 'L' else 'mixamorig:RightToeBase'
-        foot_pb = arm_obj.pose.bones.get(foot_pb_name)
-        toe_pb = arm_obj.pose.bones.get(toe_pb_name)
+    # 5. 脊椎段与肩膀高度精准对齐（消除手臂下垂偏矮问题）
+    node_shoulder = bpy.data.objects.get('Rebocap_L_Upper_arm')
+    if node_shoulder and node_l_thigh and node_r_thigh:
+        target_thigh_center = (node_l_thigh.matrix_world.translation + node_r_thigh.matrix_world.translation) * 0.5
+        t_torso_h = node_shoulder.matrix_world.translation.z - target_thigh_center.z
+        spine_ratio = max(min(t_torso_h / 0.4215, 3.0), 0.1)
         
-        if sole_obj and foot_pb:
-            pts = [sole_obj.matrix_world @ v.co for v in sole_obj.data.vertices]
-            if len(pts) >= 7:
-                # 目标鞋底线框横向宽度与纵向长度
-                w_target = max(v.x for v in pts) - min(v.x for v in pts)
-                l_target = (pts[1] - pts[4]).length
-                
-                # FBX 原生鞋体基准尺寸 (宽: 14.38cm, 长: 29.61cm)
-                base_w = 0.1438
-                base_l = 0.2961
-                
-                s_width = max(min(w_target / base_w, 3.0), 0.1)
-                s_len = max(min(l_target / base_l, 3.0), 0.1)
-                
-                # X 轴独立缩放贴合鞋宽，Y/Z 轴保持一致消除矢状面倾斜剪切
-                foot_pb.scale = (s_width, s_len, s_len)
-                if toe_pb:
-                    toe_pb.scale = (s_width, s_len, s_len)
+        spine_bones = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2']
+        for s in spine_bones:
+            pb = arm_obj.pose.bones.get(s)
+            if pb:
+                pb.scale = (spine_ratio, spine_ratio, spine_ratio)
+        neck_pb = arm_obj.pose.bones.get('mixamorig:Neck')
+        head_pb = arm_obj.pose.bones.get('mixamorig:Head')
+        if neck_pb:
+            neck_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
+        if head_pb:
+            head_pb.scale = (spine_ratio, spine_ratio, spine_ratio)
 
-    bpy.context.view_layer.update()
+    # 6. 上肢各段骨骼等比拉伸（锁骨、大臂、小臂）
+    for sh_name, arm_name, fa_name, side in [
+        ('mixamorig:LeftShoulder', 'mixamorig:LeftArm', 'mixamorig:LeftForeArm', 'L'),
+        ('mixamorig:RightShoulder', 'mixamorig:RightArm', 'mixamorig:RightForeArm', 'R')]:
+        sh_pb = arm_obj.pose.bones.get(sh_name)
+        arm_pb = arm_obj.pose.bones.get(arm_name)
+        fa_pb = arm_obj.pose.bones.get(fa_name)
+        node_sh = bpy.data.objects.get(f'Rebocap_{side}_Shoulder')
+        node_ua = bpy.data.objects.get(f'Rebocap_{side}_Upper_arm')
+        node_la = bpy.data.objects.get(f'Rebocap_{side}_Lower_arm')
+        node_hd = bpy.data.objects.get(f'Rebocap_{side}_Hand')
+        
+        if sh_pb and node_sh and node_ua and sh_pb.bone.length > 0.001:
+            sh_len = (node_ua.matrix_world.translation - node_sh.matrix_world.translation).length
+            sh_pb.scale = (sh_len / sh_pb.bone.length, sh_len / sh_pb.bone.length, sh_len / sh_pb.bone.length)
+        if arm_pb and node_ua and node_la and arm_pb.bone.length > 0.001:
+            ua_len = (node_la.matrix_world.translation - node_ua.matrix_world.translation).length
+            arm_pb.scale = (ua_len / arm_pb.bone.length, ua_len / arm_pb.bone.length, ua_len / arm_pb.bone.length)
+        if fa_pb and node_la and node_hd and fa_pb.bone.length > 0.001:
+            la_len = (node_hd.matrix_world.translation - node_la.matrix_world.translation).length
+            fa_pb.scale = (la_len / fa_pb.bone.length, la_len / fa_pb.bone.length, la_len / fa_pb.bone.length)
 
-    # 7. 鞋底精准平齐踩地校准 (Sole Ground Leveling)
-    mesh_obj = None
-    for child in arm_obj.children:
-        if child.type == 'MESH':
-            mesh_obj = child
-            break
-    if not mesh_obj:
-        for o in bpy.data.objects:
-            if o.type == 'MESH' and o.get('rebocap_demo_character'):
-                mesh_obj = o
-                break
-
-    if mesh_obj:
-        try:
-            depsgraph = bpy.context.evaluated_depsgraph_get()
-            eval_mesh_obj = mesh_obj.evaluated_get(depsgraph)
-            eval_mesh = eval_mesh_obj.to_mesh()
-            vg_foot = mesh_obj.vertex_groups.get('mixamorig:LeftFoot')
-            vg_toe = mesh_obj.vertex_groups.get('mixamorig:LeftToeBase')
-            if vg_foot and vg_toe:
-                foot_verts_z = [
-                    (eval_mesh_obj.matrix_world @ v.co).z
-                    for v in eval_mesh.vertices
-                    if any(g.group in (vg_foot.index, vg_toe.index) and g.weight > 0.1 for g in mesh_obj.data.vertices[v.index].groups)
-                ]
-                if foot_verts_z:
-                    min_z = min(foot_verts_z)
-                    if abs(min_z) > 0.0005 and hip_pb and hip_db:
-                        world_offset = Vector((0.0, 0.0, -min_z))
-                        local_offset = hip_db.matrix_local.to_3x3().inverted() @ world_offset
-                        hip_pb.location += local_offset
-            eval_mesh_obj.to_mesh_clear()
-        except Exception:
-            pass
-
-    # 8. 隐藏骨骼线框显示，保持角色表面光洁，并记录基准贴地坐标供实时驱动增量使用
+    # 7. 隐藏骨骼线框显示，保持角色表面光洁，并记录基准贴地坐标与静止骨盆高供实时驱动增量使用
     arm_obj.data.display_type = 'WIRE'
     arm_obj.show_in_front = False
     if hip_pb:
         arm_obj['rebocap_adapted_hip_location'] = list(hip_pb.location)
+    node_pelvis = bpy.data.objects.get('Rebocap_Pelvis')
+    if node_pelvis:
+        arm_obj['rebocap_rest_pelvis_z'] = float(node_pelvis.matrix_world.translation.z)
 
     bpy.context.view_layer.update()
+
+
+class REBOCAP_OT_offset_demo_character(bpy.types.Operator):
+    bl_idname = "rebocap.offset_demo_character"
+    bl_label = T_static("偏移示范角色")
+    bl_description = T_static("左右移动示范角色水平位置")
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode: bpy.props.StringProperty(default='SET')
+    offset_x: bpy.props.FloatProperty(default=0.0)
+
+    def execute(self, context):
+        arm = get_demo_character_armature()
+        if not arm:
+            self.report({'WARNING'}, "未找到示范角色")
+            return {'CANCELLED'}
+        if self.mode == 'SET':
+            arm.location.x = self.offset_x
+        elif self.mode == 'ADD':
+            arm.location.x += self.offset_x
+        context.view_layer.update()
+        return {'FINISHED'}
 
 
 class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
@@ -226,6 +222,13 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
                 bpy.context.view_layer.update()
             except Exception as e:
                 print(f"[Rebocap] auto generate tracking nodes notice: {e}")
+
+        # 确保处于物体模式，防止在姿态/编辑模式下导入报错
+        if context.object and context.object.mode != 'OBJECT':
+            try:
+                bpy.ops.object.mode_set(mode='OBJECT')
+            except Exception:
+                pass
 
         # 取消选择场景已有物体
         for obj in list(context.selected_objects):
@@ -282,7 +285,11 @@ class REBOCAP_OT_toggle_demo_character(bpy.types.Operator):
             # 2. 执行改版方案一（独立缩放隔离法自适应）
             adapt_demo_character_scale_isolated(armature_obj)
 
-            self.report({'INFO'}, "示范角色已成功载入（改版方案一：独立缩放隔离）")
+            # 3. 默认偏开右侧 2m，避免遮挡中心的主模型或追踪节点
+            armature_obj.location.x = 2.0
+            bpy.context.view_layer.update()
+
+            self.report({'INFO'}, "示范角色已成功载入（默认偏开右侧 2m）")
             return {'FINISHED'}
         else:
             self.report({'WARNING'}, "未能在导入的模型中找到骨架")
